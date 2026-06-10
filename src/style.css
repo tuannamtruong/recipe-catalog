@@ -1,0 +1,196 @@
+:root {
+  --bg: #fafaf7;
+  --fg: #1a1a1a;
+  --muted: #666;
+  --accent: #b85c2c;
+  --accent-fg: #fff;
+  --border: #e5e3dd;
+  --card-bg: #fff;
+  --danger: #c0392b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+.bar h1 {
+  font-size: 1.25rem;
+  margin: 0 0.5rem 0 0;
+}
+.bar input[type="search"],
+.bar select,
+.bar button {
+  font: inherit;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--fg);
+}
+.bar input[type="search"] {
+  flex: 1 1 14rem;
+  min-width: 8rem;
+}
+.bar button {
+  cursor: pointer;
+}
+.bar button:hover { background: #f0eee8; }
+#add { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+#add:hover { filter: brightness(0.95); }
+
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* List */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.card:hover { border-color: var(--accent); }
+.card .title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.card .meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.card .thumb {
+  display: none;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #eee;
+}
+body.show-images .card .thumb[src] { display: block; }
+
+.empty {
+  color: var(--muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* Detail */
+
+.detail {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+.detail .back,
+.form .back {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.75rem;
+  font: inherit;
+}
+.detail h2 { margin: 0 0 0.25rem; }
+.detail .meta { color: var(--muted); margin: 0 0 1rem; }
+.detail .hero {
+  display: none;
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+.detail .hero[src] { display: block; }
+.detail h3 { margin: 1rem 0 0.4rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.detail ul, .detail ol { margin: 0; padding-left: 1.25rem; }
+.detail li { margin: 0.15rem 0; }
+.detail .source { margin: 1rem 0 0; font-size: 0.9rem; }
+.detail .source a { color: var(--accent); }
+.detail-actions { margin-top: 1.25rem; display: flex; gap: 0.5rem; }
+.detail-actions button {
+  font: inherit;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+.detail-actions .delete { color: var(--danger); border-color: var(--danger); }
+
+/* Form */
+
+.form {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.form input,
+.form textarea {
+  font: 1rem/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--fg);
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+.form textarea { resize: vertical; min-height: 4rem; }
+.form-actions { display: flex; justify-content: flex-end; }
+.form-actions button {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+.form-error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin: 0;
+  min-height: 1.2rem;
+}

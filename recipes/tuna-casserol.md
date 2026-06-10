@@ -1,0 +1,22 @@
+---
+title: Tuna Casserol
+categories: [Seafood]
+duration_minutes: 30
+image: null
+source_url: "https://www.allrecipes.com/recipe/151593/campbells-tuna-noodle-casserole/"
+---
+
+## Ingredients
+- 4 cups medium egg noodles
+- 300 ml Mushroom Soup: Knorr Pils Suppe + Kondesnmilch: Ratio 2/1
+- 300mg cans tuna, drained
+- 2 cups frozen peas
+- 1 cup milk
+- 2 tbs dry bread crumbs
+- 1 tbs butter, melted
+
+## Steps
+1. Preheat the oven to 200C.
+2. Stir noodles, condensed soup, tuna, peas, and milk in a 3-quart casserole. Make sure water over all noodle.
+3. Bake 30 minutes; stir well.
+4. Mix bread crumbs with melted butter in a bowl; sprinkle over tuna casserole and continue to bake until bread crumbs are golden brown and crispy, 5 minutes more.

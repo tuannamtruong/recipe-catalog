@@ -1,7 +1,7 @@
 ---
-title: Tuna Salad – Simple – 5 mins
+title: Tuna Salad – Simple
 categories: [Seafood]
-duration_minutes: null
+duration_minutes: 5
 image: null
 source_url: "https://www.youtube.com/shorts/xD7rKT6ujFY"
 ---

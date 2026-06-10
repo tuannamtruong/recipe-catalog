@@ -1,5 +1,5 @@
 ---
-title: Oatmeal(10 mins)
+title: Oatmeal
 categories: [Dessert]
 duration_minutes: 5
 image: null

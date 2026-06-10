@@ -1,5 +1,5 @@
 ---
-title: Veggie Vegetarian Chili (30 mins)
+title: Veggie Vegetarian Chili
 categories: ["Rice & Noodles"]
 duration_minutes: 5
 image: null

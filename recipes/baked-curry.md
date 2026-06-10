@@ -1,5 +1,5 @@
 ---
-title: Baked Curry (50 min)
+title: Baked Curry
 categories: [Pork]
 duration_minutes: 45
 image: null

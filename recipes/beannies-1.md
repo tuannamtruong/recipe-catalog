@@ -1,5 +1,5 @@
 ---
-title: Beannies 1 (10mins)
+title: Beannies 1
 categories: [Uncategorized]
 duration_minutes: null
 image: null

@@ -1,5 +1,5 @@
 ---
-title: Pancake (10 mins) +
+title: Pancake
 categories: [Dessert]
 duration_minutes: 30
 image: null

@@ -1,5 +1,5 @@
 ---
-title: Tofu Dubu Jorim (25 mins)
+title: Tofu Dubu Jorim
 categories: [Vegetables]
 duration_minutes: 5
 image: null

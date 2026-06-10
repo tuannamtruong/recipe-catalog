@@ -1,5 +1,5 @@
 ---
-title: Kokosmakronen (30 min)
+title: Kokosmakronen
 categories: [Uncategorized]
 duration_minutes: 20
 image: null

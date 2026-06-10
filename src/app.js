@@ -70,6 +70,123 @@
     return btoa(s);
   }
 
+  // ----- imperial -> metric conversion -----
+  //
+  // Applied on save (create or edit). Inline format: keep the original text,
+  // append metric in parentheses. tsp/tbs are intentionally left alone.
+
+  // Per-cup weights (grams) for common ingredients. Liquids are in mL.
+  // Source: the conversion table at the top of Cooking.docx.
+  const CUP_GRAMS = {
+    flour: 120, "all-purpose flour": 120, "ap flour": 120,
+    sugar: 200, "brown sugar": 220, "powdered sugar": 120,
+    butter: 227, "cocoa": 85, "cocoa powder": 85,
+    salt: 288, honey: 340, "baking powder": 192, "baking soda": 220,
+    oat: 90, oats: 90, rice: 185,
+  };
+  const CUP_ML = {
+    water: 237, milk: 240, "almond milk": 240, "coconut milk": 240,
+    cream: 240, "heavy cream": 240, "sour cream": 240,
+    broth: 240, stock: 240, juice: 240, vinegar: 240,
+    oil: 218, "olive oil": 218, "vegetable oil": 218,
+    syrup: 320, "maple syrup": 320,
+    yogurt: 245, "greek yogurt": 245,
+    sữa: 240, nước: 237,
+  };
+
+  function parseQty(s) {
+    s = s.trim().replace(",", ".");
+    // mixed numeral like "1 1/2"
+    let m = s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+    if (m) return Number(m[1]) + Number(m[2]) / Number(m[3]);
+    m = s.match(/^(\d+)\s*\/\s*(\d+)$/);
+    if (m) return Number(m[1]) / Number(m[2]);
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function fmtNum(n) {
+    if (n >= 100) return String(Math.round(n));
+    if (n >= 10) return String(Math.round(n));
+    return n.toFixed(1).replace(/\.0$/, "");
+  }
+
+  function pickCupConversion(rest) {
+    const r = rest.toLowerCase();
+    // longest keyword first
+    const keys = Object.keys({ ...CUP_GRAMS, ...CUP_ML }).sort((a, b) => b.length - a.length);
+    for (const k of keys) {
+      const re = new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+      if (re.test(r)) {
+        if (k in CUP_ML) return { unit: "ml", per: CUP_ML[k] };
+        return { unit: "g", per: CUP_GRAMS[k] };
+      }
+    }
+    return { unit: "ml", per: 237 }; // default to volume
+  }
+
+  // Each entry: { re, replace(match) => string }
+  const CONVERTERS = [
+    // °F or 350F  ->  °C
+    {
+      re: /(\d+(?:[.,]\d+)?)\s*°?\s*F\b/g,
+      replace: (m, q) => {
+        const f = parseQty(q); if (f == null) return m;
+        const c = Math.round(((f - 32) * 5) / 9);
+        return `${m} (${c} °C)`;
+      },
+    },
+    // oz  ->  g  (28.35 g/oz)
+    {
+      re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*oz\b/gi,
+      replace: (m, q) => {
+        const first = q.split(/\s*-\s*/)[0];
+        const n = parseQty(first); if (n == null) return m;
+        return `${m} (${fmtNum(n * 28.35)} g)`;
+      },
+    },
+    // lb / lbs / pound / pounds  ->  g  (453.6 g/lb)
+    {
+      re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*(?:lbs?|pounds?)\b/gi,
+      replace: (m, q) => {
+        const n = parseQty(q.split(/\s*-\s*/)[0]); if (n == null) return m;
+        return `${m} (${fmtNum(n * 453.6)} g)`;
+      },
+    },
+    // cup / cups  ->  ml or g depending on ingredient
+    {
+      re: /(\d+(?:[.,]\d+)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*cups?\b([^\n]*)/gi,
+      replace: (m, q, rest) => {
+        const n = parseQty(q); if (n == null) return m;
+        const { unit, per } = pickCupConversion(rest || "");
+        // Reconstruct: only annotate the cup portion, keep `rest` as-is.
+        const cupPart = m.slice(0, m.length - (rest ? rest.length : 0));
+        return `${cupPart} (${fmtNum(n * per)} ${unit})${rest || ""}`;
+      },
+    },
+  ];
+
+  function convertImperialLine(line) {
+    if (!line) return line;
+    // Skip if there's already a metric annotation right after a unit.
+    let out = line;
+    for (const { re, replace } of CONVERTERS) {
+      out = out.replace(re, (match, ...groups) => {
+        // Don't double-annotate: if a `( ... g)` or `( ... ml)` already follows,
+        // leave the match alone.
+        const afterIdx = out.indexOf(match) + match.length;
+        const tail = out.slice(afterIdx, afterIdx + 16);
+        if (/^\s*\([^)]*\b(?:g|ml|°C|C)\b/.test(tail)) return match;
+        return replace(match, ...groups);
+      });
+    }
+    return out;
+  }
+
+  function convertImperialList(lines) {
+    return (lines || []).map(convertImperialLine);
+  }
+
   // ----- markdown body parsing -----
 
   /** Pull "## Ingredients" / "## Steps" / leftover from the body text. */
@@ -293,10 +410,14 @@
       const durRaw = (data.get("duration_minutes") || "").toString().trim();
       const dur = durRaw === "" ? null : Number(durRaw);
       const src = (data.get("source_url") || "").toString().trim() || null;
-      const ingredients = (data.get("ingredients") || "").toString()
-        .split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-      const steps = (data.get("steps") || "").toString()
-        .split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+      const ingredients = convertImperialList(
+        (data.get("ingredients") || "").toString()
+          .split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+      );
+      const steps = convertImperialList(
+        (data.get("steps") || "").toString()
+          .split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+      );
       const notes = (data.get("notes") || "").toString()
         .split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
 

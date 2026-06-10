@@ -1,5 +1,5 @@
 ---
-title: Edamane snack salad (10 mins)
+title: Edamane snack salad
 categories: [Salad]
 duration_minutes: 240
 image: null

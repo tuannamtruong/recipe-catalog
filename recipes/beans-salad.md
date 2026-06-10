@@ -1,7 +1,7 @@
 ---
-title: Beans salad (15 mins)
+title: Beans salad
 categories: [Salad]
-duration_minutes: null
+duration_minutes: 15
 image: null
 source_url: "https://www.youtube.com/shorts/NFWoidkA5SI"
 ---

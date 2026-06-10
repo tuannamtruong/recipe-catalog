@@ -1,5 +1,5 @@
 ---
-title: Spicy baked salad (10 mins)
+title: Spicy baked salad
 categories: [Salad]
 duration_minutes: 25
 image: null

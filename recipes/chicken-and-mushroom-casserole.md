@@ -1,5 +1,5 @@
 ---
-title: Chicken and Mushroom Casserole (40min to cooks; 40 mins simmer)
+title: Chicken and Mushroom Casserole
 categories: [Chicken]
 duration_minutes: 2
 image: null

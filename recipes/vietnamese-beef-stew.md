@@ -1,7 +1,8 @@
 ---
 title: Vietnamese beef stew
 categories: [Beef]
-duration_minutes: 30
+prep_minutes: 30
+cook_minutes: null
 image: null
 source_url: "https://www.vickypham.com/blog/vietnamese-beef-stew-bo-kho"
 ---

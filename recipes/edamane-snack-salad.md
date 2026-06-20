@@ -1,7 +1,8 @@
 ---
 title: Edamane snack salad
 categories: [Salad]
-duration_minutes: 240
+prep_minutes: 240
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/shorts/AhaNQDbNuV0"
 ---

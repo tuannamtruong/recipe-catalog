@@ -1,7 +1,8 @@
 ---
 title: Quick Sausage with Tomatoes
 categories: [Pork]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://youtu.be/4QDw_VvC0AQ?t=363"
 ---

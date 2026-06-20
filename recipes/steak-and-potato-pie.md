@@ -1,7 +1,8 @@
 ---
 title: Steak and potato pie
 categories: [Beef]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=0a4LDU0pwuU"
 ---

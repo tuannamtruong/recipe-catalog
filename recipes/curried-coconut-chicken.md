@@ -1,7 +1,8 @@
 ---
 title: "Curried Coconut Chicken:"
 categories: [Chicken]
-duration_minutes: 30
+prep_minutes: 30
+cook_minutes: null
 image: null
 source_url: null
 ---

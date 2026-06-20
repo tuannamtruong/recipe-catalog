@@ -1,7 +1,8 @@
 ---
 title: Sirloin/Tenderloin
 categories: [Beef]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: null
 ---

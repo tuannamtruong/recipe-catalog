@@ -1,7 +1,8 @@
 ---
 title: Gazpacho
 categories: [Uncategorized]
-duration_minutes: 120
+prep_minutes: 120
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/222331/chef-johns-gazpacho/"
 ---

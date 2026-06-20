@@ -1,7 +1,8 @@
 ---
 title: One-Pan Chicken Shawarma Rice Bowls
 categories: [Chicken]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: "https://www.instagram.com/p/DVeYp8IEkqd/"
 ---

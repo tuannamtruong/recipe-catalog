@@ -1,7 +1,8 @@
 ---
 title: Creamy Mushroom Pasta and Steak
 categories: [Beef]
-duration_minutes: 5
+prep_minutes: 5
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?t=442&v=cs8OYby6RrA"
 ---

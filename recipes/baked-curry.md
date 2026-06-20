@@ -1,7 +1,8 @@
 ---
 title: Baked Curry
 categories: [Pork]
-duration_minutes: 45
+prep_minutes: 45
+cook_minutes: null
 image: null
 source_url: "https://www.tiktok.com/@fitgreenmind/video/7280633344088460576"
 ---

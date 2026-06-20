@@ -1,7 +1,8 @@
 ---
 title: Asian Pork Tenderloin
 categories: [Pork]
-duration_minutes: 480
+prep_minutes: 480
+cook_minutes: null
 image: null
 source_url: null
 ---

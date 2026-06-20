@@ -1,7 +1,8 @@
 ---
 title: Spicy baked salad
 categories: [Salad]
-duration_minutes: 25
+prep_minutes: 25
+cook_minutes: null
 image: null
 source_url: null
 ---

@@ -1,7 +1,8 @@
 ---
 title: Jennifer Anistion salad
 categories: [Salad]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/shorts/_-wektibW2U"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Can fishy tomaty
 categories: [Seafood]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=Joyi0n8Uj6U"
 ---

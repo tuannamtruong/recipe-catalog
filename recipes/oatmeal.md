@@ -1,7 +1,8 @@
 ---
 title: Oatmeal
 categories: [Dessert]
-duration_minutes: 5
+prep_minutes: 5
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/shorts/wNNSQ6Na8F8"
 ---

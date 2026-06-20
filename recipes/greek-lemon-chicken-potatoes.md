@@ -1,7 +1,8 @@
 ---
 title: "Greek Lemon Chicken & Potatoes"
 categories: [Chicken]
-duration_minutes: 25
+prep_minutes: 25
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=h6OSMbfhIao"
 ---

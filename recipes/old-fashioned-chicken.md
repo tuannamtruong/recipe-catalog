@@ -1,7 +1,8 @@
 ---
 title: Old Fashioned Chicken
 categories: [Chicken]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: null
 ---

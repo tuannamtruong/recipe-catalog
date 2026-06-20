@@ -1,7 +1,8 @@
 ---
 title: Chicken drumsticks
 categories: [Chicken]
-duration_minutes: 15
+prep_minutes: 15
+cook_minutes: null
 image: null
 source_url: null
 ---

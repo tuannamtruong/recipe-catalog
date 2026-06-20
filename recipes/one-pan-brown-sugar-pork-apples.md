@@ -1,7 +1,8 @@
 ---
 title: "One Pan Brown Sugar Pork & Apples"
 categories: [Pork]
-duration_minutes: 30
+prep_minutes: 30
+cook_minutes: null
 image: null
 source_url: null
 ---

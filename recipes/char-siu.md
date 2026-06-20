@@ -1,7 +1,8 @@
 ---
 title: Char Siu
 categories: [Pork]
-duration_minutes: 240
+prep_minutes: 240
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/258494/chinese-barbeque-pork-char-siu/"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Cucumber Tahini
 categories: [Vegetables]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: "https://www.tiktok.com/@fitgreenmind/video/7409399889530047776"
 ---

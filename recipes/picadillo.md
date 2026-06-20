@@ -1,7 +1,8 @@
 ---
 title: Picadillo
 categories: [Uncategorized]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "https://foodwishes.blogspot.com/2017/02/picadillo-close-but-no-cigar.html"
 ---

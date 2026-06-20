@@ -1,7 +1,8 @@
 ---
 title: Chè đậu xanh
 categories: [Soup]
-duration_minutes: 120
+prep_minutes: 120
+cook_minutes: null
 image: null
 source_url: "https://vtcnews.vn/cach-nau-che-dau-xanh-thom-ngon-tai-nha-ar865930.html"
 ---

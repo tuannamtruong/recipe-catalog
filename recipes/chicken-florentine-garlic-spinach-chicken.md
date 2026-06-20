@@ -1,7 +1,8 @@
 ---
 title: "Chicken Florentine | Garlic Spinach Chicken"
 categories: [Chicken]
-duration_minutes: 4
+prep_minutes: 4
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=SsROVogvQuI"
 ---

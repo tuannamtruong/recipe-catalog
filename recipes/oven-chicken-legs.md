@@ -1,7 +1,8 @@
 ---
 title: Oven Chicken Legs
 categories: [Chicken]
-duration_minutes: 45
+prep_minutes: 45
+cook_minutes: null
 image: null
 source_url: null
 ---

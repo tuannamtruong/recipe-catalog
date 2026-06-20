@@ -1,7 +1,8 @@
 ---
 title: Chicken Breasts in Caper Cream Sauce
 categories: [Chicken]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/78741/chicken-breasts-in-caper-cream-sauce"
 ---

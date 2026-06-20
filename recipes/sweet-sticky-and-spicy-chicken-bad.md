@@ -1,7 +1,8 @@
 ---
 title: "Sweet, Sticky and Spicy Chicken (Bad)"
 categories: [Chicken]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: "http://allrecipes.com/video/4203/sweet-sticky-and-spicy-chicken/"
 ---

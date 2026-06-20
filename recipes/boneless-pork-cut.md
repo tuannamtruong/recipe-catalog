@@ -1,7 +1,8 @@
 ---
 title: Boneless pork cut
 categories: [Pork]
-duration_minutes: 8
+prep_minutes: 8
+cook_minutes: null
 image: null
 source_url: null
 ---

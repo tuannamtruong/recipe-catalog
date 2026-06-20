@@ -1,7 +1,8 @@
 ---
 title: Peppercorn sauce
 categories: [Sauce]
-duration_minutes: 1
+prep_minutes: 1
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=FPRvZwx5Ris"
 ---

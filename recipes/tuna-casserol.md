@@ -1,7 +1,8 @@
 ---
 title: Tuna Casserol
 categories: [Seafood]
-duration_minutes: 30
+prep_minutes: 30
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/151593/campbells-tuna-noodle-casserole/"
 ---

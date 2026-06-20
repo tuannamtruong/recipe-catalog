@@ -1,7 +1,8 @@
 ---
 title: Sticky Oven Barbecue Ribs
 categories: [Pork]
-duration_minutes: 120
+prep_minutes: 120
+cook_minutes: null
 image: null
 source_url: "https://cafedelites.com/oven-barbecue-ribs/"
 ---

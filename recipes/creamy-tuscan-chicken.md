@@ -1,7 +1,8 @@
 ---
 title: Creamy tuscan chicken
 categories: [Chicken]
-duration_minutes: 1
+prep_minutes: 1
+cook_minutes: null
 image: null
 source_url: "https://www.instagram.com/p/DLk9miqP8Sd/"
 ---

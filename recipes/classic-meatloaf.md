@@ -1,7 +1,8 @@
 ---
 title: Classic Meatloaf
 categories: [Beef]
-duration_minutes: 55
+prep_minutes: 55
+cook_minutes: null
 image: null
 source_url: null
 ---

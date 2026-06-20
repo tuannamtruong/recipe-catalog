@@ -1,7 +1,8 @@
 ---
 title: Zucchini Soup
 categories: [Vegetables]
-duration_minutes: 8
+prep_minutes: 8
+cook_minutes: null
 image: null
 source_url: "https://www.foodandwine.com/recipes/silky-zucchini-soup"
 ---

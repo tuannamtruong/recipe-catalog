@@ -1,7 +1,8 @@
 ---
 title: Pork Rib Soup
 categories: [Pork]
-duration_minutes: 60
+prep_minutes: 60
+cook_minutes: null
 image: null
 source_url: null
 ---

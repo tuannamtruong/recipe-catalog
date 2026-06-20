@@ -1,7 +1,8 @@
 ---
 title: Lemon Pepper Baked Chicken
 categories: [Chicken]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "https://www.delish.com/cooking/recipe-ideas/recipes/a55218/lemon-pepper-baked-chicken-breast-recipe/"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Cháo
 categories: [Vegetables]
-duration_minutes: 60
+prep_minutes: 60
+cook_minutes: null
 image: null
 source_url: "https://alcipedia.com/cocktails/aperol-sour-refreshing-and-delicious/"
 ---

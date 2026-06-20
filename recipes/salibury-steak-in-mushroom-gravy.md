@@ -1,7 +1,8 @@
 ---
 title: Salibury Steak in Mushroom Gravy
 categories: [Beef]
-duration_minutes: 4
+prep_minutes: 4
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/90497/scrumptious-salisbury-steak-in-mushroom-gravy/="
 ---

@@ -1,7 +1,8 @@
 ---
 title: Apple crumble
 categories: [Vegetables]
-duration_minutes: 5
+prep_minutes: 5
+cook_minutes: null
 image: null
 source_url: "https://www.instagram.com/p/CzcDruyKwF2/"
 ---

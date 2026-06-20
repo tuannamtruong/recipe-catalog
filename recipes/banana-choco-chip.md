@@ -1,7 +1,8 @@
 ---
 title: Banana choco chip
 categories: [Dessert]
-duration_minutes: 45
+prep_minutes: 45
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/shorts/WI9XPRjJ3Eo"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Pukka Yellow Curry
 categories: [Curry]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: "http://www.jamieoliver.com/recipes/chicken-recipes/pukka-yellow-curry/#OuUFD2zxPUUIofi0.97"
 ---

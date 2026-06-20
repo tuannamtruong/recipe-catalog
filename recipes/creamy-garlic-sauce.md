@@ -1,7 +1,8 @@
 ---
 title: Creamy garlic sauce
 categories: [Sauce]
-duration_minutes: 6
+prep_minutes: 6
+cook_minutes: null
 image: null
 source_url: "https://thecozycook.com/creamy-garlic-chicken/"
 ---

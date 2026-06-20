@@ -1,7 +1,8 @@
 ---
 title: Beef Stroganoff
 categories: [Beef]
-duration_minutes: 1
+prep_minutes: 1
+cook_minutes: null
 image: null
 source_url: "https://tiphero.com/easy-beef-stroganoff"
 ---

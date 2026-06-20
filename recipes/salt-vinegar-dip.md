@@ -1,7 +1,8 @@
 ---
 title: Salt vinegar dip
 categories: [Uncategorized]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "http://www.thekitchn.com/"
 ---

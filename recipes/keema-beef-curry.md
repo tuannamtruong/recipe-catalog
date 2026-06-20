@@ -1,7 +1,8 @@
 ---
 title: Keema Beef Curry
 categories: [Beef]
-duration_minutes: 1
+prep_minutes: 1
+cook_minutes: null
 image: null
 source_url: null
 ---

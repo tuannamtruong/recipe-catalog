@@ -1,7 +1,8 @@
 ---
 title: Amish Meat Balls
 categories: [Uncategorized]
-duration_minutes: 5
+prep_minutes: 5
+cook_minutes: null
 image: null
 source_url: null
 ---

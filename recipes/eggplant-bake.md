@@ -1,7 +1,8 @@
 ---
 title: Eggplant Bake
 categories: [Seafood]
-duration_minutes: 25
+prep_minutes: 25
+cook_minutes: null
 image: null
 source_url: null
 ---

@@ -1,7 +1,8 @@
 ---
 title: Pork Rib with BBQ Sauce
 categories: [Pork]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: "https://www.inspiredtaste.net/7179/sweet-and-spicy-oven-baked-ribs/"
 ---

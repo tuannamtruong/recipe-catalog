@@ -1,7 +1,8 @@
 ---
 title: Pan Sauce 2 (Steak diane is better)
 categories: [Beef]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/video/3760/pan-seared-chicken-breasts-with-shallots/"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Beannies 1
 categories: [Uncategorized]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/shorts/NuxLIbExiLU"
 ---

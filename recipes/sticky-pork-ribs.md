@@ -1,7 +1,8 @@
 ---
 title: Sticky Pork Ribs
 categories: [Pork]
-duration_minutes: 1
+prep_minutes: 1
+cook_minutes: null
 image: null
 source_url: "https://youtu.be/KgOBAWbkq5Q?t=25"
 ---

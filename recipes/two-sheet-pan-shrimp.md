@@ -1,7 +1,8 @@
 ---
 title: Two sheet pan shrimp
 categories: [Seafood]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=L-mA3UCTDPI"
 ---

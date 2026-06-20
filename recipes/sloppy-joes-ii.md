@@ -1,7 +1,8 @@
 ---
 title: Sloppy Joes II
 categories: [Uncategorized]
-duration_minutes: 3
+prep_minutes: 3
+cook_minutes: null
 image: null
 source_url: "http://allrecipes.com/recipe/24264/sloppy-joes-ii/?src=VD_Summary"
 ---

@@ -1,7 +1,8 @@
 ---
 title: Vichyssoise
 categories: [Uncategorized]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/13392/classic-vichyssoise/"
 ---

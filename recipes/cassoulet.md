@@ -1,7 +1,8 @@
 ---
 title: Cassoulet
 categories: [Uncategorized]
-duration_minutes: 120
+prep_minutes: 120
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=g_Huy-0Xeek"
 ---

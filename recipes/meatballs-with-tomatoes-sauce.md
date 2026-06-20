@@ -1,7 +1,8 @@
 ---
 title: Meatballs With Tomatoes Sauce
 categories: [Beef]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=W3YVmSMl-fY"
 ---

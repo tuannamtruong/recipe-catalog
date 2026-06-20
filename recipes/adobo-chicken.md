@@ -1,7 +1,8 @@
 ---
 title: Adobo Chicken
 categories: [Chicken]
-duration_minutes: 20
+prep_minutes: 20
+cook_minutes: null
 image: null
 source_url: null
 ---

@@ -1,7 +1,8 @@
 ---
 title: Mole Poblano With Pork Tenderloin
 categories: [Pork]
-duration_minutes: 15
+prep_minutes: 15
+cook_minutes: null
 image: null
 source_url: null
 ---

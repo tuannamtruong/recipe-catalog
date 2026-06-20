@@ -1,7 +1,8 @@
 ---
 title: Salisbury Steak
 categories: [Beef]
-duration_minutes: 120
+prep_minutes: 120
+cook_minutes: null
 image: null
 source_url: "https://www.allrecipes.com/recipe/280901/chef-johns-salisbury-steak/"
 ---

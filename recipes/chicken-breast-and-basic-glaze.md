@@ -1,7 +1,8 @@
 ---
 title: Chicken Breast and Basic Glaze
 categories: [Chicken]
-duration_minutes: 10
+prep_minutes: 10
+cook_minutes: null
 image: null
 source_url: null
 ---

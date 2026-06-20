@@ -1,7 +1,8 @@
 ---
 title: Spicy Sausage Rice
 categories: [Pork]
-duration_minutes: 12
+prep_minutes: 12
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=FP6E3JtmsCE"
 ---

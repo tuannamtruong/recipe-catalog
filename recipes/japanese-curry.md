@@ -1,7 +1,8 @@
 ---
 title: Japanese curry
 categories: [Vegetables]
-duration_minutes: 45
+prep_minutes: 45
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=qDrFJgjUz4s"
 ---

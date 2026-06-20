@@ -1,7 +1,8 @@
 ---
 title: Burgundy Pork Tenderloin
 categories: [Pork]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: null
 ---

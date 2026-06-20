@@ -1,7 +1,8 @@
 ---
 title: Friedless Orange Chicken
 categories: [Chicken]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=5Sa9nYKiYg0"
 ---

@@ -1,7 +1,8 @@
 ---
 title: One-Pot braised beef Rigatoni
 categories: [Beef]
-duration_minutes: 2
+prep_minutes: 2
+cook_minutes: null
 image: null
 source_url: "https://www.instagram.com/p/DS3Rz7Ekh1R/"
 ---

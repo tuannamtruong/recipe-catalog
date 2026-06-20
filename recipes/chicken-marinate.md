@@ -1,7 +1,8 @@
 ---
 title: Chicken Marinate
 categories: [Chicken]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: null
 ---

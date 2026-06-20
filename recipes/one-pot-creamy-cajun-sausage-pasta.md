@@ -1,7 +1,8 @@
 ---
 title: One pot creamy cajun sausage pasta
 categories: [Pork]
-duration_minutes: null
+prep_minutes: null
+cook_minutes: null
 image: null
 source_url: "https://www.youtube.com/watch?v=FP6E3JtmsCE"
 ---

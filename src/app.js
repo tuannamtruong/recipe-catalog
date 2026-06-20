@@ -231,6 +231,7 @@
     category: "",
     showImages: false,
     view: "flat", // "flat" | "grouped"
+    collapsed: new Set(), // category names collapsed in grouped view
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -381,13 +382,57 @@
       const items = groups.get(name);
       const section = document.createElement("section");
       section.className = "category-group";
-      const h = document.createElement("h2");
+      if (state.collapsed.has(name)) section.classList.add("collapsed");
+
+      const h = document.createElement("button");
       h.className = "category-heading";
-      h.textContent = `${name} (${items.length})`;
+      h.type = "button";
+      const chevron = document.createElement("span");
+      chevron.className = "chevron";
+      chevron.setAttribute("aria-hidden", "true");
+      const label = document.createElement("span");
+      label.className = "category-name";
+      label.textContent = name;
+      const count = document.createElement("span");
+      count.className = "category-count";
+      count.textContent = items.length;
+      h.append(chevron, label, count);
+      h.addEventListener("click", () => {
+        if (state.collapsed.has(name)) state.collapsed.delete(name);
+        else state.collapsed.add(name);
+        section.classList.toggle("collapsed");
+        updateCollapseAllBtn();
+      });
+
       section.appendChild(h);
       section.appendChild(makeLineList(items));
       main.appendChild(section);
     }
+    updateCollapseAllBtn();
+  }
+
+  // Names of the category groups currently shown (mirrors showGrouped's keys).
+  function currentGroupNames() {
+    const names = new Set();
+    for (const r of filteredRecipes()) {
+      const cats = categoriesOf(r);
+      if (cats.length) cats.forEach((c) => names.add(c));
+      else names.add(UNCATEGORIZED);
+    }
+    return Array.from(names);
+  }
+
+  // The collapse-all button only matters in grouped view; its label reflects
+  // whether the next click will collapse everything or expand everything.
+  function updateCollapseAllBtn() {
+    const btn = $("#toggle-collapse");
+    if (!btn) return;
+    if (state.view !== "grouped") { btn.hidden = true; return; }
+    const names = currentGroupNames();
+    btn.hidden = names.length === 0;
+    const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+    btn.textContent = allCollapsed ? "Expand all" : "Collapse all";
+    btn.dataset.state = allCollapsed ? "collapsed" : "expanded";
   }
 
   function metaLine(r) {
@@ -691,6 +736,14 @@
     viewBtn.addEventListener("click", () => {
       state.view = state.view === "grouped" ? "flat" : "grouped";
       renderViewToggle(viewBtn);
+      updateCollapseAllBtn();
+      if ((location.hash || "#/") === "#/") showList();
+    });
+    $("#toggle-collapse").addEventListener("click", () => {
+      const names = currentGroupNames();
+      const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+      if (allCollapsed) state.collapsed.clear();
+      else names.forEach((n) => state.collapsed.add(n));
       if ((location.hash || "#/") === "#/") showList();
     });
     $("#random").addEventListener("click", () => {

@@ -64,6 +64,40 @@ html, body {
 #add { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
 #add:hover { filter: brightness(0.95); }
 
+.subbar {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+.subbar select {
+  font: inherit;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--fg);
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--fg);
+  cursor: pointer;
+  line-height: 0;
+}
+.icon-btn:hover { background: #f0eee8; }
+
 main {
   max-width: 980px;
   margin: 0 auto;
@@ -86,6 +120,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
 }
 .card:hover { border-color: var(--accent); }
 .card .title {
@@ -111,6 +147,80 @@ body.show-images .card .thumb[src] { display: block; }
   color: var(--muted);
   padding: 2rem 0;
   text-align: center;
+}
+
+/* Grouped-by-category view */
+
+.category-group { margin-bottom: 1.75rem; }
+.category-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0 0 0.6rem;
+  padding: 0.1rem 0 0.3rem;
+  font: 600 1.1rem/1.3 inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.category-heading:hover { color: var(--accent); }
+.category-heading .chevron {
+  flex: 0 0 auto;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.category-group.collapsed .category-heading .chevron { transform: rotate(-45deg); }
+.category-heading .category-name { flex: 1 1 auto; }
+.category-heading .category-count {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.category-group.collapsed .recipe-lines { display: none; }
+.category-group.collapsed .category-heading { margin-bottom: 0; }
+
+#toggle-collapse {
+  font: inherit;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--fg);
+  cursor: pointer;
+}
+#toggle-collapse:hover { background: #f0eee8; }
+.recipe-lines {
+  display: flex;
+  flex-direction: column;
+}
+.recipe-line {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.35rem 0.25rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+}
+.recipe-line:last-child { border-bottom: none; }
+.recipe-line:hover { color: var(--accent); }
+.recipe-line-name { flex: 1 1 auto; }
+.recipe-line-time {
+  flex: 0 0 auto;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Detail */
@@ -237,13 +347,17 @@ body.show-images .card .thumb[src] { display: block; }
   <header class="bar">
     <h1 id="home" role="button" tabindex="0">Cooking</h1>
     <input id="search" type="search" placeholder="Search…" />
-    <select id="category-filter" aria-label="Category">
-      <option value="">All categories</option>
-    </select>
     <button id="toggle-images" type="button" data-state="hidden">Show images</button>
     <button id="random" type="button">Random</button>
     <button id="add" type="button">+ Add</button>
   </header>
+  <div class="subbar">
+    <select id="category-filter" aria-label="Category">
+      <option value="">All categories</option>
+    </select>
+    <button id="toggle-view" class="icon-btn" type="button" data-view="flat"></button>
+    <button id="toggle-collapse" type="button" hidden>Collapse all</button>
+  </div>
 
   <main id="main"></main>
 
@@ -266,11 +380,11 @@ body.show-images .card .thumb[src] { display: block; }
 
   <!-- List card -->
   <template id="tpl-card">
-    <article class="card">
+    <a class="card">
       <h3 class="title"></h3>
       <p class="meta"></p>
       <img class="thumb" alt="" />
-    </article>
+    </a>
   </template>
 
   <!-- Form -->
@@ -533,6 +647,8 @@ const __BAKED_RECIPES__ = [{"frontmatter": {"title": "Adobo Chicken", "categorie
     query: "",
     category: "",
     showImages: false,
+    view: "flat", // "flat" | "grouped"
+    collapsed: new Set(), // category names collapsed in grouped view
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -584,33 +700,156 @@ const __BAKED_RECIPES__ = [{"frontmatter": {"title": "Adobo Chicken", "categorie
 
   // ----- views -----
 
-  function showList() {
-    const recipes = filteredRecipes();
-    main.innerHTML = "";
-    if (!recipes.length) {
-      const p = document.createElement("p");
-      p.className = "empty";
-      p.textContent = state.recipes.length ? "No recipes match the current filter." : "No recipes yet.";
-      main.appendChild(p);
-      return;
+  function makeCard(r) {
+    const node = $("#tpl-card").content.firstElementChild.cloneNode(true);
+    $(".title", node).textContent = r.frontmatter?.title || r.slug;
+    $(".meta", node).textContent = metaLine(r);
+    const img = $(".thumb", node);
+    const imgName = r.frontmatter?.image;
+    if (typeof imgName === "string" && imgName) {
+      img.src = `recipe_images/${encodeURIComponent(imgName)}`;
+      img.alt = r.frontmatter?.title || "";
     }
+    node.href = `#/r/${r.slug}`;
+    return node;
+  }
+
+  function makeGrid(recipes) {
     const grid = document.createElement("div");
     grid.className = "cards";
-    const tpl = $("#tpl-card");
+    for (const r of recipes) grid.appendChild(makeCard(r));
+    return grid;
+  }
+
+  // Total active time in minutes, e.g. "45 min" (omitted when unknown).
+  function timeLabel(r) {
+    const prep = r.frontmatter?.prep_minutes;
+    const cook = r.frontmatter?.cook_minutes;
+    let total = 0;
+    if (Number.isFinite(prep)) total += prep;
+    if (Number.isFinite(cook)) total += cook;
+    return total > 0 ? `${total} min` : "";
+  }
+
+  // Compact one-line row used inside category groups: "Name - Time".
+  // The category is omitted (it is the group heading).
+  function makeLine(r) {
+    const a = document.createElement("a");
+    a.className = "recipe-line";
+    a.href = `#/r/${r.slug}`;
+    const name = document.createElement("span");
+    name.className = "recipe-line-name";
+    name.textContent = r.frontmatter?.title || r.slug;
+    const time = document.createElement("span");
+    time.className = "recipe-line-time";
+    time.textContent = timeLabel(r);
+    a.appendChild(name);
+    a.appendChild(time);
+    return a;
+  }
+
+  function makeLineList(recipes) {
+    const list = document.createElement("div");
+    list.className = "recipe-lines";
+    for (const r of recipes) list.appendChild(makeLine(r));
+    return list;
+  }
+
+  function emptyMessage() {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = state.recipes.length ? "No recipes match the current filter." : "No recipes yet.";
+    return p;
+  }
+
+  function showList() {
+    if (state.view === "grouped") return showGrouped();
+    const recipes = filteredRecipes();
+    main.innerHTML = "";
+    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+    main.appendChild(makeGrid(recipes));
+  }
+
+  // Grouped view: one section per category, recipes listed under each. A recipe
+  // with multiple categories appears under each; uncategorized ones go last.
+  const UNCATEGORIZED = "Uncategorized";
+
+  function showGrouped() {
+    const recipes = filteredRecipes();
+    main.innerHTML = "";
+    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+
+    const groups = new Map();
     for (const r of recipes) {
-      const node = tpl.content.firstElementChild.cloneNode(true);
-      $(".title", node).textContent = r.frontmatter?.title || r.slug;
-      $(".meta", node).textContent = metaLine(r);
-      const img = $(".thumb", node);
-      const imgName = r.frontmatter?.image;
-      if (typeof imgName === "string" && imgName) {
-        img.src = `recipe_images/${encodeURIComponent(imgName)}`;
-        img.alt = r.frontmatter?.title || "";
+      const cats = categoriesOf(r);
+      const keys = cats.length ? cats : [UNCATEGORIZED];
+      for (const c of keys) {
+        if (!groups.has(c)) groups.set(c, []);
+        groups.get(c).push(r);
       }
-      node.addEventListener("click", () => { location.hash = `#/r/${r.slug}`; });
-      grid.appendChild(node);
     }
-    main.appendChild(grid);
+
+    const names = Array.from(groups.keys()).sort((a, b) => {
+      if (a === UNCATEGORIZED) return 1;
+      if (b === UNCATEGORIZED) return -1;
+      return a.localeCompare(b);
+    });
+
+    for (const name of names) {
+      const items = groups.get(name);
+      const section = document.createElement("section");
+      section.className = "category-group";
+      if (state.collapsed.has(name)) section.classList.add("collapsed");
+
+      const h = document.createElement("button");
+      h.className = "category-heading";
+      h.type = "button";
+      const chevron = document.createElement("span");
+      chevron.className = "chevron";
+      chevron.setAttribute("aria-hidden", "true");
+      const label = document.createElement("span");
+      label.className = "category-name";
+      label.textContent = name;
+      const count = document.createElement("span");
+      count.className = "category-count";
+      count.textContent = items.length;
+      h.append(chevron, label, count);
+      h.addEventListener("click", () => {
+        if (state.collapsed.has(name)) state.collapsed.delete(name);
+        else state.collapsed.add(name);
+        section.classList.toggle("collapsed");
+        updateCollapseAllBtn();
+      });
+
+      section.appendChild(h);
+      section.appendChild(makeLineList(items));
+      main.appendChild(section);
+    }
+    updateCollapseAllBtn();
+  }
+
+  // Names of the category groups currently shown (mirrors showGrouped's keys).
+  function currentGroupNames() {
+    const names = new Set();
+    for (const r of filteredRecipes()) {
+      const cats = categoriesOf(r);
+      if (cats.length) cats.forEach((c) => names.add(c));
+      else names.add(UNCATEGORIZED);
+    }
+    return Array.from(names);
+  }
+
+  // The collapse-all button only matters in grouped view; its label reflects
+  // whether the next click will collapse everything or expand everything.
+  function updateCollapseAllBtn() {
+    const btn = $("#toggle-collapse");
+    if (!btn) return;
+    if (state.view !== "grouped") { btn.hidden = true; return; }
+    const names = currentGroupNames();
+    btn.hidden = names.length === 0;
+    const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+    btn.textContent = allCollapsed ? "Expand all" : "Collapse all";
+    btn.dataset.state = allCollapsed ? "collapsed" : "expanded";
   }
 
   function metaLine(r) {
@@ -872,6 +1111,23 @@ const __BAKED_RECIPES__ = [{"frontmatter": {"title": "Adobo Chicken", "categorie
     refreshCategoryFilter();
   }
 
+  // Icon for the view toggle. The button shows the view it will switch *to*.
+  const VIEW_ICONS = {
+    // grouped: stacked sections (offered while in flat view)
+    grouped: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="2" rx="1"/><rect x="3" y="7" width="14" height="2" rx="1"/><rect x="3" y="14" width="8" height="2" rx="1"/><rect x="3" y="18" width="14" height="2" rx="1"/></svg>',
+    // flat grid: four tiles (offered while in grouped view)
+    flat: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+  };
+
+  function renderViewToggle(btn) {
+    const next = state.view === "grouped" ? "flat" : "grouped";
+    const label = next === "grouped" ? "Group by category" : "Flat list";
+    btn.innerHTML = VIEW_ICONS[next];
+    btn.dataset.view = state.view;
+    btn.title = label;
+    btn.setAttribute("aria-label", label);
+  }
+
   function wireBar() {
     const home = $("#home");
     home.addEventListener("click", () => { location.hash = "#/"; });
@@ -891,6 +1147,21 @@ const __BAKED_RECIPES__ = [{"frontmatter": {"title": "Adobo Chicken", "categorie
       document.body.classList.toggle("show-images", state.showImages);
       e.target.textContent = state.showImages ? "Hide images" : "Show images";
       e.target.dataset.state = state.showImages ? "shown" : "hidden";
+    });
+    const viewBtn = $("#toggle-view");
+    renderViewToggle(viewBtn);
+    viewBtn.addEventListener("click", () => {
+      state.view = state.view === "grouped" ? "flat" : "grouped";
+      renderViewToggle(viewBtn);
+      updateCollapseAllBtn();
+      if ((location.hash || "#/") === "#/") showList();
+    });
+    $("#toggle-collapse").addEventListener("click", () => {
+      const names = currentGroupNames();
+      const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+      if (allCollapsed) state.collapsed.clear();
+      else names.forEach((n) => state.collapsed.add(n));
+      if ((location.hash || "#/") === "#/") showList();
     });
     $("#random").addEventListener("click", () => {
       const pool = filteredRecipes();

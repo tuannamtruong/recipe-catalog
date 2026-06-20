@@ -467,6 +467,66 @@
     main.appendChild(form);
   }
 
+  // Free-text combobox over a comma-separated field. The dropdown opens on
+  // focus (showing every option) and filters by the token after the last comma.
+  function attachCombobox(input, listEl, getOptions) {
+    let items = [];
+    let activeIndex = -1;
+
+    const tokens = () => input.value.split(",").map((s) => s.trim());
+    const currentToken = () => tokens().pop() || "";
+    const taken = () => new Set(tokens().slice(0, -1).filter(Boolean).map((s) => s.toLowerCase()));
+
+    function open() {
+      const tok = currentToken().toLowerCase();
+      const used = taken();
+      items = getOptions().filter((c) => !used.has(c.toLowerCase()) && c.toLowerCase().includes(tok));
+      render();
+    }
+
+    function render() {
+      if (!items.length) { close(); return; }
+      listEl.innerHTML = items
+        .map((c, i) => `<li role="option" class="${i === activeIndex ? "active" : ""}">${escapeHtml(c)}</li>`)
+        .join("");
+      listEl.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function close() {
+      listEl.hidden = true;
+      listEl.innerHTML = "";
+      activeIndex = -1;
+      input.setAttribute("aria-expanded", "false");
+    }
+
+    function choose(value) {
+      const parts = tokens();
+      parts[parts.length - 1] = value;
+      input.value = parts.join(", ");
+      close();
+      input.focus();
+    }
+
+    input.addEventListener("focus", () => { activeIndex = -1; open(); });
+    input.addEventListener("input", () => { activeIndex = -1; open(); });
+    input.addEventListener("blur", () => setTimeout(close, 120));
+    input.addEventListener("keydown", (e) => {
+      if (listEl.hidden) return;
+      if (e.key === "ArrowDown") { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); render(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); render(); }
+      else if (e.key === "Enter" && activeIndex >= 0) { e.preventDefault(); choose(items[activeIndex]); }
+      else if (e.key === "Escape") { close(); }
+    });
+    listEl.addEventListener("mousedown", (e) => {
+      const li = e.target.closest("li");
+      if (!li) return;
+      e.preventDefault();
+      const idx = Array.prototype.indexOf.call(listEl.children, li);
+      if (idx >= 0) choose(items[idx]);
+    });
+  }
+
   function slugify(title) {
     return title
       .normalize("NFKD")

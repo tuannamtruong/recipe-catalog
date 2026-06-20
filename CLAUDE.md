@@ -1,7 +1,6 @@
 # Cooking App
 
-A local, single-user webapp for browsing and managing recipes. Imported from
-`Cooking.docx` (~159 recipes, mixed English/Vietnamese).
+A local, single-user webapp for browsing and managing recipes.
 
 ## Goals
 
@@ -16,12 +15,13 @@ A local, single-user webapp for browsing and managing recipes. Imported from
 - **Images are collapsed by default** on the list view. A global "Show images" toggle reveals them in every card at once.
 - The category filter is a dropdown of all categories that actually appear across the recipes.
 - The "Random" button respects the current category filter (or picks across all recipes if no filter is set).
+- **Imperial → metric is auto-applied when saving** (add or edit). `oz`/`lb`/`°F` are **replaced** with metric. `cup`/`cups` are **kept** with metric appended in parens. `tsp`/`tbs` are intentionally left alone. Examples: `3 oz cream cheese` → `85 g cream cheese`; `350°F` → `177 °C`; `1 cup of milk` → `1 cup (240 ml) of milk`; `2 cups flour` → `2 cups (240 g) flour`. Cup is ml for liquids, g for known dry ingredients; default ml. The ingredient lookup table is in `src/app.js` under `CUP_GRAMS` / `CUP_ML`.
 
 ## Stack decisions
 
 | Concern | Choice | Why |
 |---|---|---|
-| Storage layout | One file per recipe under `recipes/`, images under `images/` | Drop a file = new recipe. Trivial backup. Per-recipe diffs. No DB. |
+| Storage layout | One file per recipe under `recipes/`, images under `recipe_images/` | Drop a file = new recipe. Trivial backup. Per-recipe diffs. No DB. |
 | Recipe format | Markdown with YAML frontmatter | Steps/ingredients are naturally prose. Frontmatter holds structured fields. Hand-editable. |
 | Frontend | Vanilla HTML + CSS + JS (no framework, no npm at all) | Single-user local app; React/Svelte/Vite is overkill. |
 | Build tool | Python stdlib script (`scripts/build.py`) | Zero npm/node. Inlines CSS + JS + recipes into one `recipes.html`. |
@@ -40,7 +40,7 @@ and opens the browser to `http://localhost:36637`.
 
 ```
 cooking_app/
-├── Cooking.docx              # original source document (do not edit)
+├── Cooking.docx              # original source document (optional after first import)
 ├── CLAUDE.md                 # this file
 ├── recipes/                  # one .md per recipe (source of truth)
 │   ├── cassoulet.md
@@ -58,7 +58,8 @@ cooking_app/
 │   ├── import_docx.py        # one-time conversion from Cooking.docx → recipes/*.md
 │   └── build.py              # bundles src/ + recipes/ → dist/recipes.html
 ├── server.py                 # runtime: stdlib HTTP server on port 36637
-└── run.sh                    # launcher: starts server.py and opens browser
+├── run.sh                    # launcher: starts server.py and opens browser
+└── Makefile                  # `make run | build | import | clean`
 ```
 
 ## Recipe format
@@ -126,7 +127,7 @@ CORS / auth: none. Server binds to `127.0.0.1` only.
 ## Running
 
 ```bash
-./run.sh                      # or: python3 server.py
+make run                      # or: ./run.sh / python3 server.py
 # browser opens at http://localhost:36637
 ```
 
@@ -138,7 +139,7 @@ Browse-only fallback (no server, no add/edit):
 ## Build
 
 ```bash
-python3 scripts/build.py      # → dist/recipes.html + dist/recipe_images/
+make build                    # → dist/recipes.html + dist/recipe_images/
 ```
 
 There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib.
@@ -153,8 +154,4 @@ There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib
 
 ## Open work
 
-- [ ] Implement `scripts/import_docx.py` and run it once.
-- [ ] Implement `server.py` (stdlib only).
-- [ ] Implement `src/` (list view, detail view, add/edit form, image upload).
-- [ ] `run.sh` launcher.
 - [ ] Manual cleanup pass over imported recipes as you actually cook them.

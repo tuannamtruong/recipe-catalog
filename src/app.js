@@ -126,59 +126,54 @@
   }
 
   // Each entry: { re, replace(match) => string }
+  // Conversion REPLACES the imperial portion with metric (does not keep both).
   const CONVERTERS = [
-    // °F or 350F  ->  °C
+    // °F or 350F  ->  °C  ("350°F" -> "177 °C")
     {
       re: /(\d+(?:[.,]\d+)?)\s*°?\s*F\b/g,
       replace: (m, q) => {
         const f = parseQty(q); if (f == null) return m;
         const c = Math.round(((f - 32) * 5) / 9);
-        return `${m} (${c} °C)`;
+        return `${c} °C`;
       },
     },
-    // oz  ->  g  (28.35 g/oz)
+    // oz  ->  g  ("3 oz cream cheese" -> "85 g cream cheese")
     {
       re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*oz\b/gi,
       replace: (m, q) => {
-        const first = q.split(/\s*-\s*/)[0];
-        const n = parseQty(first); if (n == null) return m;
-        return `${m} (${fmtNum(n * 28.35)} g)`;
+        const n = parseQty(q.split(/\s*-\s*/)[0]); if (n == null) return m;
+        return `${fmtNum(n * 28.35)} g`;
       },
     },
-    // lb / lbs / pound / pounds  ->  g  (453.6 g/lb)
+    // lb / lbs / pound / pounds  ->  g
     {
       re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*(?:lbs?|pounds?)\b/gi,
       replace: (m, q) => {
         const n = parseQty(q.split(/\s*-\s*/)[0]); if (n == null) return m;
-        return `${m} (${fmtNum(n * 453.6)} g)`;
+        return `${fmtNum(n * 453.6)} g`;
       },
     },
-    // cup / cups  ->  ml or g depending on ingredient
+    // cup / cups  ->  keep original, append metric in parens
+    //   "1 cup of milk"   -> "1 cup (240 ml) of milk"
+    //   "2 cups flour"    -> "2 cups (240 g) flour"
     {
-      re: /(\d+(?:[.,]\d+)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*cups?\b([^\n]*)/gi,
-      replace: (m, q, rest) => {
+      re: /(\d+(?:[.,]\d+)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*cups?\b/gi,
+      replace: (m, q, offset, full) => {
         const n = parseQty(q); if (n == null) return m;
-        const { unit, per } = pickCupConversion(rest || "");
-        // Reconstruct: only annotate the cup portion, keep `rest` as-is.
-        const cupPart = m.slice(0, m.length - (rest ? rest.length : 0));
-        return `${cupPart} (${fmtNum(n * per)} ${unit})${rest || ""}`;
+        const rest = full.slice(offset + m.length);
+        // Skip if already annotated: " (240 ml)" or " (240 g)"
+        if (/^\s*\(\s*\d+(?:[.,]\d+)?\s*(?:ml|g)\b/i.test(rest)) return m;
+        const { unit, per } = pickCupConversion(rest);
+        return `${m} (${fmtNum(n * per)} ${unit})`;
       },
     },
   ];
 
   function convertImperialLine(line) {
     if (!line) return line;
-    // Skip if there's already a metric annotation right after a unit.
     let out = line;
     for (const { re, replace } of CONVERTERS) {
-      out = out.replace(re, (match, ...groups) => {
-        // Don't double-annotate: if a `( ... g)` or `( ... ml)` already follows,
-        // leave the match alone.
-        const afterIdx = out.indexOf(match) + match.length;
-        const tail = out.slice(afterIdx, afterIdx + 16);
-        if (/^\s*\([^)]*\b(?:g|ml|°C|C)\b/.test(tail)) return match;
-        return replace(match, ...groups);
-      });
+      out = out.replace(re, replace);
     }
     return out;
   }
@@ -248,13 +243,17 @@
     return cs.filter((c) => typeof c === "string" && c.trim()).map((c) => c.trim());
   }
 
-  function refreshCategoryFilter() {
-    const select = $("#category-filter");
+  function allCategories() {
     const seen = new Set();
     for (const r of state.recipes) {
       for (const c of categoriesOf(r)) seen.add(c);
     }
-    const cats = Array.from(seen).sort((a, b) => a.localeCompare(b));
+    return Array.from(seen).sort((a, b) => a.localeCompare(b));
+  }
+
+  function refreshCategoryFilter() {
+    const select = $("#category-filter");
+    const cats = allCategories();
     const current = state.category;
     select.innerHTML = '<option value="">All categories</option>' +
       cats.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join("");
@@ -385,11 +384,18 @@
     const form = $("#tpl-form").content.firstElementChild.cloneNode(true);
     $(".form-title", form).textContent = editing ? "Edit recipe" : "Add recipe";
 
+    // Category field: free text plus a dropdown of existing categories that
+    // opens on focus and filters as you type.
+    const catInput = form.elements.categories;
+    const catList = $(".combo-list", form);
+    if (catInput && catList) attachCombobox(catInput, catList, allCategories);
+
     if (editing) {
       const fm = r.frontmatter || {};
       form.elements.title.value = fm.title || "";
       form.elements.categories.value = categoriesOf(r).join(", ");
-      form.elements.duration_minutes.value = Number.isFinite(fm.duration_minutes) ? fm.duration_minutes : "";
+      form.elements.prep_minutes.value = Number.isFinite(fm.prep_minutes) ? fm.prep_minutes : "";
+      form.elements.cook_minutes.value = Number.isFinite(fm.cook_minutes) ? fm.cook_minutes : "";
       form.elements.source_url.value = fm.source_url || "";
       const sections = parseBody(r.body);
       form.elements.ingredients.value = sections.ingredients.join("\n");
@@ -407,8 +413,10 @@
       if (!title) { errEl.textContent = "Title is required."; return; }
       const cats = (data.get("categories") || "").toString()
         .split(",").map((s) => s.trim()).filter(Boolean);
-      const durRaw = (data.get("duration_minutes") || "").toString().trim();
-      const dur = durRaw === "" ? null : Number(durRaw);
+      const prepRaw = (data.get("prep_minutes") || "").toString().trim();
+      const prep = prepRaw === "" ? null : Number(prepRaw);
+      const cookRaw = (data.get("cook_minutes") || "").toString().trim();
+      const cook = cookRaw === "" ? null : Number(cookRaw);
       const src = (data.get("source_url") || "").toString().trim() || null;
       const ingredients = convertImperialList(
         (data.get("ingredients") || "").toString()
@@ -438,7 +446,8 @@
         frontmatter: {
           title,
           categories: cats,
-          duration_minutes: dur,
+          prep_minutes: prep,
+          cook_minutes: cook,
           image,
           source_url: src,
         },

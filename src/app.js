@@ -230,6 +230,7 @@
     query: "",
     category: "",
     showImages: false,
+    view: "flat", // "flat" | "grouped"
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -281,34 +282,112 @@
 
   // ----- views -----
 
-  function showList() {
-    const recipes = filteredRecipes();
-    main.innerHTML = "";
-    if (!recipes.length) {
-      const p = document.createElement("p");
-      p.className = "empty";
-      p.textContent = state.recipes.length ? "No recipes match the current filter." : "No recipes yet.";
-      main.appendChild(p);
-      return;
+  function makeCard(r) {
+    const node = $("#tpl-card").content.firstElementChild.cloneNode(true);
+    $(".title", node).textContent = r.frontmatter?.title || r.slug;
+    $(".meta", node).textContent = metaLine(r);
+    const img = $(".thumb", node);
+    const imgName = r.frontmatter?.image;
+    if (typeof imgName === "string" && imgName) {
+      img.src = `recipe_images/${encodeURIComponent(imgName)}`;
+      img.alt = r.frontmatter?.title || "";
     }
     node.href = `#/r/${r.slug}`;
+    return node;
+  }
+
+  function makeGrid(recipes) {
     const grid = document.createElement("div");
     grid.className = "cards";
-    const tpl = $("#tpl-card");
+    for (const r of recipes) grid.appendChild(makeCard(r));
+    return grid;
+  }
+
+  // Total active time in minutes, e.g. "45 min" (omitted when unknown).
+  function timeLabel(r) {
+    const prep = r.frontmatter?.prep_minutes;
+    const cook = r.frontmatter?.cook_minutes;
+    let total = 0;
+    if (Number.isFinite(prep)) total += prep;
+    if (Number.isFinite(cook)) total += cook;
+    return total > 0 ? `${total} min` : "";
+  }
+
+  // Compact one-line row used inside category groups: "Name - Time".
+  // The category is omitted (it is the group heading).
+  function makeLine(r) {
+    const a = document.createElement("a");
+    a.className = "recipe-line";
+    a.href = `#/r/${r.slug}`;
+    const name = document.createElement("span");
+    name.className = "recipe-line-name";
+    name.textContent = r.frontmatter?.title || r.slug;
+    const time = document.createElement("span");
+    time.className = "recipe-line-time";
+    time.textContent = timeLabel(r);
+    a.appendChild(name);
+    a.appendChild(time);
+    return a;
+  }
+
+  function makeLineList(recipes) {
+    const list = document.createElement("div");
+    list.className = "recipe-lines";
+    for (const r of recipes) list.appendChild(makeLine(r));
+    return list;
+  }
+
+  function emptyMessage() {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = state.recipes.length ? "No recipes match the current filter." : "No recipes yet.";
+    return p;
+  }
+
+  function showList() {
+    if (state.view === "grouped") return showGrouped();
+    const recipes = filteredRecipes();
+    main.innerHTML = "";
+    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+    main.appendChild(makeGrid(recipes));
+  }
+
+  // Grouped view: one section per category, recipes listed under each. A recipe
+  // with multiple categories appears under each; uncategorized ones go last.
+  const UNCATEGORIZED = "Uncategorized";
+
+  function showGrouped() {
+    const recipes = filteredRecipes();
+    main.innerHTML = "";
+    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+
+    const groups = new Map();
     for (const r of recipes) {
-      const node = tpl.content.firstElementChild.cloneNode(true);
-      $(".title", node).textContent = r.frontmatter?.title || r.slug;
-      $(".meta", node).textContent = metaLine(r);
-      const img = $(".thumb", node);
-      const imgName = r.frontmatter?.image;
-      if (typeof imgName === "string" && imgName) {
-        img.src = `recipe_images/${encodeURIComponent(imgName)}`;
-        img.alt = r.frontmatter?.title || "";
+      const cats = categoriesOf(r);
+      const keys = cats.length ? cats : [UNCATEGORIZED];
+      for (const c of keys) {
+        if (!groups.has(c)) groups.set(c, []);
+        groups.get(c).push(r);
       }
-      node.addEventListener("click", () => { location.hash = `#/r/${r.slug}`; });
-      grid.appendChild(node);
     }
-    main.appendChild(grid);
+
+    const names = Array.from(groups.keys()).sort((a, b) => {
+      if (a === UNCATEGORIZED) return 1;
+      if (b === UNCATEGORIZED) return -1;
+      return a.localeCompare(b);
+    });
+
+    for (const name of names) {
+      const items = groups.get(name);
+      const section = document.createElement("section");
+      section.className = "category-group";
+      const h = document.createElement("h2");
+      h.className = "category-heading";
+      h.textContent = `${name} (${items.length})`;
+      section.appendChild(h);
+      section.appendChild(makeLineList(items));
+      main.appendChild(section);
+    }
   }
 
   function metaLine(r) {
@@ -570,6 +649,23 @@
     refreshCategoryFilter();
   }
 
+  // Icon for the view toggle. The button shows the view it will switch *to*.
+  const VIEW_ICONS = {
+    // grouped: stacked sections (offered while in flat view)
+    grouped: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="2" rx="1"/><rect x="3" y="7" width="14" height="2" rx="1"/><rect x="3" y="14" width="8" height="2" rx="1"/><rect x="3" y="18" width="14" height="2" rx="1"/></svg>',
+    // flat grid: four tiles (offered while in grouped view)
+    flat: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+  };
+
+  function renderViewToggle(btn) {
+    const next = state.view === "grouped" ? "flat" : "grouped";
+    const label = next === "grouped" ? "Group by category" : "Flat list";
+    btn.innerHTML = VIEW_ICONS[next];
+    btn.dataset.view = state.view;
+    btn.title = label;
+    btn.setAttribute("aria-label", label);
+  }
+
   function wireBar() {
     const home = $("#home");
     home.addEventListener("click", () => { location.hash = "#/"; });
@@ -589,6 +685,13 @@
       document.body.classList.toggle("show-images", state.showImages);
       e.target.textContent = state.showImages ? "Hide images" : "Show images";
       e.target.dataset.state = state.showImages ? "shown" : "hidden";
+    });
+    const viewBtn = $("#toggle-view");
+    renderViewToggle(viewBtn);
+    viewBtn.addEventListener("click", () => {
+      state.view = state.view === "grouped" ? "flat" : "grouped";
+      renderViewToggle(viewBtn);
+      if ((location.hash || "#/") === "#/") showList();
     });
     $("#random").addEventListener("click", () => {
       const pool = filteredRecipes();

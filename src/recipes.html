@@ -10,14 +10,16 @@
   <header class="bar">
     <h1 id="home" role="button" tabindex="0">Cooking</h1>
     <input id="search" type="search" placeholder="Search…" />
-    <select id="category-filter" aria-label="Category">
-      <option value="">All categories</option>
-    </select>
     <button id="toggle-images" type="button" data-state="hidden">Show images</button>
-    <button id="toggle-view" type="button" data-view="flat">Group by category</button>
     <button id="random" type="button">Random</button>
     <button id="add" type="button">+ Add</button>
   </header>
+  <div class="subbar">
+    <select id="category-filter" aria-label="Category">
+      <option value="">All categories</option>
+    </select>
+    <button id="toggle-view" class="icon-btn" type="button" data-view="flat"></button>
+  </div>
 
   <main id="main"></main>
 

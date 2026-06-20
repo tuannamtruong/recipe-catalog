@@ -70,7 +70,8 @@ Each recipe is one Markdown file with YAML frontmatter:
 ---
 title: Cassoulet
 categories: [Beef, Stew]
-duration_minutes: 90
+prep_minutes: 20
+cook_minutes: 70
 image: cassoulet.jpg          # filename inside images/, or null
 source_url: https://www.youtube.com/watch?v=g_Huy-0Xeek
 ---
@@ -118,7 +119,7 @@ CORS / auth: none. Server binds to `127.0.0.1` only.
    - leading quantity (digit, `tbs`, `tsp`, `cup`, `g`, `ml`, fractions, etc.) → ingredients
    - lines starting with imperative verbs or numbered → steps
    - first `http(s)://…` URL → `source_url`
-   - regex `(\d+)\s*(min|mins|phút|hour|hours)` → `duration_minutes`
+   - regex `(\d+)\s*(min|mins|phút|hour|hours)` → `prep_minutes` (cook time is left null for manual entry)
 4. Category guessed from nearest preceding section keyword in the document
    (beef / pork / chicken / seafood / vegetables / dessert / sauce / …).
 5. Emit `recipes/{slug}.md`. Expect ~20–30% of recipes to need manual cleanup
@@ -149,8 +150,9 @@ There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib
 - Slugs are kebab-case, lowercase, ASCII (Vietnamese diacritics are stripped for the filename only; the `title:` field keeps the original).
 - Categories are free-form strings; the UI builds the filter list from whatever appears across all recipes.
 - Image filenames are tied to the recipe slug. Deleting a recipe removes its images.
-- `recipes/` and `images/` are the source of truth. The UI never holds unsaved state across restarts.
-- When importing, never overwrite an existing `recipes/{slug}.md`. The import script writes to a temp directory first and reports collisions.
+- `recipes/` and `recipe_images/` are the source of truth. The UI never holds unsaved state across restarts.
+- When importing, never overwrite an existing `recipes/{slug}.md`. The import script skips collisions so manual edits survive re-runs.
+- Recipe filenames should not encode duration — keep durations in the `prep_minutes` / `cook_minutes` frontmatter fields.
 
 ## Open work
 

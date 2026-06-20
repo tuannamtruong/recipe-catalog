@@ -124,7 +124,7 @@ def _format_yaml_value(v) -> str:
 def serialize_markdown(recipe: dict) -> str:
     """Inverse of parse_markdown. Body is taken verbatim from recipe['body']."""
     fm = recipe.get("frontmatter", {})
-    order = ["title", "categories", "duration_minutes", "image", "source_url"]
+    order = ["title", "categories", "prep_minutes", "cook_minutes", "image", "source_url"]
     lines = ["---"]
     for k in order:
         if k in fm:

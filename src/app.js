@@ -312,10 +312,12 @@
 
   function metaLine(r) {
     const cats = categoriesOf(r).join(", ");
-    const dur = r.frontmatter?.duration_minutes;
+    const prep = r.frontmatter?.prep_minutes;
+    const cook = r.frontmatter?.cook_minutes;
     const bits = [];
     if (cats) bits.push(cats);
-    if (Number.isFinite(dur)) bits.push(`${dur} min`);
+    if (Number.isFinite(prep)) bits.push(`Prep ${prep} min`);
+    if (Number.isFinite(cook)) bits.push(`Cook ${cook} min`);
     return bits.join(" · ");
   }
 

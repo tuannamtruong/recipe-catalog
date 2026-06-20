@@ -210,7 +210,8 @@ def emit_markdown(slug: str, title: str, category: str,
         f"title: {yaml_escape(title)}",
         f"categories: [{yaml_escape(category)}]",
     ]
-    parts.append(f"duration_minutes: {duration}" if duration else "duration_minutes: null")
+    parts.append(f"prep_minutes: {duration}" if duration else "prep_minutes: null")
+    parts.append("cook_minutes: null")
     parts.append("image: null")
     parts.append(f"source_url: {yaml_escape(source_url)}" if source_url else "source_url: null")
     parts.append("---")

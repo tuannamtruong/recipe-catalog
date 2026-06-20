@@ -100,7 +100,7 @@ uniqueness and slug generation when saving via the UI.
 | GET | `/` and static paths | — | Serves `dist/` files |
 | GET | `/api/recipes` | — | Returns JSON array of all parsed recipes (front-matter + body) |
 | GET | `/api/recipes/{slug}` | — | Returns one recipe |
-| POST | `/api/recipes` | JSON recipe | Writes `recipes/{slug}.md`. 409 if slug exists. |
+| POST | `/api/recipes` | JSON recipe | Writes `recipes/{slug}.md`. If the slug is taken, appends `-2`/`-3`/… to the slug and ` 2`/` 3`/… to the title; returns the slug actually used. |
 | PUT | `/api/recipes/{slug}` | JSON recipe | Overwrites the file. |
 | DELETE | `/api/recipes/{slug}` | — | Deletes file (and orphaned image). |
 | POST | `/api/images` | JSON `{filename, data_base64}` | Saves to `recipe_images/{slug}.{ext}`. Returns filename. Base64 avoids multipart parsing in stdlib. |

@@ -308,11 +308,22 @@ class Handler(BaseHTTPRequestHandler):
         slug = data.get("slug") or slugify(title)
         if expected_slug and slug != expected_slug:
             return self._send_error(HTTPStatus.BAD_REQUEST, "slug mismatch")
-        path = RECIPES_DIR / f"{slug}.md"
-        if path.exists() and not overwrite:
-            return self._send_error(HTTPStatus.CONFLICT, f"recipe '{slug}' already exists")
-        if not path.exists() and overwrite:
-            return self._send_error(HTTPStatus.NOT_FOUND, "recipe not found")
+        if overwrite:
+            path = RECIPES_DIR / f"{slug}.md"
+            if not path.exists():
+                return self._send_error(HTTPStatus.NOT_FOUND, "recipe not found")
+        else:
+            # On create, never collide: if the name is taken, append "-2", "-3",
+            # ... to the slug and mirror the number in the displayed title.
+            base_slug = slug
+            n = 1
+            while (RECIPES_DIR / f"{slug}.md").exists():
+                n += 1
+                slug = f"{base_slug}-{n}"
+            if n > 1:
+                fm = dict(fm)
+                fm["title"] = f"{title} {n}"
+            path = RECIPES_DIR / f"{slug}.md"
         RECIPES_DIR.mkdir(parents=True, exist_ok=True)
         text = serialize_markdown({"frontmatter": fm, "body": data.get("body", "")})
         path.write_text(text, encoding="utf-8")

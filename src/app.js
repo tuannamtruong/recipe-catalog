@@ -291,6 +291,7 @@
       main.appendChild(p);
       return;
     }
+    node.href = `#/r/${r.slug}`;
     const grid = document.createElement("div");
     grid.className = "cards";
     const tpl = $("#tpl-card");

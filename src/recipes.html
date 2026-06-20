@@ -14,6 +14,7 @@
       <option value="">All categories</option>
     </select>
     <button id="toggle-images" type="button" data-state="hidden">Show images</button>
+    <button id="toggle-view" type="button" data-view="flat">Group by category</button>
     <button id="random" type="button">Random</button>
     <button id="add" type="button">+ Add</button>
   </header>
@@ -39,11 +40,11 @@
 
   <!-- List card -->
   <template id="tpl-card">
-    <article class="card">
+    <a class="card">
       <h3 class="title"></h3>
       <p class="meta"></p>
       <img class="thumb" alt="" />
-    </article>
+    </a>
   </template>
 
   <!-- Form -->

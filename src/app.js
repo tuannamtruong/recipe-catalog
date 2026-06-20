@@ -568,6 +568,11 @@
   }
 
   function wireBar() {
+    const home = $("#home");
+    home.addEventListener("click", () => { location.hash = "#/"; });
+    home.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); location.hash = "#/"; }
+    });
     $("#search").addEventListener("input", (e) => {
       state.query = e.target.value;
       if ((location.hash || "#/") === "#/") showList();

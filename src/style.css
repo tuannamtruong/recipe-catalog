@@ -34,6 +34,7 @@ html, body {
 .bar h1 {
   font-size: 1.25rem;
   margin: 0 0.5rem 0 0;
+  cursor: pointer;
 }
 .bar input[type="search"],
 .bar select,
@@ -178,6 +179,34 @@ body.show-images .card .thumb[src] { display: block; }
   background: #fff;
 }
 .form textarea { resize: vertical; min-height: 4rem; }
+
+/* Category combobox (free text + dropdown of existing categories) */
+.combo { position: relative; }
+.combo input { width: 100%; }
+.combo-list {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 2px);
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  max-height: 12rem;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.combo-list li {
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+.combo-list li:hover,
+.combo-list li.active { background: #f0eee8; }
 .form-actions { display: flex; justify-content: flex-end; }
 .form-actions button {
   background: var(--accent);

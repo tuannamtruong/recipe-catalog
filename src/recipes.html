@@ -8,7 +8,7 @@
 </head>
 <body>
   <header class="bar">
-    <h1>Cooking</h1>
+    <h1 id="home" role="button" tabindex="0">Cooking</h1>
     <input id="search" type="search" placeholder="Search…" />
     <select id="category-filter" aria-label="Category">
       <option value="">All categories</option>
@@ -52,8 +52,14 @@
       <button class="back" type="button">&larr; Back</button>
       <h2 class="form-title"></h2>
       <label>Title<input name="title" required></label>
-      <label>Categories (comma-separated)<input name="categories"></label>
-      <label>Duration (minutes)<input name="duration_minutes" type="number" min="0"></label>
+      <label>Categories (comma-separated)
+        <div class="combo">
+          <input name="categories" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+          <ul class="combo-list" role="listbox" hidden></ul>
+        </div>
+      </label>
+      <label>Prep time (minutes)<input name="prep_minutes" type="number" min="0"></label>
+      <label>Cook time (minutes)<input name="cook_minutes" type="number" min="0"></label>
       <label>Source URL<input name="source_url" type="url"></label>
       <label>Picture<input name="image" type="file" accept="image/*"></label>
       <label>Ingredients (one per line)<textarea name="ingredients" rows="8"></textarea></label>

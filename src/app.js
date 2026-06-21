@@ -272,6 +272,7 @@
       if (q) {
         const hay = (
           (r.frontmatter?.title || "") + "\n" +
+          (r.frontmatter?.source_url || "") + "\n" +
           (r.body || "") + "\n" +
           categoriesOf(r).join(" ")
         ).toLowerCase();

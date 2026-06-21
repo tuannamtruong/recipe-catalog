@@ -26,7 +26,7 @@ import webbrowser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 ROOT = Path(__file__).resolve().parent
 RECIPES_DIR = ROOT / "recipes"
@@ -168,6 +168,17 @@ def load_recipe(slug: str) -> dict | None:
     return rec
 
 
+def find_recipe_by_url(source_url: str) -> dict | None:
+    """Return the first recipe whose source_url matches, or None."""
+    target = (source_url or "").strip()
+    if not target:
+        return None
+    for rec in load_all_recipes():
+        if (rec.get("frontmatter", {}).get("source_url") or "").strip() == target:
+            return rec
+    return None
+
+
 def safe_image_filename(name: str) -> str | None:
     """Allow only simple basenames with image extensions."""
     if "/" in name or "\\" in name or name.startswith("."):
@@ -230,6 +241,13 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/" or path == "/recipes.html":
             return self._send_file(static_root() / "recipes.html")
         if path == "/api/recipes":
+            params = parse_qs(url.query)
+            source_url = params.get("source_url", [None])[0]
+            if source_url is not None:
+                rec = find_recipe_by_url(source_url)
+                if rec is None:
+                    return self._send_error(HTTPStatus.NOT_FOUND, "recipe not found")
+                return self._send_json(HTTPStatus.OK, rec)
             return self._send_json(HTTPStatus.OK, load_all_recipes())
         if path.startswith("/api/recipes/"):
             slug = path[len("/api/recipes/"):]

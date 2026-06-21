@@ -17,7 +17,7 @@ from pathlib import Path
 # to what the API would return.
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from server import parse_markdown  # noqa: E402
+from server import load_conversions, parse_markdown  # noqa: E402
 
 SRC = ROOT / "src"
 RECIPES_DIR = ROOT / "recipes"
@@ -53,7 +53,10 @@ def main() -> int:
     )
 
     # Replace external <script src="/app.js"></script> with inline data + script.
-    baked = "const __BAKED_RECIPES__ = " + json.dumps(recipes, ensure_ascii=False) + ";"
+    baked = (
+        "const __BAKED_RECIPES__ = " + json.dumps(recipes, ensure_ascii=False) + ";\n"
+        + "const __BAKED_CONVERSIONS__ = " + json.dumps(load_conversions(), ensure_ascii=False) + ";"
+    )
     inline_script = f"<script>\n{baked}\n{js}\n</script>"
     html = re.sub(
         r'<script\s+src="/app\.js"\s*></script>',

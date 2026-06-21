@@ -10,6 +10,7 @@
   // line below with: const BAKED = [...]; otherwise BAKED is null and we fetch.
   const BAKED = (typeof __BAKED_RECIPES__ !== "undefined") ? __BAKED_RECIPES__ : null;
   const STATIC_MODE = Array.isArray(BAKED);
+  const BAKED_CONVERSIONS = (typeof __BAKED_CONVERSIONS__ !== "undefined") ? __BAKED_CONVERSIONS__ : null;
 
   /** Returns Promise<RecipeRecord[]> */
   async function loadRecipes() {
@@ -61,6 +62,33 @@
     return body.filename;
   }
 
+  async function loadConversions() {
+    if (STATIC_MODE) return BAKED_CONVERSIONS;
+    const r = await fetch("/api/conversions");
+    if (!r.ok) throw new Error("failed to load conversions");
+    return r.json();
+  }
+
+  async function saveConversions(cupGramsObj) {
+    if (STATIC_MODE) throw new Error("Read-only mode (no server)");
+    const r = await fetch("/api/conversions", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cup_grams: cupGramsObj }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(body.error || `save failed (${r.status})`);
+    return body;
+  }
+
+  // Overwrite the in-memory table used by convert-on-save. Ignores junk so a
+  // failed/empty load just leaves the built-in defaults in place.
+  function applyConversions(data) {
+    if (data && data.cup_grams && typeof data.cup_grams === "object") {
+      cupGrams = { ...data.cup_grams };
+    }
+  }
+
   function bytesToBase64(bytes) {
     let s = "";
     const chunk = 0x8000;
@@ -75,23 +103,14 @@
   // Applied on save (create or edit). Inline format: keep the original text,
   // append metric in parentheses. tsp/tbs are intentionally left alone.
 
-  // Per-cup weights (grams) for common ingredients. Liquids are in mL.
-  // Source: the conversion table at the top of Cooking.docx.
-  const CUP_GRAMS = {
-    flour: 120, "all-purpose flour": 120, "ap flour": 120,
-    sugar: 200, "brown sugar": 220, "powdered sugar": 120,
-    butter: 227, "cocoa": 85, "cocoa powder": 85,
-    salt: 288, honey: 340, "baking powder": 192, "baking soda": 220,
-    oat: 90, oats: 90, rice: 185,
-  };
-  const CUP_ML = {
-    water: 237, milk: 240, "almond milk": 240, "coconut milk": 240,
-    cream: 240, "heavy cream": 240, "sour cream": 240,
-    broth: 240, stock: 240, juice: 240, vinegar: 240,
-    oil: 218, "olive oil": 218, "vegetable oil": 218,
-    syrup: 320, "maple syrup": 320,
-    yogurt: 245, "greek yogurt": 245,
-    sữa: 240, nước: 237,
+  // Per-cup weights (grams) for known dry ingredients. Editable via the
+  // reference panel and persisted to conversions.json; loadConversions()
+  // overwrites these defaults at startup. Anything not listed here converts
+  // to a flat 240 ml (a cup is a fixed volume).
+  let cupGrams = {
+    flour: 120,
+    sugar: 200,
+    oat: 90,
   };
 
   function parseQty(s) {
@@ -114,15 +133,12 @@
   function pickCupConversion(rest) {
     const r = rest.toLowerCase();
     // longest keyword first
-    const keys = Object.keys({ ...CUP_GRAMS, ...CUP_ML }).sort((a, b) => b.length - a.length);
+    const keys = Object.keys(cupGrams).sort((a, b) => b.length - a.length);
     for (const k of keys) {
       const re = new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
-      if (re.test(r)) {
-        if (k in CUP_ML) return { unit: "ml", per: CUP_ML[k] };
-        return { unit: "g", per: CUP_GRAMS[k] };
-      }
+      if (re.test(r)) return { unit: "g", per: cupGrams[k] };
     }
-    return { unit: "ml", per: 237 }; // default to volume
+    return { unit: "ml", per: 240 }; // default: a cup is 240 ml
   }
 
   // Each entry: { re, replace(match) => string }
@@ -180,6 +196,99 @@
 
   function convertImperialList(lines) {
     return (lines || []).map(convertImperialLine);
+  }
+
+  // Builds the imperial -> metric reference panel shown beside the add/edit
+  // form. Generated from the same constants used by the converters above so
+  // it never drifts from what saving actually does. The per-cup dry-ingredient
+  // table is editable and persisted to conversions.json via the API.
+  function buildConversionRef() {
+    const aside = document.createElement("aside");
+    aside.className = "convert-ref";
+    aside.innerHTML = `
+      <h3>Imperial → Metric</h3>
+      <p class="convert-note">Applied automatically when you save.</p>
+      <table>
+        <tbody>
+          <tr><th>1 oz</th><td>28 g</td></tr>
+          <tr><th>1 lb</th><td>454 g</td></tr>
+          <tr><th>°F</th><td>(°F − 32) × 5⁄9 °C</td></tr>
+          <tr><th>1 cup</th><td>240 ml</td></tr>
+        </tbody>
+      </table>
+      <p class="convert-note">tsp / tbs are left unchanged.</p>
+      <h4>Per cup of dry ingredient (g)</h4>
+    `;
+
+    const list = document.createElement("div");
+    list.className = "cup-grams-list";
+    aside.appendChild(list);
+
+    const makeRow = (name = "", grams = "") => {
+      const row = document.createElement("div");
+      row.className = "cup-grams-row";
+      row.innerHTML = `
+        <input class="cg-name" type="text" placeholder="ingredient" value="${escapeAttr(name)}">
+        <input class="cg-grams" type="number" min="1" placeholder="g" value="${grams === "" ? "" : escapeAttr(String(grams))}">
+        <button class="cg-remove" type="button" title="Remove" aria-label="Remove">×</button>
+      `;
+      $(".cg-remove", row).addEventListener("click", () => row.remove());
+      return row;
+    };
+
+    for (const [name, grams] of Object.entries(cupGrams).sort((a, b) => a[0].localeCompare(b[0]))) {
+      list.appendChild(makeRow(name, grams));
+    }
+
+    // Static build has no server to persist to (and the add/edit form is
+    // hidden anyway) — show the table read-only.
+    if (STATIC_MODE) {
+      $$("input", list).forEach((el) => { el.disabled = true; });
+      $$(".cg-remove", list).forEach((el) => { el.hidden = true; });
+      return aside;
+    }
+
+    const status = document.createElement("p");
+    status.className = "cg-status convert-note";
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "cg-add";
+    addBtn.textContent = "+ Add ingredient";
+    addBtn.addEventListener("click", () => list.appendChild(makeRow()));
+
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "button";
+    saveBtn.className = "cg-save";
+    saveBtn.textContent = "Save table";
+    saveBtn.addEventListener("click", async () => {
+      const next = {};
+      for (const row of $$(".cup-grams-row", list)) {
+        const name = $(".cg-name", row).value.trim().toLowerCase();
+        if (!name) continue;
+        const grams = Number($(".cg-grams", row).value);
+        if (!Number.isFinite(grams) || grams <= 0) {
+          status.textContent = `"${name || "?"}" needs grams > 0.`;
+          return;
+        }
+        next[name] = Math.round(grams);
+      }
+      status.textContent = "Saving…";
+      try {
+        applyConversions(await saveConversions(next));
+        status.textContent = "Saved.";
+      } catch (err) {
+        status.textContent = err.message;
+      }
+    });
+
+    const actions = document.createElement("div");
+    actions.className = "cup-grams-actions";
+    actions.appendChild(addBtn);
+    actions.appendChild(saveBtn);
+    aside.appendChild(actions);
+    aside.appendChild(status);
+    return aside;
   }
 
   // ----- markdown body parsing -----
@@ -592,7 +701,11 @@
     });
 
     main.innerHTML = "";
-    main.appendChild(form);
+    const layout = document.createElement("div");
+    layout.className = "form-layout";
+    layout.appendChild(buildConversionRef());
+    layout.appendChild(form);
+    main.appendChild(layout);
   }
 
   // Free-text combobox over a comma-separated field. The dropdown opens on
@@ -770,6 +883,11 @@
     } catch (e) {
       main.innerHTML = `<p class="empty">Failed to load recipes: ${escapeHtml(e.message)}</p>`;
       return;
+    }
+    try {
+      applyConversions(await loadConversions());
+    } catch {
+      /* keep built-in defaults */
     }
     route();
   })();

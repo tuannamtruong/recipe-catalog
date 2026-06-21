@@ -265,6 +265,100 @@ body.show-images .card .thumb[src] { display: block; }
 
 /* Form */
 
+.form-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.form-layout .form {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+/* Imperial -> metric reference panel beside the form */
+.convert-ref {
+  flex: 0 0 220px;
+  position: sticky;
+  top: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--fg);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+.convert-ref h3 { margin: 0 0 0.25rem; font-size: 0.95rem; }
+.convert-ref h4 {
+  margin: 0.6rem 0 0.2rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.convert-ref .convert-note {
+  margin: 0.25rem 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.convert-ref table { width: 100%; border-collapse: collapse; }
+.convert-ref th,
+.convert-ref td {
+  text-align: left;
+  padding: 0.12rem 0;
+  font-weight: normal;
+  vertical-align: top;
+}
+.convert-ref td { text-align: right; color: var(--muted); white-space: nowrap; }
+.cup-grams-list { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.2rem; }
+.cup-grams-row { display: flex; gap: 0.3rem; align-items: center; }
+.cup-grams-row .cg-name { flex: 1 1 auto; min-width: 0; }
+.cup-grams-row .cg-grams { flex: 0 0 3.5rem; width: 3.5rem; }
+.cup-grams-row input {
+  font: inherit;
+  color: var(--fg);
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fff;
+}
+.cup-grams-row .cg-remove {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+  border-radius: 5px;
+  width: 1.6rem;
+  height: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.cup-grams-row .cg-remove:hover { color: var(--danger); border-color: var(--danger); }
+.cup-grams-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap; }
+.cup-grams-actions button {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--fg);
+}
+.cup-grams-actions .cg-save {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+.cg-status { min-height: 1rem; }
+@media (max-width: 720px) {
+  .form-layout { flex-direction: column; }
+  .convert-ref { position: static; flex-basis: auto; width: 100%; max-height: none; }
+}
+
 .form {
   max-width: 900px;
   margin: 0 auto;

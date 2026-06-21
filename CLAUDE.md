@@ -15,7 +15,7 @@ A local, single-user webapp for browsing and managing recipes.
 - **Images are collapsed by default** on the list view. A global "Show images" toggle reveals them in every card at once.
 - The category filter is a dropdown of all categories that actually appear across the recipes.
 - The "Random" button respects the current category filter (or picks across all recipes if no filter is set).
-- **Imperial → metric is auto-applied when saving** (add or edit). `oz`/`lb`/`°F` are **replaced** with metric. `cup`/`cups` are **kept** with metric appended in parens. `tsp`/`tbs` are intentionally left alone. Examples: `3 oz cream cheese` → `85 g cream cheese`; `350°F` → `177 °C`; `1 cup of milk` → `1 cup (240 ml) of milk`; `2 cups flour` → `2 cups (240 g) flour`. Cup is ml for liquids, g for known dry ingredients; default ml. The ingredient lookup table is in `src/app.js` under `CUP_GRAMS` / `CUP_ML`.
+- **Imperial → metric is auto-applied when saving** (add or edit). `oz`/`lb`/`°F` are **replaced** with metric. `cup`/`cups` are **kept** with metric appended in parens. `tsp`/`tbs` are intentionally left alone. Examples: `3 oz cream cheese` → `85 g cream cheese`; `350°F` → `177 °C`; `1 cup of milk` → `1 cup (240 ml) of milk`; `2 cups flour` → `2 cups (240 g) flour`. Known dry ingredients convert to grams; everything else converts to a flat 240 ml (a cup is a fixed volume). The dry-ingredient gram table lives in `conversions.json` and is **editable from the reference panel** on the add/edit form (persisted via `PUT /api/conversions`). `src/app.js` holds built-in defaults used until the table loads and as a fallback.
 
 ## Stack decisions
 
@@ -47,6 +47,7 @@ cooking_app/
 │   └── ...
 ├── recipe_images/            # recipe photos, referenced by frontmatter `image:` field
 │   └── cassoulet.jpg
+├── conversions.json          # editable cup→gram table for dry ingredients
 ├── src/                      # frontend source
 │   ├── recipes.html
 │   ├── app.js
@@ -106,6 +107,8 @@ uniqueness and slug generation when saving via the UI.
 | DELETE | `/api/recipes/{slug}` | — | Deletes file (and orphaned image). |
 | POST | `/api/images` | JSON `{filename, data_base64}` | Saves to `recipe_images/{slug}.{ext}`. Returns filename. Base64 avoids multipart parsing in stdlib. |
 | GET | `/recipe_images/{name}` | — | Serves images. |
+| GET | `/api/conversions` | — | Returns `{cup_grams: {name: grams}}` from `conversions.json` (or built-in defaults). |
+| PUT | `/api/conversions` | JSON `{cup_grams}` | Validates (drops empty names / non-positive / non-numeric, lowercases keys) and overwrites `conversions.json`. |
 
 CORS / auth: none. Server binds to `127.0.0.1` only.
 

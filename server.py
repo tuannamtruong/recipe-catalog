@@ -33,7 +33,13 @@ RECIPES_DIR = ROOT / "recipes"
 IMAGES_DIR = ROOT / "recipe_images"
 SRC_DIR = ROOT / "src"
 DIST_DIR = ROOT / "dist"
+CONVERSIONS_FILE = ROOT / "conversions.json"
 PORT = 36637
+
+# Per-cup gram weights for known dry ingredients. Editable via the UI and
+# persisted to conversions.json; these are the fallback when the file is
+# missing or invalid. Anything not listed converts to a flat 240 ml.
+DEFAULT_CUP_GRAMS = {"flour": 120, "sugar": 200, "oat": 90}
 
 # Index page: prefer src/ in dev. If src/recipes.html is missing, fall back to dist/.
 def static_root() -> Path:
@@ -168,6 +174,48 @@ def load_recipe(slug: str) -> dict | None:
     return rec
 
 
+def sanitize_cup_grams(raw) -> dict:
+    """Keep only {non-empty lowercased name: positive number} entries."""
+    out: dict = {}
+    if not isinstance(raw, dict):
+        return out
+    for name, grams in raw.items():
+        if not isinstance(name, str):
+            continue
+        key = name.strip().lower()
+        if not key:
+            continue
+        if isinstance(grams, bool) or not isinstance(grams, (int, float)):
+            continue
+        if grams <= 0:
+            continue
+        out[key] = int(grams) if float(grams).is_integer() else grams
+    return out
+
+
+def load_conversions() -> dict:
+    """Return {"cup_grams": {name: grams}}, falling back to defaults."""
+    if CONVERSIONS_FILE.exists():
+        try:
+            data = json.loads(CONVERSIONS_FILE.read_text(encoding="utf-8"))
+            cg = sanitize_cup_grams(data.get("cup_grams") if isinstance(data, dict) else None)
+            if cg:
+                return {"cup_grams": cg}
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            pass
+    return {"cup_grams": dict(DEFAULT_CUP_GRAMS)}
+
+
+def save_conversions(data: dict) -> dict:
+    """Validate and overwrite conversions.json. Returns the stored payload."""
+    cg = sanitize_cup_grams((data or {}).get("cup_grams"))
+    payload = {"cup_grams": cg}
+    CONVERSIONS_FILE.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return payload
+
+
 def find_recipe_by_url(source_url: str) -> dict | None:
     """Return the first recipe whose source_url matches, or None."""
     target = (source_url or "").strip()
@@ -240,6 +288,8 @@ class Handler(BaseHTTPRequestHandler):
 
         if path == "/" or path == "/recipes.html":
             return self._send_file(static_root() / "recipes.html")
+        if path == "/api/conversions":
+            return self._send_json(HTTPStatus.OK, load_conversions())
         if path == "/api/recipes":
             params = parse_qs(url.query)
             source_url = params.get("source_url", [None])[0]
@@ -287,6 +337,11 @@ class Handler(BaseHTTPRequestHandler):
     def do_PUT(self):
         url = urlparse(self.path)
         path = unquote(url.path)
+        if path == "/api/conversions":
+            data = self._read_json()
+            if data is None:
+                return self._send_error(HTTPStatus.BAD_REQUEST, "json body required")
+            return self._send_json(HTTPStatus.OK, save_conversions(data))
         if path.startswith("/api/recipes/"):
             slug = path[len("/api/recipes/"):]
             data = self._read_json()

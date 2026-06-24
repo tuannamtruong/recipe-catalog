@@ -672,7 +672,9 @@
       );
       const steps = convertImperialList(
         (data.get("steps") || "").toString()
-          .split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+          .split(/\r?\n/)
+          .map((s) => s.trim().replace(/^\d+\s*[.)]\s*/, ""))
+          .filter(Boolean)
       );
       const notes = (data.get("notes") || "").toString()
         .split(/\r?\n/).map((s) => s.trim()).filter(Boolean);

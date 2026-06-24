@@ -1,6 +1,6 @@
 ---
 title: Swedish Meatballs
-categories: [Beef]
+categories: [Ground meat]
 prep_minutes: 60
 cook_minutes: null
 image: null
@@ -22,8 +22,8 @@ source_url: null
 - Sốt:
 - 3 tbs butter
 - 1 tbs (all purpose) flour
-- 3 Cups beef broth
-- 3/4 cup Heavycream
+- 3 Cups (720 ml) beef broth
+- 3/4 cup (180 ml) Heavycream
 - 0,5 tbs đường
 - ( 1/4 tbs Worcestershire sauce)
 - % muối và tiêu

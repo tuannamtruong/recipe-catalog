@@ -842,9 +842,12 @@
 
   function wireBar() {
     const home = $("#home");
-    home.addEventListener("click", () => { location.hash = "#/"; });
-    home.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); location.hash = "#/"; }
+    home.addEventListener("click", (e) => {
+      // Plain left-click navigates in place. Middle-click and modifier-clicks
+      // fall through to the browser so home opens in a new tab.
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      location.hash = "#/";
     });
     $("#search").addEventListener("input", (e) => {
       state.query = e.target.value;

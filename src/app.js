@@ -570,9 +570,20 @@
     }
     const { ingredients, steps } = parseBody(r.body);
     const ul = $(".ingredients ul", node);
+    let firstGroup = true;
     for (const i of ingredients) {
       const li = document.createElement("li");
-      li.textContent = i;
+      // A line ending in ":" (e.g. "Salad:", "Sauce:") is a group label, not an
+      // ingredient — render it as a sub-heading with the items listed under it.
+      const groupMatch = i.match(/^(.+?):\s*$/);
+      if (groupMatch) {
+        li.className = "ingredient-group";
+        if (firstGroup) li.classList.add("first");
+        li.textContent = groupMatch[1];
+        firstGroup = false;
+      } else {
+        li.textContent = i;
+      }
       ul.appendChild(li);
     }
     const ol = $(".steps ol", node);

@@ -249,7 +249,21 @@ body.show-images .card .thumb[src] { display: block; }
 .detail .hero[src] { display: block; }
 .detail h3 { margin: 1rem 0 0.4rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
 .detail ul, .detail ol { margin: 0; padding-left: 1.25rem; }
-.detail li { margin: 0.15rem 0; }
+.detail li { margin: 0.3rem 0; }
+.detail .steps li { margin: 0.45rem 0; }
+
+/* Ingredient group label (a line ending in ":", e.g. "Salad:" / "Sauce:") */
+.detail .ingredients li.ingredient-group {
+  list-style: none;
+  margin-left: -1.25rem;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.detail .ingredients li.ingredient-group.first { margin-top: 0; }
 .detail .source { margin: 1rem 0 0; font-size: 0.9rem; }
 .detail .source a { color: var(--accent); }
 .detail-actions { margin-top: 1.25rem; display: flex; gap: 0.5rem; }

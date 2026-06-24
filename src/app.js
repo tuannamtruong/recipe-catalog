@@ -668,7 +668,9 @@
       const src = (data.get("source_url") || "").toString().trim() || null;
       const ingredients = convertImperialList(
         (data.get("ingredients") || "").toString()
-          .split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+          .split(/\r?\n/)
+          .map((s) => s.trim().replace(/^[-*•·‣◦]\s*/, ""))
+          .filter(Boolean)
       );
       const steps = convertImperialList(
         (data.get("steps") || "").toString()

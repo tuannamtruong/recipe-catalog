@@ -1,81 +1,142 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cooking</title>
-  <link rel="stylesheet" href="/style.css" />
-</head>
-<body>
-  <header class="bar">
-    <h1><a id="home" href="#/">Cooking</a></h1>
-    <input id="search" type="search" placeholder="Search…" />
-    <button id="toggle-images" type="button" data-state="hidden">Show images</button>
-    <button id="random" type="button">Random</button>
-    <button id="add" type="button">+ Add</button>
-  </header>
-  <div class="subbar">
-    <select id="category-filter" aria-label="Category">
-      <option value="">All categories</option>
-    </select>
-    <button id="toggle-view" class="icon-btn" type="button" data-view="flat"></button>
-    <button id="toggle-collapse" type="button" hidden>Collapse all</button>
-  </div>
-
-  <main id="main"></main>
-
-  <!-- Recipe detail -->
-  <template id="tpl-detail">
-    <article class="detail">
-      <button class="back" type="button">&larr; Back</button>
-      <h2 class="title"></h2>
-      <p class="meta"></p>
-      <img class="hero" alt="" />
-      <section class="ingredients"><h3>Ingredients</h3><ul></ul></section>
-      <section class="steps"><h3>Steps</h3><ol></ol></section>
-      <p class="source"></p>
-      <div class="detail-actions">
-        <button class="edit" type="button">Edit</button>
-        <button class="delete" type="button">Delete</button>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cooking</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1><a id="home" href="#/">Cooking</a></h1>
+      <input id="search" type="search" placeholder="Search… ( / )" />
+      <button
+        id="toggle-images"
+        type="button"
+        data-state="hidden"
+        title="Show / hide images (i)"
+      >
+        Show images
+      </button>
+      <button id="random" type="button" title="Random recipe (r)">
+        Random
+      </button>
+      <button id="add" type="button" title="Add recipe (a)">+ Add</button>
+      <button
+        id="hotkeys"
+        type="button"
+        title="Keyboard shortcuts (?)"
+        aria-label="Keyboard shortcuts"
+        aria-expanded="false"
+        aria-controls="hotkeys-panel"
+      >
+        ?
+      </button>
+      <div
+        id="hotkeys-panel"
+        role="dialog"
+        aria-label="Keyboard shortcuts"
+        hidden
+      >
+        <h2>Keyboard shortcuts</h2>
+        <dl></dl>
       </div>
-    </article>
-  </template>
+    </header>
+    <div class="subbar">
+      <select id="category-filter" aria-label="Category">
+        <option value="">All categories</option>
+      </select>
+      <button
+        id="toggle-view"
+        class="icon-btn"
+        type="button"
+        data-view="flat"
+      ></button>
+      <button id="toggle-collapse" type="button" hidden>Collapse all</button>
+    </div>
 
-  <!-- List card -->
-  <template id="tpl-card">
-    <a class="card">
-      <h3 class="title"></h3>
-      <p class="meta"></p>
-      <img class="thumb" alt="" />
-    </a>
-  </template>
+    <main id="main"></main>
 
-  <!-- Form -->
-  <template id="tpl-form">
-    <form class="form">
-      <button class="back" type="button">&larr; Back</button>
-      <h2 class="form-title"></h2>
-      <label>Title<input name="title" required></label>
-      <label>Categories (comma-separated)
-        <div class="combo">
-          <input name="categories" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
-          <ul class="combo-list" role="listbox" hidden></ul>
+    <!-- Recipe detail -->
+    <template id="tpl-detail">
+      <article class="detail">
+        <button class="back" type="button">&larr; Back</button>
+        <h2 class="title"></h2>
+        <p class="meta"></p>
+        <img class="hero" alt="" />
+        <section class="ingredients">
+          <h3>Ingredients</h3>
+          <ul></ul>
+        </section>
+        <section class="steps">
+          <h3>Steps</h3>
+          <ol></ol>
+        </section>
+        <p class="source"></p>
+        <div class="detail-actions">
+          <button class="edit" type="button" title="Edit (e)">Edit</button>
+          <button class="delete" type="button" title="Delete (d)">
+            Delete
+          </button>
         </div>
-      </label>
-      <label>Prep time (minutes)<input name="prep_minutes" type="number" min="0"></label>
-      <label>Cook time (minutes)<input name="cook_minutes" type="number" min="0"></label>
-      <label>Source URL<input name="source_url" type="url"></label>
-      <label>Picture<input name="image" type="file" accept="image/*"></label>
-      <label>Ingredients (one per line)<textarea name="ingredients" rows="8"></textarea></label>
-      <label>Steps (one per line)<textarea name="steps" rows="10"></textarea></label>
-      <label>Notes<textarea name="notes" rows="3"></textarea></label>
-      <div class="form-actions">
-        <button type="submit">Save</button>
-      </div>
-      <p class="form-error" role="alert"></p>
-    </form>
-  </template>
+      </article>
+    </template>
 
-  <script src="/app.js"></script>
-</body>
+    <!-- List card -->
+    <template id="tpl-card">
+      <a class="card">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <img class="thumb" alt="" />
+      </a>
+    </template>
+
+    <!-- Form -->
+    <template id="tpl-form">
+      <form class="form">
+        <button class="back" type="button">&larr; Back</button>
+        <h2 class="form-title"></h2>
+        <label>Title<input name="title" required /></label>
+        <label
+          >Categories (comma-separated)
+          <div class="combo">
+            <input
+              name="categories"
+              autocomplete="off"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <ul class="combo-list" role="listbox" hidden></ul>
+          </div>
+        </label>
+        <label
+          >Prep time (minutes)<input name="prep_minutes" type="number" min="0"
+        /></label>
+        <label
+          >Cook time (minutes)<input name="cook_minutes" type="number" min="0"
+        /></label>
+        <label>Source URL<input name="source_url" type="url" /></label>
+        <label
+          >Picture<input name="image" type="file" accept="image/*"
+        /></label>
+        <label
+          >Ingredients (one per line)<textarea
+            name="ingredients"
+            rows="8"
+          ></textarea>
+        </label>
+        <label
+          >Steps (one per line)<textarea name="steps" rows="10"></textarea>
+        </label>
+        <label>Notes<textarea name="notes" rows="3"></textarea></label>
+        <div class="form-actions">
+          <button type="submit">Save</button>
+        </div>
+        <p class="form-error" role="alert"></p>
+      </form>
+    </template>
+
+    <script src="/app.js"></script>
+  </body>
 </html>

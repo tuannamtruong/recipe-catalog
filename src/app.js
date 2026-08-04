@@ -8,9 +8,11 @@
 
   // When built into a single self-contained recipes.html, build.py replaces the
   // line below with: const BAKED = [...]; otherwise BAKED is null and we fetch.
-  const BAKED = (typeof __BAKED_RECIPES__ !== "undefined") ? __BAKED_RECIPES__ : null;
+  const BAKED =
+    typeof __BAKED_RECIPES__ !== "undefined" ? __BAKED_RECIPES__ : null;
   const STATIC_MODE = Array.isArray(BAKED);
-  const BAKED_CONVERSIONS = (typeof __BAKED_CONVERSIONS__ !== "undefined") ? __BAKED_CONVERSIONS__ : null;
+  const BAKED_CONVERSIONS =
+    typeof __BAKED_CONVERSIONS__ !== "undefined" ? __BAKED_CONVERSIONS__ : null;
 
   /** Returns Promise<RecipeRecord[]> */
   async function loadRecipes() {
@@ -22,9 +24,10 @@
 
   async function saveRecipe(rec, mode /* "create" | "update" */) {
     if (STATIC_MODE) throw new Error("Read-only mode (no server)");
-    const url = mode === "update"
-      ? `/api/recipes/${encodeURIComponent(rec.slug)}`
-      : "/api/recipes";
+    const url =
+      mode === "update"
+        ? `/api/recipes/${encodeURIComponent(rec.slug)}`
+        : "/api/recipes";
     const method = mode === "update" ? "PUT" : "POST";
     const r = await fetch(url, {
       method,
@@ -38,7 +41,9 @@
 
   async function deleteRecipe(slug) {
     if (STATIC_MODE) throw new Error("Read-only mode (no server)");
-    const r = await fetch(`/api/recipes/${encodeURIComponent(slug)}`, { method: "DELETE" });
+    const r = await fetch(`/api/recipes/${encodeURIComponent(slug)}`, {
+      method: "DELETE",
+    });
     if (!r.ok) {
       const body = await r.json().catch(() => ({}));
       throw new Error(body.error || `delete failed (${r.status})`);
@@ -47,7 +52,9 @@
 
   async function uploadImage(file, slug) {
     if (STATIC_MODE) throw new Error("Read-only mode (no server)");
-    const ext = (file.name.match(/\.[A-Za-z0-9]+$/) || [".jpg"])[0].toLowerCase();
+    const ext = (file.name.match(/\.[A-Za-z0-9]+$/) || [
+      ".jpg",
+    ])[0].toLowerCase();
     const safeSlug = slug.replace(/[^a-zA-Z0-9_-]/g, "");
     const filename = `${safeSlug || "image"}-${Date.now()}${ext}`;
     const data = await file.arrayBuffer();
@@ -135,7 +142,10 @@
     // longest keyword first
     const keys = Object.keys(cupGrams).sort((a, b) => b.length - a.length);
     for (const k of keys) {
-      const re = new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+      const re = new RegExp(
+        `\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
+        "i",
+      );
       if (re.test(r)) return { unit: "g", per: cupGrams[k] };
     }
     return { unit: "ml", per: 240 }; // default: a cup is 240 ml
@@ -148,7 +158,8 @@
     {
       re: /(\d+(?:[.,]\d+)?)\s*°?\s*F\b/g,
       replace: (m, q) => {
-        const f = parseQty(q); if (f == null) return m;
+        const f = parseQty(q);
+        if (f == null) return m;
         const c = Math.round(((f - 32) * 5) / 9);
         return `${c} °C`;
       },
@@ -157,7 +168,8 @@
     {
       re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*oz\b/gi,
       replace: (m, q) => {
-        const n = parseQty(q.split(/\s*-\s*/)[0]); if (n == null) return m;
+        const n = parseQty(q.split(/\s*-\s*/)[0]);
+        if (n == null) return m;
         return `${fmtNum(n * 28.35)} g`;
       },
     },
@@ -165,7 +177,8 @@
     {
       re: /(\d+(?:[.,]\d+)?(?:\s*-\s*\d+(?:[.,]\d+)?)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*(?:lbs?|pounds?)\b/gi,
       replace: (m, q) => {
-        const n = parseQty(q.split(/\s*-\s*/)[0]); if (n == null) return m;
+        const n = parseQty(q.split(/\s*-\s*/)[0]);
+        if (n == null) return m;
         return `${fmtNum(n * 453.6)} g`;
       },
     },
@@ -175,7 +188,8 @@
     {
       re: /(\d+(?:[.,]\d+)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)\s*cups?\b/gi,
       replace: (m, q, offset, full) => {
-        const n = parseQty(q); if (n == null) return m;
+        const n = parseQty(q);
+        if (n == null) return m;
         const rest = full.slice(offset + m.length);
         // Skip if already annotated: " (240 ml)" or " (240 g)"
         if (/^\s*\(\s*\d+(?:[.,]\d+)?\s*(?:ml|g)\b/i.test(rest)) return m;
@@ -236,15 +250,21 @@
       return row;
     };
 
-    for (const [name, grams] of Object.entries(cupGrams).sort((a, b) => a[0].localeCompare(b[0]))) {
+    for (const [name, grams] of Object.entries(cupGrams).sort((a, b) =>
+      a[0].localeCompare(b[0]),
+    )) {
       list.appendChild(makeRow(name, grams));
     }
 
     // Static build has no server to persist to (and the add/edit form is
     // hidden anyway) — show the table read-only.
     if (STATIC_MODE) {
-      $$("input", list).forEach((el) => { el.disabled = true; });
-      $$(".cg-remove", list).forEach((el) => { el.hidden = true; });
+      $$("input", list).forEach((el) => {
+        el.disabled = true;
+      });
+      $$(".cg-remove", list).forEach((el) => {
+        el.hidden = true;
+      });
       return aside;
     }
 
@@ -299,9 +319,18 @@
     let current = "notes";
     for (const raw of (body || "").split(/\r?\n/)) {
       const line = raw.trim();
-      if (/^##\s+ingredients\b/i.test(line)) { current = "ingredients"; continue; }
-      if (/^##\s+steps\b/i.test(line)) { current = "steps"; continue; }
-      if (/^##\s+notes\b/i.test(line)) { current = "notes"; continue; }
+      if (/^##\s+ingredients\b/i.test(line)) {
+        current = "ingredients";
+        continue;
+      }
+      if (/^##\s+steps\b/i.test(line)) {
+        current = "steps";
+        continue;
+      }
+      if (/^##\s+notes\b/i.test(line)) {
+        current = "notes";
+        continue;
+      }
       if (!line) continue;
       const cleaned = line.replace(/^[-*]\s+/, "").replace(/^\d+\.\s+/, "");
       sections[current].push(cleaned);
@@ -351,7 +380,9 @@
   function categoriesOf(rec) {
     const cs = rec.frontmatter?.categories;
     if (!Array.isArray(cs)) return [];
-    return cs.filter((c) => typeof c === "string" && c.trim()).map((c) => c.trim());
+    return cs
+      .filter((c) => typeof c === "string" && c.trim())
+      .map((c) => c.trim());
   }
 
   function allCategories() {
@@ -366,8 +397,13 @@
     const select = $("#category-filter");
     const cats = allCategories();
     const current = state.category;
-    select.innerHTML = '<option value="">All categories</option>' +
-      cats.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join("");
+    select.innerHTML =
+      '<option value="">All categories</option>' +
+      cats
+        .map(
+          (c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`,
+        )
+        .join("");
     select.value = current;
   }
 
@@ -380,9 +416,12 @@
       }
       if (q) {
         const hay = (
-          (r.frontmatter?.title || "") + "\n" +
-          (r.frontmatter?.source_url || "") + "\n" +
-          (r.body || "") + "\n" +
+          (r.frontmatter?.title || "") +
+          "\n" +
+          (r.frontmatter?.source_url || "") +
+          "\n" +
+          (r.body || "") +
+          "\n" +
           categoriesOf(r).join(" ")
         ).toLowerCase();
         if (!hay.includes(q)) return false;
@@ -451,7 +490,9 @@
   function emptyMessage() {
     const p = document.createElement("p");
     p.className = "empty";
-    p.textContent = state.recipes.length ? "No recipes match the current filter." : "No recipes yet.";
+    p.textContent = state.recipes.length
+      ? "No recipes match the current filter."
+      : "No recipes yet.";
     return p;
   }
 
@@ -459,7 +500,10 @@
     if (state.view === "grouped") return showGrouped();
     const recipes = filteredRecipes();
     main.innerHTML = "";
-    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+    if (!recipes.length) {
+      main.appendChild(emptyMessage());
+      return;
+    }
     main.appendChild(makeGrid(recipes));
   }
 
@@ -470,7 +514,10 @@
   function showGrouped() {
     const recipes = filteredRecipes();
     main.innerHTML = "";
-    if (!recipes.length) { main.appendChild(emptyMessage()); return; }
+    if (!recipes.length) {
+      main.appendChild(emptyMessage());
+      return;
+    }
 
     const groups = new Map();
     for (const r of recipes) {
@@ -537,10 +584,14 @@
   function updateCollapseAllBtn() {
     const btn = $("#toggle-collapse");
     if (!btn) return;
-    if (state.view !== "grouped") { btn.hidden = true; return; }
+    if (state.view !== "grouped") {
+      btn.hidden = true;
+      return;
+    }
     const names = currentGroupNames();
     btn.hidden = names.length === 0;
-    const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+    const allCollapsed =
+      names.length > 0 && names.every((n) => state.collapsed.has(n));
     btn.textContent = allCollapsed ? "Expand all" : "Collapse all";
     btn.dataset.state = allCollapsed ? "collapsed" : "expanded";
   }
@@ -558,7 +609,10 @@
 
   function showDetail(slug) {
     const r = state.recipes.find((x) => x.slug === slug);
-    if (!r) { main.innerHTML = '<p class="empty">Recipe not found.</p>'; return; }
+    if (!r) {
+      main.innerHTML = '<p class="empty">Recipe not found.</p>';
+      return;
+    }
     const node = $("#tpl-detail").content.firstElementChild.cloneNode(true);
     $(".title", node).textContent = r.frontmatter?.title || r.slug;
     $(".meta", node).textContent = metaLine(r);
@@ -604,7 +658,9 @@
       p.appendChild(a);
     }
     $(".back", node).addEventListener("click", () => history.back());
-    $(".edit", node).addEventListener("click", () => { location.hash = `#/edit/${r.slug}`; });
+    $(".edit", node).addEventListener("click", () => {
+      location.hash = `#/edit/${r.slug}`;
+    });
     $(".delete", node).addEventListener("click", async () => {
       if (!confirm(`Delete "${r.frontmatter?.title || r.slug}"?`)) return;
       try {
@@ -628,7 +684,10 @@
   function showForm(slug) {
     const editing = !!slug;
     const r = editing ? state.recipes.find((x) => x.slug === slug) : null;
-    if (editing && !r) { main.innerHTML = '<p class="empty">Recipe not found.</p>'; return; }
+    if (editing && !r) {
+      main.innerHTML = '<p class="empty">Recipe not found.</p>';
+      return;
+    }
     const form = $("#tpl-form").content.firstElementChild.cloneNode(true);
     $(".form-title", form).textContent = editing ? "Edit recipe" : "Add recipe";
 
@@ -642,8 +701,12 @@
       const fm = r.frontmatter || {};
       form.elements.title.value = fm.title || "";
       form.elements.categories.value = categoriesOf(r).join(", ");
-      form.elements.prep_minutes.value = Number.isFinite(fm.prep_minutes) ? fm.prep_minutes : "";
-      form.elements.cook_minutes.value = Number.isFinite(fm.cook_minutes) ? fm.cook_minutes : "";
+      form.elements.prep_minutes.value = Number.isFinite(fm.prep_minutes)
+        ? fm.prep_minutes
+        : "";
+      form.elements.cook_minutes.value = Number.isFinite(fm.cook_minutes)
+        ? fm.cook_minutes
+        : "";
       form.elements.source_url.value = fm.source_url || "";
       const sections = parseBody(r.body);
       form.elements.ingredients.value = sections.ingredients.join("\n");
@@ -658,30 +721,41 @@
       errEl.textContent = "";
       const data = new FormData(form);
       const title = (data.get("title") || "").toString().trim();
-      if (!title) { errEl.textContent = "Title is required."; return; }
-      const cats = (data.get("categories") || "").toString()
-        .split(",").map((s) => s.trim()).filter(Boolean);
+      if (!title) {
+        errEl.textContent = "Title is required.";
+        return;
+      }
+      const cats = (data.get("categories") || "")
+        .toString()
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
       const prepRaw = (data.get("prep_minutes") || "").toString().trim();
       const prep = prepRaw === "" ? null : Number(prepRaw);
       const cookRaw = (data.get("cook_minutes") || "").toString().trim();
       const cook = cookRaw === "" ? null : Number(cookRaw);
       const src = (data.get("source_url") || "").toString().trim() || null;
       const ingredients = convertImperialList(
-        (data.get("ingredients") || "").toString()
+        (data.get("ingredients") || "")
+          .toString()
           .split(/\r?\n/)
           .map((s) => s.trim().replace(/^[-*•·‣◦]\s*/, ""))
-          .filter(Boolean)
+          .filter(Boolean),
       );
       const steps = convertImperialList(
-        (data.get("steps") || "").toString()
+        (data.get("steps") || "")
+          .toString()
           .split(/\r?\n/)
           .map((s) => s.trim().replace(/^\d+\s*[.)]\s*/, ""))
-          .filter(Boolean)
+          .filter(Boolean),
       );
-      const notes = (data.get("notes") || "").toString()
-        .split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+      const notes = (data.get("notes") || "")
+        .toString()
+        .split(/\r?\n/)
+        .map((s) => s.trim())
+        .filter(Boolean);
 
-      let image = editing ? (r.frontmatter?.image || null) : null;
+      let image = editing ? r.frontmatter?.image || null : null;
       const file = form.elements.image.files[0];
       const newSlug = editing ? r.slug : slugify(title);
       if (file) {
@@ -731,19 +805,33 @@
 
     const tokens = () => input.value.split(",").map((s) => s.trim());
     const currentToken = () => tokens().pop() || "";
-    const taken = () => new Set(tokens().slice(0, -1).filter(Boolean).map((s) => s.toLowerCase()));
+    const taken = () =>
+      new Set(
+        tokens()
+          .slice(0, -1)
+          .filter(Boolean)
+          .map((s) => s.toLowerCase()),
+      );
 
     function open() {
       const tok = currentToken().toLowerCase();
       const used = taken();
-      items = getOptions().filter((c) => !used.has(c.toLowerCase()) && c.toLowerCase().includes(tok));
+      items = getOptions().filter(
+        (c) => !used.has(c.toLowerCase()) && c.toLowerCase().includes(tok),
+      );
       render();
     }
 
     function render() {
-      if (!items.length) { close(); return; }
+      if (!items.length) {
+        close();
+        return;
+      }
       listEl.innerHTML = items
-        .map((c, i) => `<li role="option" class="${i === activeIndex ? "active" : ""}">${escapeHtml(c)}</li>`)
+        .map(
+          (c, i) =>
+            `<li role="option" class="${i === activeIndex ? "active" : ""}">${escapeHtml(c)}</li>`,
+        )
         .join("");
       listEl.hidden = false;
       input.setAttribute("aria-expanded", "true");
@@ -764,15 +852,35 @@
       input.focus();
     }
 
-    input.addEventListener("focus", () => { activeIndex = -1; open(); });
-    input.addEventListener("input", () => { activeIndex = -1; open(); });
+    input.addEventListener("focus", () => {
+      activeIndex = -1;
+      open();
+    });
+    input.addEventListener("input", () => {
+      activeIndex = -1;
+      open();
+    });
     input.addEventListener("blur", () => setTimeout(close, 120));
     input.addEventListener("keydown", (e) => {
       if (listEl.hidden) return;
-      if (e.key === "ArrowDown") { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); render(); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); render(); }
-      else if (e.key === "Enter" && activeIndex >= 0) { e.preventDefault(); choose(items[activeIndex]); }
-      else if (e.key === "Escape") { close(); }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        render();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        render();
+      } else if (e.key === "Enter" && activeIndex >= 0) {
+        e.preventDefault();
+        choose(items[activeIndex]);
+      }
+      // Swallow Escape so it only closes the dropdown — the global hotkey
+      // handler would otherwise blur the field in the same keystroke.
+      else if (e.key === "Escape") {
+        e.stopPropagation();
+        close();
+      }
     });
     listEl.addEventListener("mousedown", (e) => {
       const li = e.target.closest("li");
@@ -784,33 +892,47 @@
   }
 
   function slugify(title) {
-    return title
-      .normalize("NFKD")
-      .replace(/[̀-ͯ]/g, "")
-      .replace(/[đĐ]/g, "d")
-      .replace(/[^a-zA-Z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .toLowerCase() || "untitled";
+    return (
+      title
+        .normalize("NFKD")
+        .replace(/[̀-ͯ]/g, "")
+        .replace(/[đĐ]/g, "d")
+        .replace(/[^a-zA-Z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase() || "untitled"
+    );
   }
 
   // ----- escape helpers -----
 
   function escapeHtml(s) {
-    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    return String(s).replace(
+      /[&<>"]/g,
+      (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+    );
   }
-  function escapeAttr(s) { return escapeHtml(s); }
+  function escapeAttr(s) {
+    return escapeHtml(s);
+  }
 
   // ----- routing -----
 
   function route() {
     const hash = location.hash || "#/";
-    if (hash.startsWith("#/r/")) return showDetail(decodeURIComponent(hash.slice(4)));
+    if (hash.startsWith("#/r/"))
+      return showDetail(decodeURIComponent(hash.slice(4)));
     if (hash === "#/add") {
-      if (STATIC_MODE) { location.hash = "#/"; return; }
+      if (STATIC_MODE) {
+        location.hash = "#/";
+        return;
+      }
       return showForm(null);
     }
     if (hash.startsWith("#/edit/")) {
-      if (STATIC_MODE) { location.hash = "#/"; return; }
+      if (STATIC_MODE) {
+        location.hash = "#/";
+        return;
+      }
       return showForm(decodeURIComponent(hash.slice(7)));
     }
     return showList();
@@ -826,7 +948,8 @@
   // Icon for the view toggle. The button shows the view it will switch *to*.
   const VIEW_ICONS = {
     // grouped: stacked sections (offered while in flat view)
-    grouped: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="2" rx="1"/><rect x="3" y="7" width="14" height="2" rx="1"/><rect x="3" y="14" width="8" height="2" rx="1"/><rect x="3" y="18" width="14" height="2" rx="1"/></svg>',
+    grouped:
+      '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="2" rx="1"/><rect x="3" y="7" width="14" height="2" rx="1"/><rect x="3" y="14" width="8" height="2" rx="1"/><rect x="3" y="18" width="14" height="2" rx="1"/></svg>',
     // flat grid: four tiles (offered while in grouped view)
     flat: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
   };
@@ -845,7 +968,8 @@
     home.addEventListener("click", (e) => {
       // Plain left-click navigates in place. Middle-click and modifier-clicks
       // fall through to the browser so home opens in a new tab.
-      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+        return;
       e.preventDefault();
       location.hash = "#/";
     });
@@ -873,14 +997,18 @@
     });
     $("#toggle-collapse").addEventListener("click", () => {
       const names = currentGroupNames();
-      const allCollapsed = names.length > 0 && names.every((n) => state.collapsed.has(n));
+      const allCollapsed =
+        names.length > 0 && names.every((n) => state.collapsed.has(n));
       if (allCollapsed) state.collapsed.clear();
       else names.forEach((n) => state.collapsed.add(n));
       if ((location.hash || "#/") === "#/") showList();
     });
     $("#random").addEventListener("click", () => {
       const pool = filteredRecipes();
-      if (!pool.length) { alert("No recipes to pick from."); return; }
+      if (!pool.length) {
+        alert("No recipes to pick from.");
+        return;
+      }
       const pick = pool[Math.floor(Math.random() * pool.length)];
       location.hash = `#/r/${pick.slug}`;
     });
@@ -888,14 +1016,158 @@
     if (STATIC_MODE) {
       addBtn.hidden = true;
     } else {
-      addBtn.addEventListener("click", () => { location.hash = "#/add"; });
+      addBtn.addEventListener("click", () => {
+        location.hash = "#/add";
+      });
     }
+  }
+
+  // ----- hotkeys -----
+  //
+  // One document-level listener. Each action delegates to the button that
+  // already implements it, so there is a single implementation of every
+  // behaviour and STATIC_MODE stays honest on its own: the buttons hidden in
+  // static mode are simply never clicked.
+
+  const HOTKEYS = [
+    { keys: "/", label: "Focus the search box" },
+    { keys: "Ctrl / ⌘ + K", label: "Focus the search box, even while typing" },
+    { keys: "Esc", label: "Leave the field, then reset to the initial view" },
+    { keys: "e", label: "Edit the open recipe", serverOnly: true },
+    { keys: "d", label: "Delete the open recipe", serverOnly: true },
+    { keys: "r", label: "Open a random recipe" },
+    { keys: "a", label: "Add a recipe", serverOnly: true },
+    { keys: "i", label: "Show / hide images" },
+    { keys: "?", label: "Show / hide this list" },
+  ];
+
+  const isTyping = (el) =>
+    !!el &&
+    (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+  // Only presses the button when it is actually offered (hidden = static mode,
+  // or no recipe open).
+  function clickIfAvailable(sel) {
+    const btn = $(sel);
+    if (btn && !btn.hidden) btn.click();
+  }
+
+  function focusSearch() {
+    const s = $("#search");
+    s.focus();
+    s.select();
+  }
+
+  function toggleHotkeysPanel(force) {
+    const panel = $("#hotkeys-panel");
+    const btn = $("#hotkeys");
+    const show = force === undefined ? panel.hidden : force;
+    panel.hidden = !show;
+    btn.setAttribute("aria-expanded", show ? "true" : "false");
+  }
+
+  // "Like when the site was just opened": drop the query, the category filter,
+  // the image toggle, the view mode and any collapsed groups, then go home.
+  function resetToInitial() {
+    state.query = "";
+    state.category = "";
+    state.collapsed.clear();
+    state.view = "flat";
+    state.showImages = false;
+    $("#search").value = "";
+    $("#category-filter").value = "";
+    document.body.classList.remove("show-images");
+    const imgBtn = $("#toggle-images");
+    imgBtn.textContent = "Show images";
+    imgBtn.dataset.state = "hidden";
+    renderViewToggle($("#toggle-view"));
+    toggleHotkeysPanel(false);
+    if (document.activeElement) document.activeElement.blur();
+    // hashchange does not fire when the hash is already "#/", so render here;
+    // otherwise let the hash change route for us.
+    if ((location.hash || "#/") === "#/") {
+      showList();
+      updateCollapseAllBtn();
+    } else {
+      location.hash = "#/";
+    }
+  }
+
+  function wireHotkeys() {
+    $("#hotkeys-panel > dl").innerHTML = HOTKEYS.filter(
+      (h) => !(h.serverOnly && STATIC_MODE),
+    )
+      .map(
+        (h) =>
+          `<dt><kbd>${escapeHtml(h.keys)}</kbd></dt><dd>${escapeHtml(h.label)}</dd>`,
+      )
+      .join("");
+    $("#hotkeys").addEventListener("click", () => toggleHotkeysPanel());
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#hotkeys, #hotkeys-panel"))
+        toggleHotkeysPanel(false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.repeat) return;
+      const typing = isTyping(e.target);
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        focusSearch();
+        return;
+      }
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      // Escape steps out: first out of the field you are in, then all the way
+      // back to the initial view.
+      if (e.key === "Escape") {
+        if (typing) {
+          e.target.blur();
+          return;
+        }
+        if (!$("#hotkeys-panel").hidden) {
+          toggleHotkeysPanel(false);
+          return;
+        }
+        resetToInitial();
+        return;
+      }
+      if (typing) return;
+
+      switch (e.key) {
+        case "/":
+          e.preventDefault();
+          focusSearch();
+          break;
+        case "?":
+          e.preventDefault();
+          toggleHotkeysPanel();
+          break;
+        case "e":
+          clickIfAvailable(".detail .edit");
+          break;
+        case "d":
+          clickIfAvailable(".detail .delete");
+          break;
+        case "r":
+          clickIfAvailable("#random");
+          break;
+        case "a":
+          clickIfAvailable("#add");
+          break;
+        case "i":
+          clickIfAvailable("#toggle-images");
+          break;
+      }
+    });
   }
 
   window.addEventListener("hashchange", route);
 
   (async () => {
     wireBar();
+    wireHotkeys();
     try {
       await refreshData();
     } catch (e) {

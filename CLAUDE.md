@@ -40,27 +40,13 @@ and opens the browser to `http://localhost:36637`.
 
 ```
 cooking_app/
-├── Cooking.docx              # original source document (optional after first import)
-├── CLAUDE.md                 # this file
 ├── recipes/                  # one .md per recipe (source of truth)
-│   ├── cassoulet.md
-│   └── ...
 ├── recipe_images/            # recipe photos, referenced by frontmatter `image:` field
-│   └── cassoulet.jpg
 ├── conversions.json          # editable cup→gram table for dry ingredients
 ├── src/                      # frontend source
-│   ├── recipes.html
-│   ├── app.js
-│   └── style.css
 ├── dist/                     # build output
 │   ├── recipes.html          # single self-contained file (CSS + JS + recipes inlined)
-│   └── recipe_images/        # copied from project root
-├── scripts/
-│   ├── import_docx.py        # one-time conversion from Cooking.docx → recipes/*.md
-│   └── build.py              # bundles src/ + recipes/ → dist/recipes.html
-├── server.py                 # runtime: stdlib HTTP server on port 36637
 ├── run.sh                    # launcher: starts server.py and opens browser
-└── Makefile                  # `make run | build | import | clean`
 ```
 
 ## Recipe format
@@ -156,7 +142,3 @@ There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib
 - `recipes/` and `recipe_images/` are the source of truth. The UI never holds unsaved state across restarts.
 - When importing, never overwrite an existing `recipes/{slug}.md`. The import script skips collisions so manual edits survive re-runs.
 - Recipe filenames should not encode duration — keep durations in the `prep_minutes` / `cook_minutes` frontmatter fields.
-
-## Open work
-
-- [ ] Manual cleanup pass over imported recipes as you actually cook them.

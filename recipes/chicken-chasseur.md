@@ -1,8 +1,8 @@
 ---
 title: Chicken chasseur
 categories: [Chicken]
-prep_minutes: null
-cook_minutes: null
+prep_minutes: 60
+cook_minutes: 120
 image: null
 source_url: "https://www.youtube.com/watch?v=yMVGR3ibVvs"
 ---
@@ -30,5 +30,5 @@ source_url: "https://www.youtube.com/watch?v=yMVGR3ibVvs"
 5. When the veg is soft, brown the chicken pieces. Remove the veg if needed.
 6. When the chicken is golden brown, deglaze the pan with brandy, add the vegetables back if necessary.
 7. Tomatoes, a little white wine, and enough stock to cover everything. Simmer until the chicken is as tender as you want it — I gave mine an hour.
-8. When the chicken is done, take the pieces out and boil the sauce down until thick. Taste and adjust seasoning.
+8. When the chicken is done, take the pieces out and boil the sauce down until thick. To taste with soy sauce and butter.
 9. Return the chicken to the pan to coat and reheat, garnish with fresh herbs and serve with noodles.

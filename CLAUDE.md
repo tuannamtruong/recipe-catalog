@@ -44,8 +44,11 @@ cooking_app/
 ├── recipe_images/            # recipe photos, referenced by frontmatter `image:` field
 ├── conversions.json          # editable cup→gram table for dry ingredients
 ├── src/                      # frontend source
-├── dist/                     # build output
+├── dist/                     # build output (tracked)
 │   ├── recipes.html          # single self-contained file (CSS + JS + recipes inlined)
+├── build/                    # desktop-bundle output (gitignored)
+│   └── macos/                # Cooking App.app + cooking-app-macos.zip
+├── scripts/                  # build.py, import_docx.py, appicon.py, make_*_bundle.*
 ├── run.sh                    # launcher: starts server.py and opens browser
 ```
 
@@ -115,7 +118,19 @@ Browse-only fallback (no server, no add/edit):
   Recipes are baked into the file; `recipe_images/` sits next to it and is loaded
   via `<img>` tags. Add/edit UI is hidden in this mode.
 
-### Windows desktop launcher (codegen)
+### Desktop launchers (codegen)
+
+| Build host  | Target  | Command        | Script                            |
+| ----------- | ------- | -------------- | --------------------------------- |
+| Linux / WSL | Windows | `make exe`     | `scripts/make_windows_bundle.py`  |
+| Windows     | Windows | `make exe-win` | `scripts/make_windows_bundle.ps1` |
+| Linux / WSL | macOS   | `make exe-mac` | `scripts/make_macos_bundle.py`    |
+
+The app icon is drawn from scratch in `scripts/appicon.py` (shared): the same
+raster renderer feeds `build_ico()` for Windows and `build_icns()` (PNG-payload
+chunks) for macOS. No image library, no checked-in binary.
+
+#### Windows launcher
 
 ```bash
 make exe                      # execute scripts/make_windows_bundle.py
@@ -148,6 +163,56 @@ Three things `server.py` does specifically for this mode:
 - `POST /api/quit` — with no console there is no Ctrl+C, so the header's
   **Quit** button is the graceful way to stop the process (the alternative is
   killing `pythonw.exe` in Task Manager). The button is hidden in static mode.
+
+#### Building the Windows launcher on Windows
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\make_windows_bundle.ps1
+```
+
+`make exe-win` is the same thing invoked through `powershell.exe` (works from
+WSL). The `.ps1` exists because stock Windows has no `make` and no `python3`
+command, so the Makefile recipe cannot run there; it is a front end only — the
+bundler is still `make_windows_bundle.py`, which already handles both hosts.
+It uses an installed Python if one answers a version probe (running it, not
+just `Get-Command` — the Store's `python.exe` stub is on `PATH` by default and
+would otherwise be picked), else unpacks the embeddable zip into
+`.build-cache/python-bootstrap/` and bundles with that. That bootstrap
+interpreter must stay out of `C:\Tools\CookingApp\python\`, which the bundler
+wipes. Built this way the shortcut points at the repo's real Windows path
+instead of `\\wsl.localhost\...`.
+
+### macOS bundle (codegen)
+
+```bash
+make exe-mac                  # → build/macos/Cooking App.app + cooking-app-macos.zip
+```
+
+The Mac is a **different machine**, so this bundle inverts the Windows rule:
+`server.py`, `src/`, `recipes/`, `recipe_images/` and `conversions.json` are
+**copied** into `Contents/Resources/app/`. Recipes on the Mac are a snapshot;
+rebuilding replaces them. `dist/` is deliberately not copied — `server.py`
+serves `src/` whenever `src/recipes.html` exists.
+
+No runtime is staged (there is no macOS equivalent of the embeddable zip to
+unpack from Linux). `Contents/MacOS/cooking-app` is a `/bin/sh` script that
+probes for a python3 and `exec`s `server.py` with output appended to
+`cooking-app.log`, like the Windows path. Details that matter:
+
+- Finder hands a `.app` a minimal `PATH`, so Homebrew pythons are probed by
+  absolute path; `/usr/bin/python3` is tried **last** because without the
+  Command Line Tools it is a stub that pops the "install developer tools"
+  dialog when run. No python at all → an `osascript` dialog.
+- The bundle is unsigned: the first launch needs right-click → **Open** or
+  `xattr -dr com.apple.quarantine`. Left quarantined, App Translocation runs it
+  from a read-only shadow copy and added recipes silently vanish — hence
+  `READ-ME-FIRST.txt` in the output folder and the `LOG=/dev/null` fallback in
+  the launcher.
+- The zip is written entry-by-entry with `create_system = 3` and a `0o755` mode
+  on the launcher; `shutil.make_archive` would drop the executable bit and the
+  Mac would refuse to open the app.
+- Output goes to `build/` (gitignored), not `dist/` — `dist/recipes.html` is
+  tracked.
 
 ## Build
 

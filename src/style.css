@@ -79,6 +79,28 @@ body {
   filter: brightness(0.95);
 }
 
+/* Quit is destructive-ish and rarely wanted: muted until hovered. */
+#quit {
+  color: var(--muted);
+}
+#quit:hover {
+  background: #f7e9e6;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#stopped {
+  max-width: 32rem;
+  margin: 6rem auto;
+  padding: 0 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+#stopped h2 {
+  margin: 0 0 0.5rem;
+  color: var(--fg);
+}
+
 /* Keyboard-shortcut help: round "?" button, panel drops out of the header. */
 #hotkeys {
   flex: 0 0 auto;

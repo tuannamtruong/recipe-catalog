@@ -50,6 +50,17 @@
     }
   }
 
+  // Stops the server process. The response arrives before the socket dies, so
+  // a network error here means it went down slightly early -- also a success.
+  async function quitApp() {
+    if (STATIC_MODE) throw new Error("Read-only mode (no server)");
+    try {
+      await fetch("/api/quit", { method: "POST" });
+    } catch (err) {
+      /* server already gone */
+    }
+  }
+
   async function uploadImage(file, slug) {
     if (STATIC_MODE) throw new Error("Read-only mode (no server)");
     const ext = (file.name.match(/\.[A-Za-z0-9]+$/) || [
@@ -1013,13 +1024,31 @@
       location.hash = `#/r/${pick.slug}`;
     });
     const addBtn = $("#add");
+    const quitBtn = $("#quit");
     if (STATIC_MODE) {
       addBtn.hidden = true;
+      quitBtn.hidden = true;
     } else {
       addBtn.addEventListener("click", () => {
         location.hash = "#/add";
       });
+      quitBtn.addEventListener("click", async () => {
+        if (!confirm("Stop the cooking app? Unsaved edits will be lost."))
+          return;
+        quitBtn.disabled = true;
+        await quitApp();
+        showStopped();
+      });
     }
+  }
+
+  // The page outlives the server it was served from, so swap it for a dead end
+  // instead of leaving buttons that would all fail.
+  function showStopped() {
+    document.querySelector(".bar").hidden = true;
+    document.querySelector(".subbar").hidden = true;
+    $("#main").hidden = true;
+    $("#stopped").hidden = false;
   }
 
   // ----- hotkeys -----

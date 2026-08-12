@@ -11,6 +11,7 @@ Layout served:
   PUT  /api/recipes/{slug} -> overwrite recipes/{slug}.md
   DEL  /api/recipes/{slug} -> delete recipes/{slug}.md (+ matching image)
   POST /api/images         -> body {filename, data_base64} -> saves to recipe_images/
+  POST /api/quit           -> stop the server and exit the process
 
 Binds to 127.0.0.1 only. No auth.
 """
@@ -19,8 +20,11 @@ from __future__ import annotations
 import base64
 import json
 import mimetypes
+import os
 import re
+import socket
 import sys
+import threading
 import unicodedata
 import webbrowser
 from http import HTTPStatus
@@ -34,7 +38,12 @@ IMAGES_DIR = ROOT / "recipe_images"
 SRC_DIR = ROOT / "src"
 DIST_DIR = ROOT / "dist"
 CONVERSIONS_FILE = ROOT / "conversions.json"
+LOG_FILE = ROOT / "cooking-app.log"
 PORT = 36637
+
+# Set by main(); POST /api/quit needs it to stop serve_forever(). There is no
+# console under pythonw.exe, so the Quit button is the only graceful way out.
+SERVER: ThreadingHTTPServer | None = None
 
 # Per-cup gram weights for known dry ingredients. Editable via the UI and
 # persisted to conversions.json; these are the fallback when the file is
@@ -332,6 +341,8 @@ class Handler(BaseHTTPRequestHandler):
             if not data or "filename" not in data or "data_base64" not in data:
                 return self._send_error(HTTPStatus.BAD_REQUEST, "filename and data_base64 required")
             return self._save_image(data["filename"], data["data_base64"])
+        if path == "/api/quit":
+            return self._quit()
         return self._send_error(HTTPStatus.NOT_FOUND, "not found")
 
     def do_PUT(self):
@@ -416,10 +427,67 @@ class Handler(BaseHTTPRequestHandler):
         (IMAGES_DIR / safe).write_bytes(blob)
         return self._send_json(HTTPStatus.OK, {"filename": safe})
 
+    def _quit(self):
+        # Answer first so the browser sees a clean 200, then stop from another
+        # thread -- shutdown() blocks until serve_forever() returns, and
+        # serve_forever() is what is waiting on this very request.
+        self._send_json(HTTPStatus.OK, {"stopped": True})
+        self.wfile.flush()
+        print("quit requested from the UI")
+        if SERVER is not None:
+            threading.Thread(target=SERVER.shutdown, daemon=True).start()
+
+
+def _ensure_streams() -> None:
+    """Give the process usable stdout/stderr.
+
+    Windows' pythonw.exe (used by the desktop launcher so no console window
+    appears) hands us sys.stdout == sys.stderr == None. log_message() writes to
+    sys.stderr on every request, so without this the server would raise
+    AttributeError on the first hit. Send both to a log file beside the recipes.
+    """
+    if sys.stdout is not None and sys.stderr is not None:
+        return
+    try:
+        stream = open(LOG_FILE, "a", encoding="utf-8", buffering=1)
+    except OSError:
+        stream = open(os.devnull, "w", encoding="utf-8")
+    if sys.stdout is None:
+        sys.stdout = stream
+    if sys.stderr is None:
+        sys.stderr = stream
+
+
+def _already_running() -> bool:
+    """True if something is already listening on our port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.settimeout(0.25)
+        return probe.connect_ex(("127.0.0.1", PORT)) == 0
+
 
 def main(open_browser: bool = True) -> int:
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
+    global SERVER
+    _ensure_streams()
     url = f"http://localhost:{PORT}/"
+
+    # Double-clicking the launcher a second time should focus the running app,
+    # not die on "address already in use" behind a hidden console.
+    if _already_running():
+        print(f"cooking app already running: {url}")
+        if open_browser:
+            try:
+                webbrowser.open(url)
+            except Exception:
+                pass
+        return 0
+
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
+    except OSError as exc:  # lost the race, or port taken by something else
+        print(f"cannot bind port {PORT}: {exc}")
+        return 1
+    SERVER = server
+
     print(f"cooking app: {url}")
     print(f"  recipes:  {RECIPES_DIR}")
     print(f"  images:   {IMAGES_DIR}")
@@ -433,6 +501,8 @@ def main(open_browser: bool = True) -> int:
         server.serve_forever()
     except KeyboardInterrupt:
         print("\nstopping")
+    server.server_close()
+    print("stopped")
     return 0
 
 

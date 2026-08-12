@@ -22,6 +22,9 @@
         Random
       </button>
       <button id="add" type="button" title="Add recipe (a)">+ Add</button>
+      <button id="quit" type="button" title="Stop the server and close the app">
+        Quit
+      </button>
       <button
         id="hotkeys"
         type="button"
@@ -56,6 +59,12 @@
     </div>
 
     <main id="main"></main>
+
+    <!-- Shown after Quit: the server is gone, nothing here works any more. -->
+    <div id="stopped" role="status" hidden>
+      <h2>Cooking app stopped</h2>
+      <p>The server has shut down. You can close this tab.</p>
+    </div>
 
     <!-- Recipe detail -->
     <template id="tpl-detail">

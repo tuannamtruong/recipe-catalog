@@ -19,15 +19,15 @@ A local, single-user webapp for browsing and managing recipes.
 
 ## Stack decisions
 
-| Concern | Choice | Why |
-|---|---|---|
-| Storage layout | One file per recipe under `recipes/`, images under `recipe_images/` | Drop a file = new recipe. Trivial backup. Per-recipe diffs. No DB. |
-| Recipe format | Markdown with YAML frontmatter | Steps/ingredients are naturally prose. Frontmatter holds structured fields. Hand-editable. |
-| Frontend | Vanilla HTML + CSS + JS (no framework, no npm at all) | Single-user local app; React/Svelte/Vite is overkill. |
-| Build tool | Python stdlib script (`scripts/build.py`) | Zero npm/node. Inlines CSS + JS + recipes into one `recipes.html`. |
-| Runtime server | Python 3 stdlib `http.server` subclass (`server.py`) | Zero pip installs ever. Browsers cannot write files from `file://`, so a small server is required for the add-recipe / image-upload flow. |
-| Port | **36637** | Fixed; reserved for this app. |
-| Built output | Single self-contained `recipes.html` + sibling `recipe_images/` folder | Easy to AirDrop/USB the pair to a phone for read-only browsing. |
+| Concern        | Choice                                                                 | Why                                                                                                                                       |
+| -------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Storage layout | One file per recipe under `recipes/`, images under `recipe_images/`    | Drop a file = new recipe. Trivial backup. Per-recipe diffs. No DB.                                                                        |
+| Recipe format  | Markdown with YAML frontmatter                                         | Steps/ingredients are naturally prose. Frontmatter holds structured fields. Hand-editable.                                                |
+| Frontend       | Vanilla HTML + CSS + JS (no framework, no npm at all)                  | Single-user local app; React/Svelte/Vite is overkill.                                                                                     |
+| Build tool     | Python stdlib script (`scripts/build.py`)                              | Zero npm/node. Inlines CSS + JS + recipes into one `recipes.html`.                                                                        |
+| Runtime server | Python 3 stdlib `http.server` subclass (`server.py`)                   | Zero pip installs ever. Browsers cannot write files from `file://`, so a small server is required for the add-recipe / image-upload flow. |
+| Port           | **36637**                                                              | Fixed; reserved for this app.                                                                                                             |
+| Built output   | Single self-contained `recipes.html` + sibling `recipe_images/` folder | Easy to AirDrop/USB the pair to a phone for read-only browsing.                                                                           |
 
 ### Why a server at all?
 
@@ -59,22 +59,25 @@ title: Cassoulet
 categories: [Beef, Stew]
 prep_minutes: 20
 cook_minutes: 70
-image: cassoulet.jpg          # filename inside images/, or null
+image: cassoulet.jpg # filename inside images/, or null
 source_url: https://www.youtube.com/watch?v=g_Huy-0Xeek
 ---
 
 ## Ingredients
+
 - 200g white beans
 - 200g sausage
 - 500g chicken leg
 - ...
 
 ## Steps
+
 1. Soak white beans in salt for 2 hours.
 2. Brown ham with no oil.
 3. ...
 
 ## Notes
+
 Optional free-form notes (cook's tips, substitutions).
 ```
 
@@ -83,36 +86,21 @@ uniqueness and slug generation when saving via the UI.
 
 ## HTTP API (runtime, served by `server.py`)
 
-| Method | Path | Body | Effect |
-|---|---|---|---|
-| GET | `/` and static paths | — | Serves `dist/` files |
-| GET | `/api/recipes` | — | Returns JSON array of all parsed recipes (front-matter + body) |
-| GET | `/api/recipes/{slug}` | — | Returns one recipe |
-| POST | `/api/recipes` | JSON recipe | Writes `recipes/{slug}.md`. If the slug is taken, appends `-2`/`-3`/… to the slug and ` 2`/` 3`/… to the title; returns the slug actually used. |
-| PUT | `/api/recipes/{slug}` | JSON recipe | Overwrites the file. |
-| DELETE | `/api/recipes/{slug}` | — | Deletes file (and orphaned image). |
-| POST | `/api/images` | JSON `{filename, data_base64}` | Saves to `recipe_images/{slug}.{ext}`. Returns filename. Base64 avoids multipart parsing in stdlib. |
-| GET | `/recipe_images/{name}` | — | Serves images. |
-| GET | `/api/conversions` | — | Returns `{cup_grams: {name: grams}}` from `conversions.json` (or built-in defaults). |
-| PUT | `/api/conversions` | JSON `{cup_grams}` | Validates (drops empty names / non-positive / non-numeric, lowercases keys) and overwrites `conversions.json`. |
+| Method | Path                    | Body                           | Effect                                                                                                                                          |
+| ------ | ----------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/` and static paths    | —                              | Serves `dist/` files                                                                                                                            |
+| GET    | `/api/recipes`          | —                              | Returns JSON array of all parsed recipes (front-matter + body)                                                                                  |
+| GET    | `/api/recipes/{slug}`   | —                              | Returns one recipe                                                                                                                              |
+| POST   | `/api/recipes`          | JSON recipe                    | Writes `recipes/{slug}.md`. If the slug is taken, appends `-2`/`-3`/… to the slug and ` 2`/` 3`/… to the title; returns the slug actually used. |
+| PUT    | `/api/recipes/{slug}`   | JSON recipe                    | Overwrites the file.                                                                                                                            |
+| DELETE | `/api/recipes/{slug}`   | —                              | Deletes file (and orphaned image).                                                                                                              |
+| POST   | `/api/images`           | JSON `{filename, data_base64}` | Saves to `recipe_images/{slug}.{ext}`. Returns filename. Base64 avoids multipart parsing in stdlib.                                             |
+| GET    | `/recipe_images/{name}` | —                              | Serves images.                                                                                                                                  |
+| GET    | `/api/conversions`      | —                              | Returns `{cup_grams: {name: grams}}` from `conversions.json` (or built-in defaults).                                                            |
+| PUT    | `/api/conversions`      | JSON `{cup_grams}`             | Validates (drops empty names / non-positive / non-numeric, lowercases keys) and overwrites `conversions.json`.                                  |
+| POST   | `/api/quit`             | —                              | Answers `{stopped: true}`, then stops `serve_forever()` from a background thread and exits. Backs the **Quit** button.                          |
 
 CORS / auth: none. Server binds to `127.0.0.1` only.
-
-## Import pipeline
-
-`scripts/import_docx.py` is a one-shot script (run during initial setup; not invoked at runtime).
-
-1. Unzip `Cooking.docx`, parse `word/document.xml`.
-2. Split paragraphs at every `Heading2` / `Heading3` — each one starts a new recipe.
-3. For each recipe body, best-effort classify lines:
-   - leading quantity (digit, `tbs`, `tsp`, `cup`, `g`, `ml`, fractions, etc.) → ingredients
-   - lines starting with imperative verbs or numbered → steps
-   - first `http(s)://…` URL → `source_url`
-   - regex `(\d+)\s*(min|mins|phút|hour|hours)` → `prep_minutes` (cook time is left null for manual entry)
-4. Category guessed from nearest preceding section keyword in the document
-   (beef / pork / chicken / seafood / vegetables / dessert / sauce / …).
-5. Emit `recipes/{slug}.md`. Expect ~20–30% of recipes to need manual cleanup
-   after first import — that's accepted ("best-effort auto-import, accept messy results").
 
 ## Running
 
@@ -122,9 +110,44 @@ make run                      # or: ./run.sh / python3 server.py
 ```
 
 Browse-only fallback (no server, no add/edit):
+
 - After a build, `dist/recipes.html` can be opened from disk on desktop or phone.
   Recipes are baked into the file; `recipe_images/` sits next to it and is loaded
   via `<img>` tags. Add/edit UI is hidden in this mode.
+
+### Windows desktop launcher (codegen)
+
+```bash
+make exe                      # execute scripts/make_windows_bundle.py
+```
+
+Stages an official Python **embeddable** distribution (a plain zip from
+python.org — still no pip, ever) into `C:\Tools\CookingApp\python\`, generates
+`cooking.ico`, and creates a "Cooking App" desktop shortcut. The shortcut runs
+`pythonw.exe server.py` so there is no console window. Full add/edit works.
+
+The recipes are **not copied**. The shortcut points at `server.py` where it
+already lives, so when the repo is in WSL the shortcut targets
+`\\wsl.localhost\<distro>\home\...\server.py` and `recipes/` stays the single
+source of truth with git untouched. Re-run `make exe` after moving the repo.
+
+`make exe` re-stages `C:\Tools\CookingApp\python\`, and Windows locks the DLLs of a
+running instance — over drvfs that failure surfaces as a bare
+`OSError: [Errno 5] Input/output error` on `vcruntime140.dll`, not as "file in use".
+So the script first looks for interpreters running out of that folder and asks them to
+quit via `POST /api/quit`; if that fails (an instance older than the route answers 404)
+it stops with the PID and a `taskkill` line instead of the opaque error.
+
+Three things `server.py` does specifically for this mode:
+
+- `_ensure_streams()` — `pythonw.exe` sets `sys.stdout`/`sys.stderr` to `None`,
+  which would make `log_message()` raise on every request. Both are redirected
+  to `cooking-app.log` beside the recipes; check it first when debugging.
+- `_already_running()` — double-clicking the shortcut again focuses the running
+  app instead of dying on a port collision behind a hidden console.
+- `POST /api/quit` — with no console there is no Ctrl+C, so the header's
+  **Quit** button is the graceful way to stop the process (the alternative is
+  killing `pythonw.exe` in Task Manager). The button is hidden in static mode.
 
 ## Build
 

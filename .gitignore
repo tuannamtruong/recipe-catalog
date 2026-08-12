@@ -1,0 +1,4 @@
+__pycache__*
+__pycache__/
+.build-cache/
+cooking-app.log

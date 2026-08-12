@@ -25,16 +25,16 @@ Opens [http://localhost:36637](http://localhost:36637) in your browser.
 
 ## Make targets
 
-| Command          | What it does                                                                                                                                                                                                 |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `make run`       | Start the server on `http://localhost:36637`.                                                                                                                                                                |
-| `make build`     | Bundle `src/` + `recipes/` into a single `dist/recipes.html` (with `dist/recipe_images/` alongside). Open this file directly from disk — or AirDrop it to a phone — for read-only browsing without a server. |
-| `make import`    | Parse `Cooking.docx` into `recipes/*.md` (requires the docx in the project root). Already run once; safe to re-run — skips files that exist.                                                                 |
-| `make exe`       | Windows desktop launcher + shortcut, built **from here** (Linux/WSL).                                                                                                                                        |
-| `make exe-win`   | The same launcher, built **by Windows itself** — see below.                                                                                                                                                  |
-| `make exe-mac`   | Self-contained macOS `.app` + transfer zip in `build/macos/`.                                                                                                                                                |
-| `make clean`     | Remove `dist/`, `build/` and `__pycache__/`.                                                                                                                                                                 |
-| `make` (no args) | Print the target list.                                                                                                                                                                                       |
+| Command            | What it does                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `make run`         | Start the server on `http://localhost:36637`.                                                                                                                                                                |
+| `make build`       | Bundle `src/` + `recipes/` into a single `dist/recipes.html` (with `dist/recipe_images/` alongside). Open this file directly from disk — or AirDrop it to a phone — for read-only browsing without a server. |
+| `make import`      | Parse `Cooking.docx` into `recipes/*.md` (requires the docx in the project root). Already run once; safe to re-run — skips files that exist.                                                                 |
+| `make exe-win`     | Windows desktop launcher + shortcut, built **from here** (Linux/WSL).                                                                                                                                        |
+| `make exe-win-win` | The same launcher, built **by Windows itself** — see below.                                                                                                                                                  |
+| `make exe-mac`     | Self-contained macOS `.app` + transfer zip in `build/macos/`.                                                                                                                                                |
+| `make clean`       | Remove `dist/`, `build/` and `__pycache__/`.                                                                                                                                                                 |
+| `make` (no args)   | Print the target list.                                                                                                                                                                                       |
 
 ## Recipe format
 
@@ -75,15 +75,15 @@ The bundle is one self-contained HTML file, that shows the recipes.
 
 ## Desktop launchers
 
-| Build on    | For     | Command        | Result                                                                                                                                                                                                                                                                                    |
-| ----------- | ------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Linux / WSL | Windows | `make exe`     | Stages an embeddable Python in `C:\Tools\CookingApp\` and puts a **Cooking App** shortcut on the desktop. Recipes are **not** copied — the shortcut points at `server.py` in this repo (over `\\wsl.localhost\...` when it lives in WSL), so `recipes/` stays the single source of truth. |
-| Windows     | Windows | `make exe-win` | Same bundler, run natively — the shortcut points at this repo's Windows path, no `\\wsl.localhost` hop.                                                                                                                                                                                   |
-| Linux / WSL | macOS   | `make exe-mac` | `build/macos/Cooking App.app` + `cooking-app-macos.zip`.                                                                                                                                                                                                                                  |
+| Build on    | For     | Command            | Result                                                                                                                                                                                                                                                                                    |
+| ----------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linux / WSL | Windows | `make exe-win`     | Stages an embeddable Python in `C:\Tools\CookingApp\` and puts a **Cooking App** shortcut on the desktop. Recipes are **not** copied — the shortcut points at `server.py` in this repo (over `\\wsl.localhost\...` when it lives in WSL), so `recipes/` stays the single source of truth. |
+| Windows     | Windows | `make exe-win-win` | Same bundler, run natively — the shortcut points at this repo's Windows path, no `\\wsl.localhost` hop.                                                                                                                                                                                   |
+| Linux / WSL | macOS   | `make exe-mac`     | `build/macos/Cooking App.app` + `cooking-app-macos.zip`.                                                                                                                                                                                                                                  |
 
-`make exe-win` exists because stock Windows has neither `make` nor a `python3`
-command, so the Makefile recipe cannot run there. On the Windows box, run the
-script directly:
+`make exe-win-win` wraps a PowerShell script, which exists because stock Windows
+has neither `make` nor a `python3` command. On a Windows box without `make`, run
+that script directly:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\make_windows_bundle.ps1
@@ -91,7 +91,7 @@ powershell -ExecutionPolicy Bypass -File scripts\make_windows_bundle.ps1
 
 It uses an installed Python if there is one and otherwise downloads the official
 embeddable distribution into `.build-cache/` — a bare Windows machine needs
-nothing installed. (From WSL, `make exe-win` invokes that same script through
+nothing installed. (From WSL, `make exe-win-win` invokes that same script through
 `powershell.exe`.)
 
 ### macOS

@@ -120,11 +120,11 @@ Browse-only fallback (no server, no add/edit):
 
 ### Desktop launchers (codegen)
 
-| Build host  | Target  | Command        | Script                            |
-| ----------- | ------- | -------------- | --------------------------------- |
-| Linux / WSL | Windows | `make exe`     | `scripts/make_windows_bundle.py`  |
-| Windows     | Windows | `make exe-win` | `scripts/make_windows_bundle.ps1` |
-| Linux / WSL | macOS   | `make exe-mac` | `scripts/make_macos_bundle.py`    |
+| Build host  | Target  | Command            | Script                            |
+| ----------- | ------- | ------------------ | --------------------------------- |
+| Linux / WSL | Windows | `make exe-win`     | `scripts/make_windows_bundle.py`  |
+| Windows     | Windows | `make exe-win-win` | `scripts/make_windows_bundle.ps1` |
+| Linux / WSL | macOS   | `make exe-mac`     | `scripts/make_macos_bundle.py`    |
 
 The app icon is drawn from scratch in `scripts/appicon.py` (shared): the same
 raster renderer feeds `build_ico()` for Windows and `build_icns()` (PNG-payload
@@ -133,7 +133,7 @@ chunks) for macOS. No image library, no checked-in binary.
 #### Windows launcher
 
 ```bash
-make exe                      # execute scripts/make_windows_bundle.py
+make exe-win                      # execute scripts/make_windows_bundle.py
 ```
 
 Stages an official Python **embeddable** distribution (a plain zip from
@@ -144,9 +144,9 @@ python.org — still no pip, ever) into `C:\Tools\CookingApp\python\`, generates
 The recipes are **not copied**. The shortcut points at `server.py` where it
 already lives, so when the repo is in WSL the shortcut targets
 `\\wsl.localhost\<distro>\home\...\server.py` and `recipes/` stays the single
-source of truth with git untouched. Re-run `make exe` after moving the repo.
+source of truth with git untouched. Re-run `make exe-win` after moving the repo.
 
-`make exe` re-stages `C:\Tools\CookingApp\python\`, and Windows locks the DLLs of a
+`make exe-win` re-stages `C:\Tools\CookingApp\python\`, and Windows locks the DLLs of a
 running instance — over drvfs that failure surfaces as a bare
 `OSError: [Errno 5] Input/output error` on `vcruntime140.dll`, not as "file in use".
 So the script first looks for interpreters running out of that folder and asks them to
@@ -170,9 +170,13 @@ Three things `server.py` does specifically for this mode:
 powershell -ExecutionPolicy Bypass -File scripts\make_windows_bundle.ps1
 ```
 
-`make exe-win` is the same thing invoked through `powershell.exe` (works from
-WSL). The `.ps1` exists because stock Windows has no `make` and no `python3`
-command, so the Makefile recipe cannot run there; it is a front end only — the
+`make exe-win-win` is the same thing invoked through `powershell.exe`. It works
+from either host: the Makefile resolves the script path itself (`wslpath -w`
+under WSL, a plain relative path when `OS=Windows_NT`), because a Windows make
+runs recipes through `cmd.exe`, which does no `$(...)` substitution and would
+pass the literal text to `-File`. The `.ps1` exists because stock Windows has
+neither `make` nor a `python3` command, so on a machine without them the
+`powershell -File` line above is the entry point; it is a front end only — the
 bundler is still `make_windows_bundle.py`, which already handles both hosts.
 It uses an installed Python if one answers a version probe (running it, not
 just `Get-Command` — the Store's `python.exe` stub is on `PATH` by default and

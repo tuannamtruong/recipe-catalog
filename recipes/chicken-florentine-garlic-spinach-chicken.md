@@ -10,15 +10,15 @@ source_url: "https://www.youtube.com/watch?v=SsROVogvQuI"
 ## Ingredients
 - 400g baby spinach
 - 2 chicken breast
-- 1/4 cup all-purpose flour
+- 1/4 cup (30 g) all-purpose flour
 - 4 tbs olive oil
 - 1 tbs butter
 - 4 cloves garlic
-- 1/4 cup minced shallots or onions
-- 3 tbs white wine
+- 1/4 cup (60 ml) minced shallots or onions
+- 3 tbs white wines
 - 1 tbs lemon zest, plus more to garnish
-- 1/2 cup diced red bell peppers
-- 1 cup heavy cream
+- 1/2 cup (120 ml) diced red bell peppers
+- 1 cup (240 ml) heavy cream
 
 ## Steps
 1. Cook spinat almost throguh.

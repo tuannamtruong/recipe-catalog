@@ -1346,7 +1346,12 @@
     });
     $("#type-filter").addEventListener("change", (e) => {
       state.type = e.target.value;
-      if ((location.hash || "#/") === "#/") showList();
+      const hash = location.hash || "#/";
+      // Picking a type is a list-level action, so an open recipe is closed and
+      // the filtered list shown. The add/edit form is left alone -- leaving it
+      // would throw away unsaved edits.
+      if (hash === "#/") showList();
+      else if (hash.startsWith("#/r/")) location.hash = "#/";
     });
     wireIngredientFilter();
     $("#toggle-images").addEventListener("click", (e) => {

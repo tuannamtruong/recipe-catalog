@@ -1,7 +1,7 @@
 ---
 title: Swedish Meatballs
 types: []
-ingredient_tags: [ground meat, thịt, trứng, breadcrumb, tiêu, "% butter", nutmeg, butter, flour, beef broth, heavycream, "% muối và tiêu", nhánh hành lá]
+ingredient_tags: [ground meat]
 prep_minutes: 60
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Roasted Pork Loin
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork loin, garlic, rosmarin, salt, pepper, olive oil, white wine]
 prep_minutes: 60
 cook_minutes: null
 image: null

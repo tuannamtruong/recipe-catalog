@@ -1,6 +1,7 @@
 ---
 title: One-Pot braised beef Rigatoni
-categories: [Beef]
+types: []
+ingredient_tags: [beef, chuck roast, carrot, celery, white onion, garlic, tomato paste, beef broth, tomatoes, water, thyme, rosemary, bay leaf, salt, black pepper, basil, fresh parsley, parmesan cheese]
 prep_minutes: 2
 cook_minutes: null
 image: null

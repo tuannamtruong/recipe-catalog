@@ -1,6 +1,7 @@
 ---
 title: Eggy tomatoes sauce with sausage
-categories: [Sausage]
+types: []
+ingredient_tags: [sausage, tomatoes, eggs, sausages, garlic, water, ketchup]
 prep_minutes: 20
 cook_minutes: null
 image: eggy-tomatoes-sauce-with-sausage-1781937850286.png

@@ -1,6 +1,7 @@
 ---
 title: Jennifer Anistion salad
-categories: [Salad]
+types: [Salad]
+ingredient_tags: [chickpeas, quinoa, cucumber, red onion, mint, parsley, pistachio, fresh lemon juice, garlic powder, dijon mustard, salt, black pepper, honey, thyme]
 prep_minutes: null
 cook_minutes: null
 image: null

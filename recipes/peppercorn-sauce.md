@@ -1,6 +1,7 @@
 ---
 title: Peppercorn sauce
-categories: [Sauce]
+types: [Sauce]
+ingredient_tags: [rapeseed, shallot, garlic, black, brandy, beef stock, whipping cream, dijon mustard]
 prep_minutes: 1
 cook_minutes: null
 image: null

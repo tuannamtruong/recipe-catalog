@@ -1,6 +1,7 @@
 ---
 title: "Dad's Creamy Cucumber Salad"
-categories: [Salad]
+types: [Salad]
+ingredient_tags: [cucumbers, sweet onion, sea salt, mayonnaise, vinegar, white sugar, dried dill weed, garlic powder, ground black pepper]
 prep_minutes: null
 cook_minutes: null
 image: null

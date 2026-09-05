@@ -1,6 +1,7 @@
 ---
 title: "Chicken Florentine | Garlic Spinach Chicken"
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, baby spinach, chicken breast, all-purpose flour, olive oil, butter, garlic, shallots, white wines, lemon zest, red bell peppers, heavy cream]
 prep_minutes: 4
 cook_minutes: null
 image: null

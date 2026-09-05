@@ -1,6 +1,7 @@
 ---
 title: Adobo Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken thighs, white wine, soy sauce, brown sugar, garlic whole, phalanx ginger, green onions, black pepper, bay leaf, cinanmon stick, onion]
 prep_minutes: 20
 cook_minutes: null
 image: null

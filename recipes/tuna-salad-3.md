@@ -1,6 +1,7 @@
 ---
 title: Tuna salad
-categories: [Salad]
+types: [Salad]
+ingredient_tags: [cucumber, cherry tomatoes, red onion, sweet corns, spring onion, tuna, something spicy, salt n pepper, tortilla, mayo, greek yogurt, hot sauce]
 prep_minutes: 10
 cook_minutes: null
 image: null

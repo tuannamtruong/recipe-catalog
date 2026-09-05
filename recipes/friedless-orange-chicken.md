@@ -1,6 +1,7 @@
 ---
 title: Friedless Orange Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, flour, garlic, sugar, orange juice, vinegar, soy sauce, water]
 prep_minutes: null
 cook_minutes: null
 image: null

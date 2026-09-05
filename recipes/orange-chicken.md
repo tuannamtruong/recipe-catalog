@@ -1,6 +1,7 @@
 ---
 title: Orange chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, crown of broccoli, cornstarch, garlic, 1-inch piece ginger, orange zest, orange juice, soy sauce, rice vinegar, granulated sugar]
 prep_minutes: null
 cook_minutes: null
 image: null

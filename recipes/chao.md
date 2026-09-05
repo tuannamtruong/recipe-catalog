@@ -1,6 +1,7 @@
 ---
 title: Cháo
-categories: [Vegetables]
+types: []
+ingredient_tags: [vegetables, gạo, gừng, thịt]
 prep_minutes: 60
 cook_minutes: null
 image: null

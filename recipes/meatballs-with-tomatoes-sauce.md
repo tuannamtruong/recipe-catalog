@@ -1,6 +1,7 @@
 ---
 title: Meatballs With Tomatoes Sauce
-categories: [Beef]
+types: []
+ingredient_tags: [beef, thịt băm, onions, garlics, tomatoes, tomatoes puree, vinegar, sugar, basil, thyme, rosmarin]
 prep_minutes: 10
 cook_minutes: null
 image: null

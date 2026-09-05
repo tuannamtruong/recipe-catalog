@@ -1,6 +1,7 @@
 ---
 title: Pork Rib Soup
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork loin, onion, vegtable of choice]
 prep_minutes: 60
 cook_minutes: null
 image: null

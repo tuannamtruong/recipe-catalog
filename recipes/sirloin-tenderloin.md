@@ -1,6 +1,7 @@
 ---
 title: Sirloin/Tenderloin
-categories: [Beef]
+types: []
+ingredient_tags: [beef]
 prep_minutes: null
 cook_minutes: null
 image: null
@@ -11,4 +12,4 @@ source_url: null
 - 
 
 ## Steps
-1. 
+1.

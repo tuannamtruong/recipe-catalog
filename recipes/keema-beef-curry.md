@@ -1,6 +1,7 @@
 ---
 title: Keema Beef Curry
-categories: [Beef]
+types: []
+ingredient_tags: [beef, olive oil, ground beef, onion, fresh ginger, garlic, salt, black pepper, curry powder, garam masala, turmeric, tomato paste, fire-roasted diced tomatoes, coconut milk, frozen baby peas]
 prep_minutes: 1
 cook_minutes: null
 image: null

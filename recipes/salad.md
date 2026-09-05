@@ -1,6 +1,7 @@
 ---
 title: Salad
-categories: [Salad]
+types: [Salad]
+ingredient_tags: [tzatziki, quinoa, cucumber, bell pepper, red onion, chickpeas, kalamata olives, banana peppers, feta]
 prep_minutes: null
 cook_minutes: null
 image: null

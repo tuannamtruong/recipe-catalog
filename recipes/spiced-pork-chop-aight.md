@@ -1,6 +1,7 @@
 ---
 title: Spiced Pork Chop (aight)
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork loin, sốt, paprika, star anise, salt, pepper, olive oil, thyme, garlic, coriander seeds]
 prep_minutes: 8
 cook_minutes: null
 image: null

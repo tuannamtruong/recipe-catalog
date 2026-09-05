@@ -1,6 +1,7 @@
 ---
 title: Chicken Breast and Basic Glaze
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken breast, salt, pepper, garlic, juice/red wine, paprika, brown sugar]
 prep_minutes: 10
 cook_minutes: null
 image: null

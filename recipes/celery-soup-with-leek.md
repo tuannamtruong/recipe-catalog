@@ -1,6 +1,7 @@
 ---
 title: Celery Soup (with leek)
-categories: [Soup]
+types: [Soup]
+ingredient_tags: [celeries, butter, white part of leek, celeriac, onion, small-medium size potato, chicken/veggie broth, sour/ heavy cream, celeries leafs]
 prep_minutes: 10
 cook_minutes: null
 image: null

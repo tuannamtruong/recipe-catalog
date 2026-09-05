@@ -1,6 +1,7 @@
 ---
 title: Salisbury Steak
-categories: [Beef]
+types: []
+ingredient_tags: [beef, "85% lean ground beef", black pepper, dry mustard, ketchup, worcestershire sauce, soy sauce, egg, cayenne pepper, plain bread crumbs, salted butter, white button mushrooms, onion, salt, all-purpose flour, high-quality]
 prep_minutes: 120
 cook_minutes: null
 image: null

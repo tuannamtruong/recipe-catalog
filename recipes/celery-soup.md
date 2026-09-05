@@ -1,6 +1,7 @@
 ---
 title: Celery Soup
-categories: [Soup]
+types: [Soup]
+ingredient_tags: [celeries, butter, white part of leek, celeriac, onion, garlics cloves, potatoes, water, chicken, bay leaf, salt, pepper, parsley, sour cream, celeries leafs]
 prep_minutes: 5
 cook_minutes: null
 image: null

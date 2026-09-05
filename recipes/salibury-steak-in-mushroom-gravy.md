@@ -1,6 +1,7 @@
 ---
 title: Salibury Steak in Mushroom Gravy
-categories: [Beef]
+types: []
+ingredient_tags: [beef, ground beef, egg, crumbs, onion, salt, pepper, poultry seasoning, butter, all-purpose flour, milk, beef bouillon]
 prep_minutes: 4
 cook_minutes: null
 image: null

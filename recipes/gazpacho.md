@@ -1,6 +1,7 @@
 ---
 title: Gazpacho
-categories: [Soup]
+types: [Soup]
+ingredient_tags: [fresh tomatoes, cucumber, red bell pepper, green onion, garlic, ground cumin, dried oregano, from main, cherry tomatoes, lime, extra-virgin olive oil, balsamic vinegar, worcestershire sauce, fresh basil]
 prep_minutes: 120
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Kokosmakronen
-categories: [Cake]
+types: [Cake]
+ingredient_tags: [kokosraspel, eiweiß, zucker, oblaten]
 prep_minutes: 20
 cook_minutes: null
 image: null

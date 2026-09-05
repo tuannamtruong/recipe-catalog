@@ -1,6 +1,7 @@
 ---
 title: Salt vinegar dip
-categories: [Uncategorized]
+types: []
+ingredient_tags: [mayo, sour cream, balasmaic, mustard, salt, pepper, sugar]
 prep_minutes: null
 cook_minutes: null
 image: null

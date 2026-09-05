@@ -1,6 +1,7 @@
 ---
 title: Creamy garlic sauce
-categories: [Sauce]
+types: [Sauce]
+ingredient_tags: [chicken broth, beef bouillon cube, low sodium soy sauce, onion powder, thyme, mustard powder, butter, garlic, flour, heavy cream, parmesan cheese]
 prep_minutes: 6
 cook_minutes: null
 image: null

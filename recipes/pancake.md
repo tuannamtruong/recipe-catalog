@@ -1,6 +1,7 @@
 ---
 title: Pancake
-categories: [Dessert]
+types: [Dessert]
+ingredient_tags: [egg, greek yogurt, flour, baking powder, protein powder, milk, sweetener of choice, choco, berries, almond, banana, nut]
 prep_minutes: 30
 cook_minutes: null
 image: null

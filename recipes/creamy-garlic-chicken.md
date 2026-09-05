@@ -1,6 +1,7 @@
 ---
 title: Creamy Garlic Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken breasts, flour, olive oil, butter, garlic cloves, chicken broth, lemon juice, garlic powder, heavy/whipping cream, salt, pepper]
 prep_minutes: 3
 cook_minutes: null
 image: null

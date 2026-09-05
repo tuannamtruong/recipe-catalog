@@ -1,6 +1,7 @@
 ---
 title: Creamy tuscan chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken breast fillets, salt, smoked paprika powder, garlic powder, italian seasoning, black pepper, unsweetened heavy whipping cream, butter, shallot, garlic, red bell peppers, red chili flakes, parmesan cheese, spinach, cherry tomatoes, tomato paste, sun dried tomatoes]
 prep_minutes: 1
 cook_minutes: null
 image: null

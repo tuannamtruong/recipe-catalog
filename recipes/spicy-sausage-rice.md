@@ -1,6 +1,7 @@
 ---
 title: Spicy Sausage Rice
-categories: [Pork]
+types: []
+ingredient_tags: [pork, sausage, chicken stock, hành, bell pepper, garlic cloves, rice, white wine, spring onion, parsly, tomatoe]
 prep_minutes: 12
 cook_minutes: null
 image: null

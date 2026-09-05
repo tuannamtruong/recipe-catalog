@@ -1,6 +1,7 @@
 ---
 title: Picadillo
-categories: [Ground meat]
+types: []
+ingredient_tags: [ground meat, thịt, oil, yellow onion, salt, cumin, bay leaves, garlic, vinegar, tomatoes, water, currant]
 prep_minutes: null
 cook_minutes: null
 image: null

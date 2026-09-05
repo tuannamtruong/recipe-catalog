@@ -1,6 +1,7 @@
 ---
 title: Amish Meat Balls
-categories: [Ground meat]
+types: []
+ingredient_tags: [ground meat, thịt bò/mix, bread crumbs, onion, eggs, oil, ketchup, vinegar, soy sauce, brown sugar]
 prep_minutes: 5
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Steak Diane Ragusea
-categories: [Beef]
+types: []
+ingredient_tags: [beef, sirloin steak, onion, mushrooms, garlic cloves, 2 tbs worcestershire sauce, mustard, tomato paste, heavy cream, rind broth, lemon juice]
 prep_minutes: null
 cook_minutes: null
 image: null

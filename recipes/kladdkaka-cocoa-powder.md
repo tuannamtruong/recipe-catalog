@@ -1,6 +1,7 @@
 ---
 title: Kladdkaka - Cocoa powder
-categories: [Cake]
+types: [Cake]
+ingredient_tags: [butter, white sugar, eggs, vanilla extract, unsweetened cocoa powder, salt, all-purpose flour]
 prep_minutes: 20
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Cucumber Tahini
-categories: [Vegetables]
+types: []
+ingredient_tags: [vegetables, cucumber, cut in half, garlic, ginger, tahini, soy sauce, maple syrup, vinegar, chili flakes, salt]
 prep_minutes: 10
 cook_minutes: null
 image: null

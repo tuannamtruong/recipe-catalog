@@ -1,6 +1,7 @@
 ---
 title: Steak Diane
-categories: [Beef]
+types: []
+ingredient_tags: [beef, sirloin steak, shallots, mushrooms, salted butter, garlic clove, 2 tbs worcestershire sauce, dijon mustard, brandy, heavy cream, flat-leaf parsley]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: "Greek Lemon Chicken & Potatoes"
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, thịt gà, củ khoai to, salt, black pepper, rosemary, oregano, hot pepper, garlic, lemon, olive oil, chicken broth, little oil]
 prep_minutes: 25
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Vietnamese beef stew
-categories: [Beef]
+types: []
+ingredient_tags: [beef, beef goulash, red curry powder, sea salt, sugar, chicken bouillon powder, garlic, shallots, carrots, lemongrass, 2-inch knob ginger, oil, tomato paste, coconut juice, cinnamon stick, star anise, fish sauce, light soy sauce]
 prep_minutes: 30
 cook_minutes: null
 image: null

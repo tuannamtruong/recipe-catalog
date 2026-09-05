@@ -1,6 +1,7 @@
 ---
 title: Sloppy Joes II
-categories: [Ground meat]
+types: []
+ingredient_tags: [ground meat, thịt, bell pepper, mustard, brown sugar, salt, pepper]
 prep_minutes: 3
 cook_minutes: null
 image: null

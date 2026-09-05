@@ -1,6 +1,7 @@
 ---
 title: Peanut Curry Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, thịt gà, mix gia vị, coriander, cumin, tumeric, paprika, salt, main, oil, onion, ginger, garlic cloves, ketchup, peanut butter, chicken broth, zucchini, red pepper, roasted peanut, cilantro]
 prep_minutes: 1
 cook_minutes: null
 image: null

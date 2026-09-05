@@ -1,6 +1,7 @@
 ---
 title: Eggplant Bake
-categories: [Seafood]
+types: []
+ingredient_tags: [seafood, eggplants, cut in chunks, drizzle of oil, salt, curry powder]
 prep_minutes: 25
 cook_minutes: null
 image: null

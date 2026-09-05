@@ -1,6 +1,7 @@
 ---
 title: Old Fashioned Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, thịt gà, củ hành to, white beans, củ khoai, tomatoes diced tomatoes can, tomato puree, garlic powder, paprika powder, curry, chicken stock]
 prep_minutes: 2
 cook_minutes: null
 image: null

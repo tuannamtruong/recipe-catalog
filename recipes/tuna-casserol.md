@@ -1,6 +1,7 @@
 ---
 title: Tuna Casserol
-categories: [Seafood]
+types: []
+ingredient_tags: [seafood, egg noodles, "kondesnmilch: ratio 2/1", tuna, frozen peas, milk, dry bread crumbs, butter]
 prep_minutes: 30
 cook_minutes: null
 image: null

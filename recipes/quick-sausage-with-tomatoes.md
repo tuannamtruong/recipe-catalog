@@ -1,6 +1,7 @@
 ---
 title: Quick Sausage with Tomatoes
-categories: [Pork]
+types: []
+ingredient_tags: [pork, cooking, sausage, pasta, onion, cherry tomatoes, salt n pepper, pasta cooking water, add pasta to pan]
 prep_minutes: null
 cook_minutes: null
 image: null

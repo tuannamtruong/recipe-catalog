@@ -1,6 +1,7 @@
 ---
 title: Balsamic Roasted Pork Loin
-categories: [Beef]
+types: []
+ingredient_tags: [beef, pork loin, steak seasoning, olive oil, balsamic vinegar]
 prep_minutes: null
 cook_minutes: null
 image: null

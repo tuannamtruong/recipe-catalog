@@ -1,6 +1,7 @@
 ---
 title: Sloppy Joe Dip
-categories: [Ground meat]
+types: []
+ingredient_tags: [ground meat, meat, onion, bell pepper, garlic, salt, pepper, all-purpose flour, brown sugar, cayenne, dijon mustard, chicken broth, worcestershire sauce]
 prep_minutes: 15
 cook_minutes: null
 image: null

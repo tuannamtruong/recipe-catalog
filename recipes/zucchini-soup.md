@@ -1,6 +1,7 @@
 ---
 title: Zucchini Soup
-categories: [Vegetables]
+types: []
+ingredient_tags: [vegetables, unsalted butter, extra-virgin olive oil, onion, garlic clove, zucchini, vegetable stock]
 prep_minutes: 8
 cook_minutes: null
 image: null

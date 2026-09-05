@@ -1,6 +1,7 @@
 ---
 title: Veggie Vegetarian Chili
-categories: ["Rice & Noodles"]
+types: []
+ingredient_tags: [onion, carrots, garlic, bell peppers, chili powder, tomatoes, black beans, kidney beans, pinto beans, kernel corn, fresh mushrooms, dried oregano, dried basil, ground cumin, garlic powder]
 prep_minutes: 5
 cook_minutes: null
 image: null
@@ -8,8 +9,8 @@ source_url: "https://www.allrecipes.com/recipe/83716/veggie-vegetarian-chili/"
 ---
 
 ## Ingredients
-- 1 cup chopped onion
-- 1 cup chopped carrots
+- 1 cup (240 ml) chopped onion
+- 1 cup (240 ml) chopped carrots
 - 3 cloves garlic, minced
 - 3 bell peppers
 - 2 tbs chili powder

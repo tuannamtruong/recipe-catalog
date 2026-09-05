@@ -1,6 +1,7 @@
 ---
 title: Egg-Fried Rice Noodles with Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken breast, garlic, soy sauce, broccoli]
 prep_minutes: null
 cook_minutes: null
 image: null

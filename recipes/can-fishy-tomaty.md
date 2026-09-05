@@ -1,6 +1,7 @@
 ---
 title: Can fishy tomaty
-categories: [Seafood]
+types: []
+ingredient_tags: [seafood, olive oil, shallot, garlic, sweet smoked paprika, tomato sauce, broth, tuna, greek yogurt parsley]
 prep_minutes: 3
 cook_minutes: null
 image: null

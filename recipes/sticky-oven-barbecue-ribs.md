@@ -1,6 +1,7 @@
 ---
 title: Sticky Oven Barbecue Ribs
-categories: [Pork]
+types: []
+ingredient_tags: [pork, back pork ribs, garlic powder, onion powder, paprika, salt, pepper, cumin, chili, barbecue sauce, garlic, olive oil, worcestershire sauce]
 prep_minutes: 120
 cook_minutes: null
 image: null

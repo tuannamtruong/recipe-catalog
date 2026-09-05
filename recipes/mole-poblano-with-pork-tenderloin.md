@@ -1,6 +1,7 @@
 ---
 title: Mole Poblano With Pork Tenderloin
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork loin, shallots /1 med onion, garlic cloves, butter, canned chipotle peppers, peanut butter, ground cumin, dried oregano, ground cinnamon, ground cloves, flour, tomato paste, fruit preserves]
 prep_minutes: 15
 cook_minutes: null
 image: null

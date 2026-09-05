@@ -1,6 +1,7 @@
 ---
 title: Beannies 1
-categories: [Vegan]
+types: [Vegan]
+ingredient_tags: [garlics, onions, sun-dried tomatoes, tomato paste, mixed seasoning, cumin, turmeric, beans, coconut milk, spinach, lemon, nutritional yeast]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Oven Chicken Legs
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken legs, butter, chicken broth, hot red pepper sauce, garlic powder, onion powder, salt, pepper]
 prep_minutes: 45
 cook_minutes: null
 image: null

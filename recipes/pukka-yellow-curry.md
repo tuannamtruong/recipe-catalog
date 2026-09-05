@@ -1,6 +1,7 @@
 ---
 title: Pukka Yellow Curry
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, đùi gà, onion, garlic cloves, bell peppers, chicken broth?, hot paprika, cilantro, honey, turmeric, curry powder, olive oil, nước sôi, soft chickpeas, tomato puree]
 prep_minutes: 10
 cook_minutes: null
 image: null

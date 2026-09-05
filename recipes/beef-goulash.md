@@ -1,6 +1,7 @@
 ---
 title: Beef goulash
-categories: [Beef]
+types: []
+ingredient_tags: [beef, goulasch, sunflower oil, onions, garlic cloves, hot smoked paprika, paprika, beef stock cube, cold water, tomatoes, tomato purée, bay leaves, red pepper, green pepper, orange pepper]
 prep_minutes: 5
 cook_minutes: null
 image: null

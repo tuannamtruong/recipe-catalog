@@ -1,6 +1,7 @@
 ---
 title: Two sheet pan shrimp
-categories: [Seafood]
+types: []
+ingredient_tags: [seafood, shrimp, asparagus/brocolli, shallots, garlic cloves, lemon, fresh herb]
 prep_minutes: 3
 cook_minutes: null
 image: null

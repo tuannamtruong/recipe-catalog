@@ -1,6 +1,7 @@
 ---
 title: One pot creamy cajun sausage pasta
-categories: [Pork]
+types: []
+ingredient_tags: [pork, sausage, yellow onion, red bell pepper, roasted tomatoes, garlic cloves, beef broth, pasta, heavy cream, cream cheese, beans, salt, pepper, paprika, cumin, thyme, garlic powder, onion powder, cayenne]
 prep_minutes: null
 cook_minutes: null
 image: null

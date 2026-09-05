@@ -1,6 +1,7 @@
 ---
 title: Chicken drumsticks
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, flour, salt, curry powder, paprika]
 prep_minutes: 15
 cook_minutes: null
 image: null

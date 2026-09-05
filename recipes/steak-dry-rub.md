@@ -1,6 +1,7 @@
 ---
 title: Steak Dry Rub
-categories: [Beef]
+types: []
+ingredient_tags: [beef, muối, smoked paprika, onion powder, garlic powder, dried oregano, ground black pepper, brown sugar, cumin]
 prep_minutes: null
 cook_minutes: null
 image: null

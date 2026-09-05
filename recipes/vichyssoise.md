@@ -1,6 +1,7 @@
 ---
 title: Vichyssoise
-categories: [Soup]
+types: [Soup]
+ingredient_tags: [butter, leeks, onion, potatoes, salt, pepper, dried marjoram, dried thyme, bay leaf, chicken broth, heavy whipping cream, garnish with parsley]
 prep_minutes: 10
 cook_minutes: null
 image: null

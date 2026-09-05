@@ -1,6 +1,7 @@
 ---
 title: Baked Curry
-categories: [Pork]
+types: []
+ingredient_tags: [pork, carrots, onion, garlic, thumbsize piece of ginger, tomatoes, coconut milk, water, chickpeas, coriander, salt]
 prep_minutes: 45
 cook_minutes: null
 image: null

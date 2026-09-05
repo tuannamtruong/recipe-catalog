@@ -1,6 +1,7 @@
 ---
 title: Pan Sauce 2 (Steak diane is better)
-categories: [Beef]
+types: []
+ingredient_tags: [beef, seared sth, shallot, garlic, wine, butter, broth/water, mustard]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Burritos
-categories: [Beef]
+types: []
+ingredient_tags: [beef, tater tot’s, grounded beef, cheddar, peppers, eggs, wraps, ketchup]
 prep_minutes: null
 cook_minutes: null
 image: null

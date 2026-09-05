@@ -1,6 +1,7 @@
 ---
 title: Potatoes salad
-categories: [Salad]
+types: [Salad]
+ingredient_tags: [potatoes, olive oil, chili powder, tomato, paprika paste, pomegranate molasses, ground red pepper, bell pepper, red onions, parsley, spring onions, pecan, pickles]
 prep_minutes: null
 cook_minutes: null
 image: null

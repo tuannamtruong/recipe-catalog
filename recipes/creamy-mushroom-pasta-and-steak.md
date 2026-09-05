@@ -1,6 +1,7 @@
 ---
 title: Creamy Mushroom Pasta and Steak
-categories: [Beef]
+types: []
+ingredient_tags: [beef, steak, oil, salt, butter, mushroom, onion, hot paprika, thyme, dry white wine, chicken broth, pasta, worcestershire sauce, sour cream]
 prep_minutes: 5
 cook_minutes: null
 image: null

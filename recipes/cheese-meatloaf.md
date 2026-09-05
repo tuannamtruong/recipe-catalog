@@ -1,6 +1,7 @@
 ---
 title: Cheese Meatloaf
-categories: [Beef]
+types: []
+ingredient_tags: [beef, thịt băm, egg, milk, salt, black pepper, bread, onion, cheddar cheese, carrot, brown sugar, ketchup, yellow mustard]
 prep_minutes: 240
 cook_minutes: null
 image: null

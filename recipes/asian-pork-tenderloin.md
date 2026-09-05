@@ -1,6 +1,7 @@
 ---
 title: Asian Pork Tenderloin
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork loin, garlic, ginger, soy sauce, sesame oil, worchester sauce, brown sugar, green onions, pepper, chili paste]
 prep_minutes: 480
 cook_minutes: null
 image: null

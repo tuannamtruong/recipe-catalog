@@ -1,6 +1,7 @@
 ---
 title: Sticky Pork Ribs
-categories: [Pork]
+types: []
+ingredient_tags: [pork, pork chop, salt, black pepper, ginger, garlic, hot pepper, cumin, honey, soy sauce, hot sauce, vinegar, rind]
 prep_minutes: 1
 cook_minutes: null
 image: null

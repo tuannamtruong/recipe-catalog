@@ -1,6 +1,7 @@
 ---
 title: One-Pan Chicken Shawarma Rice Bowls
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken thighs/breast, paprika, cumin, onion powder, coriander, allspice, turmeric, pepper, salt, olive oil, garlic cloves, lemon, chicken boulion, butter, yellow onion, rice, hot water, mayonnaise, plain greek yogurt, to 3 garlic cloves, fresh parsley, black pepper]
 prep_minutes: 2
 cook_minutes: null
 image: null

@@ -1,6 +1,7 @@
 ---
 title: Creamy Chicken with Mushroom
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, chicken breast, oil, onion, butter, garlic cloves, mushroom, heavy cream]
 prep_minutes: null
 cook_minutes: null
 image: null

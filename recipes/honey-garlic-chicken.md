@@ -1,6 +1,7 @@
 ---
 title: Honey Garlic Chicken
-categories: [Chicken]
+types: []
+ingredient_tags: [chicken, thịt gà, salt, pepper, flour, garlic, soy sauce, honey]
 prep_minutes: 3
 cook_minutes: null
 image: null

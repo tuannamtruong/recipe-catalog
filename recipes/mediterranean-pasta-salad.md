@@ -1,6 +1,7 @@
 ---
 title: Mediterranean pasta salad
-categories: [Salad, Sauce]
+types: [Salad, Sauce]
+ingredient_tags: [pasta of choice, cucumber, bell pepper, red onion, chickpease, kalamata olive, feta cheese, cherry tomatoes, salt, hummus, lime juice, water to thin]
 prep_minutes: null
 cook_minutes: null
 image: null

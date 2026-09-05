@@ -1,6 +1,6 @@
 ---
 title: Chicken Biryani
-categories: []
+categories: [Chicken]
 prep_minutes: null
 cook_minutes: null
 image: null

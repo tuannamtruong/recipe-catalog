@@ -12,10 +12,10 @@ source_url: "https://www.youtube.com/shorts/_-wektibW2U"
 - 200g cooked quinoa
 - 1 cucumber, diced
 - 1/2 red onion, diced
-- 1/3 cup mint, chopped
-- 1/3 cup parsley, chopped
-- 1/2 cup pistachio, crumbled pecan
-- 1/2 cup Lemon vinaigrette:
+- 1/3 cup (80 ml) mint, chopped
+- 1/3 cup (80 ml) parsley, chopped
+- 1/2 cup (120 ml) pistachio, crumbled pecan
+- 1/2 cup (120 ml) Lemon vinaigrette:
 - ¼ cup fresh lemon juice
 - 1 tsp garlic powder
 - 1 tsp Dijon mustard
@@ -27,5 +27,3 @@ source_url: "https://www.youtube.com/shorts/_-wektibW2U"
 
 ## Steps
 1. Mix all together
-2. https://www.loveandlemons.com/lemon-vinaigrette/
-3. Soup

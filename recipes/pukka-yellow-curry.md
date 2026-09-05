@@ -1,6 +1,6 @@
 ---
 title: Pukka Yellow Curry
-categories: [Curry]
+categories: [Chicken]
 prep_minutes: 10
 cook_minutes: null
 image: null

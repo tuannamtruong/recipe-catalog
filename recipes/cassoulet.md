@@ -1,6 +1,6 @@
 ---
 title: Cassoulet
-categories: [Uncategorized]
+categories: [Main, Meat]
 prep_minutes: 120
 cook_minutes: null
 image: null

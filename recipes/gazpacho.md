@@ -1,6 +1,6 @@
 ---
 title: Gazpacho
-categories: [Uncategorized]
+categories: [Soup]
 prep_minutes: 120
 cook_minutes: null
 image: null

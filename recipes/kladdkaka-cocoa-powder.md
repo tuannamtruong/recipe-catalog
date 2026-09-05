@@ -1,6 +1,6 @@
 ---
 title: Kladdkaka - Cocoa powder
-categories: [Uncategorized]
+categories: [Cake]
 prep_minutes: 20
 cook_minutes: null
 image: null

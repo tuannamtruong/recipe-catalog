@@ -1,6 +1,6 @@
 ---
 title: Amish Meat Balls
-categories: [Uncategorized]
+categories: [Ground meat]
 prep_minutes: 5
 cook_minutes: null
 image: null
@@ -9,14 +9,14 @@ source_url: null
 
 ## Ingredients
 - 500g thịt bò/mix
-- 1/2 cup bread crumbs
-- 1/4 cup onion, minced
+- 1/2 cup (120 ml) bread crumbs
+- 1/4 cup (60 ml) onion, minced
 - 2 eggs
 - 1 tsp oil (+)
-- 3/2 cups ketchup
+- 3/2 cups (360 ml) ketchup
 - 1 tsps vinegar
 - 1 tbs soy sauce
-- 3/4 cup brown sugar
+- 3/4 cup (150 g) brown sugar
 
 ## Steps
 1. Cho thịt, bread crumbs, hành, trứng, ít tiêu và muối và 1 bát

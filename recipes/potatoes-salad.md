@@ -1,6 +1,6 @@
 ---
 title: Potatoes salad
-categories: []
+categories: [Salad]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,6 +1,6 @@
 ---
 title: Vichyssoise
-categories: [Uncategorized]
+categories: [Soup]
 prep_minutes: 10
 cook_minutes: null
 image: null
@@ -16,7 +16,7 @@ source_url: "https://www.allrecipes.com/recipe/13392/classic-vichyssoise/"
 - ½ tsp dried marjoram
 - ¼ tsp dried thyme
 - 1 bay leaf
-- 5 cups chicken broth
+- 5 cups (1200 ml) chicken broth
 - ¼ cup heavy whipping cream
 - Garnish with Parsley
 
@@ -33,13 +33,13 @@ source_url: "https://www.allrecipes.com/recipe/13392/classic-vichyssoise/"
 10. 1 onion, chopped
 11. 3 cloves garlic, minced
 12. 1,4 kg potatoes, peeled and cubed
-13. 4 cups chicken stock, or enough to cover potatoes
+13. 4 cups (960 ml) chicken stock, or enough to cover potatoes
 14. 45g butter
 15. 30g all-purpose flour
-16. 1 cup heavy cream
+16. 1 cup (240 ml) heavy cream
 17. 1 tsp dried tarragon
 18. 3 tsp chopped fresh cilantro
-19. Brown the meat. Set aside. If bacon, drain off all but 1/4 cup of the bacon grease.
+19. Brown the meat. Set aside. If bacon, drain off all but 1/4 cup (60 ml) of the bacon grease.
 20. Cook celery and onion in the reserved bacon drippings until soft and translucent, about 5 minutes. Stir in garlic, and continue cooking for 1 to 2 minutes.
 21. Add cubed potatoes, and toss to coat. Sauté for 3 to 4 minutes. Return bacon to the pan, and add enough chicken stock to just cover the potatoes. Cover, and simmer until potatoes are tender, 15 to 20 minutes.
 22. In a separate skillet makes a roux. Whisk in heavy cream, tarragon, and cilantro.

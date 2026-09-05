@@ -1,6 +1,6 @@
 ---
 title: Sloppy Joe Dip
-categories: [Uncategorized]
+categories: [Ground meat]
 prep_minutes: 15
 cook_minutes: null
 image: null
@@ -17,11 +17,11 @@ source_url: null
 - 2 tbs all-purpose flour
 - 1 tbs brown sugar
 - 1 tsp cayenne, or 1 tbs hot paprika
-- 0,5 cup ketchup
+- 0,5 cup (120 ml) ketchup
 - 1 tbs Dijon mustard
-- 1 cup chicken broth
+- 1 cup (240 ml) chicken broth
 - 1 tsp Worcestershire sauce
-- 0,5 cup shredded cheddar cheese
+- 0,5 cup (120 ml) shredded cheddar cheese
 
 ## Steps
 1. Cho thịt, hành, ớt chuông, tỏi, tiêu, muối, đường, flour, gia vị cay vào nồi nấu

@@ -19,7 +19,7 @@ source_url: null
 - % Butter
 - 1/2 tbs nutmeg
 - (- nhúm cayanne pepper)
-- Sốt:
+- Sauce:
 - 3 tbs butter
 - 1 tbs (all purpose) flour
 - 3 Cups (720 ml) beef broth
@@ -38,7 +38,7 @@ source_url: null
 6. Bơ tan và flour vào chảo tầm 4 phút hoặc chuyển màu nâu vàng
 7. Cho từ từ beef broth vô
 8. Lửa lên med-high
-9. Cho heavycream vô
+9. Cho heavycream + wochester sauce + pepper + sugar
 10. Nấu cho đến hơi sệt lại rồi tắt
 11. Viên thịt cho lên giấy bạc
 12. Cho vào lò: 20 phút 220 C ( hoặc thịt nâu)

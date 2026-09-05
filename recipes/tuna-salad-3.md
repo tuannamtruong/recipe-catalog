@@ -1,5 +1,5 @@
 ---
-title: Tuna salad 3
+title: Tuna salad
 categories: [Salad]
 prep_minutes: 10
 cook_minutes: null

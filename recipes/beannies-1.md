@@ -1,6 +1,6 @@
 ---
 title: Beannies 1
-categories: [Uncategorized]
+categories: [Vegan]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,6 +1,6 @@
 ---
 title: Sloppy Joes II
-categories: [Uncategorized]
+categories: [Ground meat]
 prep_minutes: 3
 cook_minutes: null
 image: null
@@ -13,7 +13,7 @@ source_url: "http://allrecipes.com/recipe/24264/sloppy-joes-ii/?src=VD_Summary"
 - 1 bell pepper
 - 0,5 tsp garlic powder
 - 1 tsp mustard
-- 0,75 cup ketchup
+- 0,75 cup (180 ml) ketchup
 - 3 tsp brown sugar
 - salt and pepper to taste
 

@@ -1,5 +1,5 @@
 ---
-title: "Honey Garlic Chicken:"
+title: Honey Garlic Chicken
 categories: [Chicken]
 prep_minutes: 3
 cook_minutes: null
@@ -10,12 +10,12 @@ source_url: null
 ## Ingredients
 - 500g thịt gà
 - salt and pepper
-- 1 cup flour
+- 1 cup (120 g) flour
 - 3,5 tbs unsalted butter
 - 2 cloves garlic, minced
 - 1,5 apple vinegar
 - 1tbs soy sauce (oyster sauce)
-- 1/3 cup honey
+- 1/3 cup (80 ml) honey
 
 ## Steps
 1. Breats medium cut

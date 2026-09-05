@@ -46,9 +46,22 @@
       </div>
     </header>
     <div class="subbar">
-      <select id="category-filter" aria-label="Category">
-        <option value="">All categories</option>
+      <select id="type-filter" aria-label="Dish type">
+        <option value="">All types</option>
       </select>
+      <div class="combo ing-filter">
+        <input
+          id="ingredient-filter"
+          type="text"
+          placeholder="Ingredients… (g)"
+          aria-label="Filter by ingredients"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+        />
+        <ul class="combo-list" role="listbox" hidden></ul>
+      </div>
       <button
         id="toggle-view"
         class="icon-btn"
@@ -56,6 +69,7 @@
         data-view="flat"
       ></button>
       <button id="toggle-collapse" type="button" hidden>Collapse all</button>
+      <div id="ingredient-chips" class="chips" hidden></div>
     </div>
 
     <main id="main"></main>
@@ -72,6 +86,7 @@
         <button class="back" type="button">&larr; Back</button>
         <h2 class="title"></h2>
         <p class="meta"></p>
+        <div class="chips tag-chips"></div>
         <img class="hero" alt="" />
         <section class="ingredients">
           <h3>Ingredients</h3>
@@ -107,10 +122,10 @@
         <h2 class="form-title"></h2>
         <label>Title<input name="title" required /></label>
         <label
-          >Categories (comma-separated)
-          <div class="combo">
+          >Types (comma-separated)
+          <div class="combo combo-types">
             <input
-              name="categories"
+              name="types"
               autocomplete="off"
               role="combobox"
               aria-autocomplete="list"
@@ -119,6 +134,25 @@
             <ul class="combo-list" role="listbox" hidden></ul>
           </div>
         </label>
+        <label
+          >Ingredient tags (comma-separated)
+          <div class="combo combo-tags">
+            <input
+              name="ingredient_tags"
+              autocomplete="off"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <ul class="combo-list" role="listbox" hidden></ul>
+          </div>
+        </label>
+        <p class="tags-hint">
+          Filled in from the ingredients below as you type, until you edit it.
+          <button class="extract-tags" type="button">
+            Re-extract from ingredients
+          </button>
+        </p>
         <label
           >Prep time (minutes)<input name="prep_minutes" type="number" min="0"
         /></label>

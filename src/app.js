@@ -372,15 +372,146 @@
     return parts.join("\n") + "\n";
   }
 
+  // ----- ingredient-name extraction -----
+  //
+  // Turns raw ingredient lines into bare names for the tag field:
+  // "3 cloves garlic, minced" -> "garlic". Mirrored in
+  // scripts/ingredient_tags.py, which the importer and the migration use.
+  // Keep the two in sync.
+
+  const UNITS = new Set(
+    ("g gr gram grams kg kilo kilos kilogram kilograms mg ml milliliter " +
+      "milliliters millilitre millilitres l liter liters litre litres dl cl " +
+      "cup cups tbsp tbs tb tablespoon tablespoons tsp tsps tbsps teaspoon " +
+      "teaspoons oz ounce ounces lb lbs pound pounds pinch pinches dash " +
+      "dashes clove cloves can cans jar jars tin tins packet packets package " +
+      "packages pack packs stick sticks slice slices piece pieces bunch " +
+      "bunches sprig sprigs stalk stalks head heads handful handfuls sheet " +
+      "sheets bag bags box boxes cube cubes drop drops quart quarts pint " +
+      "pints gallon gallons").split(" "),
+  );
+
+  const COUNT_WORDS = new Set(
+    ("a an one two three four five six seven eight nine ten eleven twelve " +
+      "half quarter couple few some several").split(" "),
+  );
+
+  // Qualify the amount or the cut, never the ingredient itself.
+  const LEAD_NOISE = new Set(
+    ("of about approximately around roughly large small medium big extra " +
+      "good heaped heaping level generous whole plus the your any x").split(" "),
+  );
+
+  // Preparation, not identity — dropped from the end, repeatedly.
+  const TRAIL_NOISE = new Set(
+    ("chopped minced diced sliced grated shredded crushed melted softened " +
+      "beaten peeled cubed drained rinsed halved quartered trimmed divided " +
+      "optional cooked uncooked thawed julienned mashed cut torn seeded " +
+      "deseeded stemmed boneless skinless finely roughly coarsely thinly " +
+      "freshly lightly well warm cold hot room temperature more extra " +
+      "needed taste").split(" "),
+  );
+
+  // The same words lead just as often ("chopped tomatoes"), except the few
+  // that are part of the name when they do: "hot sauce", "cut of beef".
+  const LEAD_PREP = new Set(
+    Array.from(TRAIL_NOISE).filter(
+      (w) => !["hot", "cold", "warm", "cut", "well", "taste", "more", "needed"].includes(w),
+    ),
+  );
+
+  const NUMERIC_RE = /^[\d¼-¾⅐-⅞]+([.,/–-]?[\d¼-¾⅐-⅞]+)*$/;
+  const NUM_UNIT_RE = /^[\d.,/-]+([a-z]+)$/;
+  const TAIL_CUT_RE =
+    /\b(to taste|for garnish|garnish with|to garnish|for serving|for the\b|as needed|if needed|at room temperature|plus more|or more|divided)\b.*$/;
+  // "juice of 1 lemon" is the lemon's juice — reorder rather than lose the word.
+  const OF_PHRASE_RE = /^(juice|zest|peel|rind)\s+of\s+(.+)$/i;
+
+  function stripLead(words) {
+    while (words.length) {
+      const w = words[0].replace(/\./g, "").toLowerCase();
+      if (UNITS.has(w) || COUNT_WORDS.has(w) || LEAD_NOISE.has(w) || LEAD_PREP.has(w)) {
+        words = words.slice(1);
+        continue;
+      }
+      if (NUMERIC_RE.test(w)) {
+        words = words.slice(1);
+        continue;
+      }
+      const m = NUM_UNIT_RE.exec(w);
+      if (m && UNITS.has(m[1])) {
+        words = words.slice(1);
+        continue;
+      }
+      break;
+    }
+    return words;
+  }
+
+  function cleanPhrase(phrase) {
+    let text = phrase.trim();
+    const of = OF_PHRASE_RE.exec(text);
+    if (of) {
+      const rest = stripLead(of[2].split(/\s+/)).join(" ");
+      text = rest ? `${rest} ${of[1].toLowerCase()}` : of[1].toLowerCase();
+    }
+    let words = text.split(/\s+/).filter(Boolean);
+    words = stripLead(words);
+    while (
+      words.length &&
+      TRAIL_NOISE.has(words[words.length - 1].replace(/[.,]/g, "").toLowerCase())
+    ) {
+      words = words.slice(0, -1);
+    }
+    // A unit can survive in the middle once the count is gone ("2 x 400 g can").
+    words = stripLead(words);
+    const name = words
+      .join(" ")
+      .replace(/^[\s.,–:;-]+|[\s.,–:;-]+$/g, "")
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+    if (!name || NUMERIC_RE.test(name)) return "";
+    // Anything still this long is a sentence, not an ingredient name.
+    if (name.split(" ").length > 4) return "";
+    return name;
+  }
+
+  /** Ingredient names from raw "## Ingredients" lines, order preserved. */
+  function extractIngredientNames(lines) {
+    const out = [];
+    const seen = new Set();
+    for (const raw of lines || []) {
+      let line = String(raw)
+        .replace(/^\s*[-*•·‣◦]\s*/, "")
+        .trim();
+      if (!line) continue;
+      // "Sauce:", "For the topping:" — a group heading, not an ingredient.
+      if (line.endsWith(":")) continue;
+      line = line.replace(/\([^)]*\)/g, " "); // parentheticals are notes
+      line = line.split(/\s+[-–—]\s+|,/)[0];
+      line = line.split(/\bor\b/)[0];
+      line = line.replace(TAIL_CUT_RE, "");
+      for (const part of line.split(/\s+and\s+|\s*[&+]\s*/)) {
+        const name = cleanPhrase(part);
+        if (name && !seen.has(name)) {
+          seen.add(name);
+          out.push(name);
+        }
+      }
+    }
+    return out;
+  }
+
   // ----- state + view glue -----
 
   const state = {
     recipes: [],
     query: "",
-    category: "",
+    type: "", // one dish type, from the dropdown
+    ingredients: [], // lowercase ingredient tokens, ANDed together
     showImages: false,
     view: "flat", // "flat" | "grouped"
-    collapsed: new Set(), // category names collapsed in grouped view
+    collapsed: new Set(), // type names collapsed in grouped view
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -388,43 +519,143 @@
 
   const main = $("#main");
 
-  function categoriesOf(rec) {
-    const cs = rec.frontmatter?.categories;
-    if (!Array.isArray(cs)) return [];
-    return cs
+  // A recipe carries two independent tag lists: `types` (dish types — the
+  // dropdown filter and the grouped-view headings) and `ingredient_tags` (what
+  // it is made of — the multi-ingredient search). Both are 0..n.
+  //
+  // Canonical type names. These are NOT offered as suggestions — the form only
+  // suggests types already in use, so the list never advertises a type no
+  // recipe has. Free-form: anything typed in is kept. This list exists solely
+  // to classify the legacy `categories:` field.
+  // Mirrored in scripts/ingredient_tags.py.
+  const TYPE_VOCAB = [
+    "Appetizer",
+    "Bread",
+    "Breakfast",
+    "Cake",
+    "Curry",
+    "Dessert",
+    "Drink",
+    "Main dish",
+    "Rice & Noodles",
+    "Salad",
+    "Sauce",
+    "Side dish",
+    "Snack",
+    "Soup",
+    "Stew",
+    "Vegan",
+    "Vegetarian",
+  ];
+
+  // Legacy `categories:` values that name a type under a different word.
+  const TYPE_ALIASES = {
+    main: "Main dish",
+    mains: "Main dish",
+    "main course": "Main dish",
+    dinner: "Main dish",
+    side: "Side dish",
+    sides: "Side dish",
+    starter: "Appetizer",
+    noodles: "Rice & Noodles",
+    rice: "Rice & Noodles",
+    pasta: "Rice & Noodles",
+    dessert: "Dessert",
+    desserts: "Dessert",
+    sauces: "Sauce",
+    soups: "Soup",
+    salads: "Salad",
+    cakes: "Cake",
+    sweets: "Dessert",
+    baking: "Bread",
+  };
+  const LEGACY_NOISE = new Set(["uncategorized", "other", "misc"]);
+
+  const TYPE_LOOKUP = new Map(TYPE_VOCAB.map((t) => [t.toLowerCase(), t]));
+  for (const [k, v] of Object.entries(TYPE_ALIASES)) TYPE_LOOKUP.set(k, v);
+
+  function strList(value) {
+    if (!Array.isArray(value)) return [];
+    return value
       .filter((c) => typeof c === "string" && c.trim())
       .map((c) => c.trim());
   }
 
-  function allCategories() {
+  // Recipes written before the split (or hand-edited from an old file) still
+  // carry one mixed `categories:` list. Sort it out on read so nothing has to
+  // be migrated before the app works.
+  function legacySplit(rec) {
+    const types = [];
+    const tags = [];
+    for (const c of strList(rec.frontmatter?.categories)) {
+      const key = c.toLowerCase();
+      if (LEGACY_NOISE.has(key)) continue;
+      if (TYPE_LOOKUP.has(key)) types.push(TYPE_LOOKUP.get(key));
+      else tags.push(key);
+    }
+    return { types, tags };
+  }
+
+  function typesOf(rec) {
+    const fm = rec.frontmatter || {};
+    if ("types" in fm || "ingredient_tags" in fm) return strList(fm.types);
+    return legacySplit(rec).types;
+  }
+
+  function ingredientTagsOf(rec) {
+    const fm = rec.frontmatter || {};
+    if ("types" in fm || "ingredient_tags" in fm)
+      return strList(fm.ingredient_tags);
+    return legacySplit(rec).tags;
+  }
+
+  function allTypes() {
     const seen = new Set();
     for (const r of state.recipes) {
-      for (const c of categoriesOf(r)) seen.add(c);
+      for (const t of typesOf(r)) seen.add(t);
     }
     return Array.from(seen).sort((a, b) => a.localeCompare(b));
   }
 
-  function refreshCategoryFilter() {
-    const select = $("#category-filter");
-    const cats = allCategories();
-    const current = state.category;
+  function allIngredientTags() {
+    const seen = new Set();
+    for (const r of state.recipes) {
+      for (const t of ingredientTagsOf(r)) seen.add(t.toLowerCase());
+    }
+    return Array.from(seen).sort((a, b) => a.localeCompare(b));
+  }
+
+  function refreshTypeFilter() {
+    const select = $("#type-filter");
+    const types = allTypes();
+    const current = state.type;
     select.innerHTML =
-      '<option value="">All categories</option>' +
-      cats
+      '<option value="">All types</option>' +
+      types
         .map(
           (c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`,
         )
         .join("");
-    select.value = current;
+    // A type can disappear when the recipe holding it is edited away.
+    select.value = types.includes(current) ? current : "";
+    state.type = select.value;
+  }
+
+  // Every selected ingredient must match (AND), so adding tokens narrows the
+  // list. A token matches as a substring, which makes "tomato" find
+  // "cherry tomatoes" and saves the user guessing the exact tag.
+  function matchesIngredients(rec, tokens) {
+    if (!tokens.length) return true;
+    const tags = ingredientTagsOf(rec).map((t) => t.toLowerCase());
+    return tokens.every((tok) => tags.some((tag) => tag.includes(tok)));
   }
 
   function filteredRecipes() {
     const q = state.query.trim().toLowerCase();
+    const tokens = state.ingredients.map((t) => t.toLowerCase()).filter(Boolean);
     return state.recipes.filter((r) => {
-      if (state.category) {
-        const cats = categoriesOf(r);
-        if (!cats.includes(state.category)) return false;
-      }
+      if (state.type && !typesOf(r).includes(state.type)) return false;
+      if (!matchesIngredients(r, tokens)) return false;
       if (q) {
         const hay = (
           (r.frontmatter?.title || "") +
@@ -433,7 +664,9 @@
           "\n" +
           (r.body || "") +
           "\n" +
-          categoriesOf(r).join(" ")
+          typesOf(r).join(" ") +
+          "\n" +
+          ingredientTagsOf(r).join(" ")
         ).toLowerCase();
         if (!hay.includes(q)) return false;
       }
@@ -474,8 +707,8 @@
     return total > 0 ? `${total} min` : "";
   }
 
-  // Compact one-line row used inside category groups: "Name - Time".
-  // The category is omitted (it is the group heading).
+  // Compact one-line row used inside type groups: "Name - Time".
+  // The type is omitted (it is the group heading).
   function makeLine(r) {
     const a = document.createElement("a");
     a.className = "recipe-line";
@@ -518,8 +751,8 @@
     main.appendChild(makeGrid(recipes));
   }
 
-  // Grouped view: one section per category, recipes listed under each. A recipe
-  // with multiple categories appears under each; uncategorized ones go last.
+  // Grouped view: one section per dish type, recipes listed under each. A
+  // recipe with several types appears under each; untyped ones go last.
   const UNCATEGORIZED = "Uncategorized";
 
   function showGrouped() {
@@ -532,8 +765,8 @@
 
     const groups = new Map();
     for (const r of recipes) {
-      const cats = categoriesOf(r);
-      const keys = cats.length ? cats : [UNCATEGORIZED];
+      const types = typesOf(r);
+      const keys = types.length ? types : [UNCATEGORIZED];
       for (const c of keys) {
         if (!groups.has(c)) groups.set(c, []);
         groups.get(c).push(r);
@@ -579,12 +812,12 @@
     updateCollapseAllBtn();
   }
 
-  // Names of the category groups currently shown (mirrors showGrouped's keys).
+  // Names of the type groups currently shown (mirrors showGrouped's keys).
   function currentGroupNames() {
     const names = new Set();
     for (const r of filteredRecipes()) {
-      const cats = categoriesOf(r);
-      if (cats.length) cats.forEach((c) => names.add(c));
+      const types = typesOf(r);
+      if (types.length) types.forEach((c) => names.add(c));
       else names.add(UNCATEGORIZED);
     }
     return Array.from(names);
@@ -608,7 +841,7 @@
   }
 
   function metaLine(r) {
-    const cats = categoriesOf(r).join(", ");
+    const cats = typesOf(r).join(", ");
     const prep = r.frontmatter?.prep_minutes;
     const cook = r.frontmatter?.cook_minutes;
     const bits = [];
@@ -627,6 +860,22 @@
     const node = $("#tpl-detail").content.firstElementChild.cloneNode(true);
     $(".title", node).textContent = r.frontmatter?.title || r.slug;
     $(".meta", node).textContent = metaLine(r);
+    // Ingredient tags double as a jumping-off point: clicking one goes back to
+    // the list filtered by it.
+    const tagBox = $(".tag-chips", node);
+    for (const tag of ingredientTagsOf(r)) {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.textContent = tag;
+      chip.title = `Show recipes with ${tag}`;
+      chip.addEventListener("click", () => {
+        state.ingredients = [tag.toLowerCase()];
+        syncIngredientFilter();
+        location.hash = "#/";
+      });
+      tagBox.appendChild(chip);
+    }
     const img = $(".hero", node);
     const imgName = r.frontmatter?.image;
     if (typeof imgName === "string" && imgName) {
@@ -702,16 +951,42 @@
     const form = $("#tpl-form").content.firstElementChild.cloneNode(true);
     $(".form-title", form).textContent = editing ? "Edit recipe" : "Add recipe";
 
-    // Category field: free text plus a dropdown of existing categories that
-    // opens on focus and filters as you type.
-    const catInput = form.elements.categories;
-    const catList = $(".combo-list", form);
-    if (catInput && catList) attachCombobox(catInput, catList, allCategories);
+    // Both tag fields are free text plus a dropdown of what already exists,
+    // opening on focus and filtering as you type.
+    const typeInput = form.elements.types;
+    const tagInput = form.elements.ingredient_tags;
+    attachCombobox(typeInput, $(".combo-types .combo-list", form), allTypes);
+    attachCombobox(tagInput, $(".combo-tags .combo-list", form), allIngredientTags);
+
+    // Ingredient tags are derived from the ingredient lines, then owned by the
+    // user: the moment they type in the field (or an edit brings existing tags
+    // in) auto-fill stops, so a manual correction is never overwritten.
+    const ingredientLines = () =>
+      (form.elements.ingredients.value || "")
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+    const fillTags = () => {
+      tagInput.value = extractIngredientNames(ingredientLines()).join(", ");
+    };
+    tagInput.addEventListener("input", () => {
+      tagInput.dataset.touched = "1";
+    });
+    form.elements.ingredients.addEventListener("input", () => {
+      if (tagInput.dataset.touched !== "1") fillTags();
+    });
+    $(".extract-tags", form).addEventListener("click", () => {
+      fillTags();
+      tagInput.dataset.touched = "1";
+    });
 
     if (editing) {
       const fm = r.frontmatter || {};
       form.elements.title.value = fm.title || "";
-      form.elements.categories.value = categoriesOf(r).join(", ");
+      form.elements.types.value = typesOf(r).join(", ");
+      const existingTags = ingredientTagsOf(r);
+      tagInput.value = existingTags.join(", ");
+      if (existingTags.length) tagInput.dataset.touched = "1";
       form.elements.prep_minutes.value = Number.isFinite(fm.prep_minutes)
         ? fm.prep_minutes
         : "";
@@ -736,11 +1011,16 @@
         errEl.textContent = "Title is required.";
         return;
       }
-      const cats = (data.get("categories") || "")
-        .toString()
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
+      const splitTags = (name) =>
+        (data.get(name) || "")
+          .toString()
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+      const types = splitTags("types");
+      const ingredientTags = splitTags("ingredient_tags").map((s) =>
+        s.toLowerCase(),
+      );
       const prepRaw = (data.get("prep_minutes") || "").toString().trim();
       const prep = prepRaw === "" ? null : Number(prepRaw);
       const cookRaw = (data.get("cook_minutes") || "").toString().trim();
@@ -782,7 +1062,8 @@
         slug: newSlug,
         frontmatter: {
           title,
-          categories: cats,
+          types,
+          ingredient_tags: ingredientTags,
           prep_minutes: prep,
           cook_minutes: cook,
           image,
@@ -902,6 +1183,152 @@
     });
   }
 
+  // ----- ingredient filter (multi-select) -----
+  //
+  // A text input that turns each accepted suggestion into a removable chip.
+  // Several ingredients can be stacked; filteredRecipes() ANDs them.
+
+  function renderIngredientChips() {
+    const box = $("#ingredient-chips");
+    box.innerHTML = "";
+    box.hidden = state.ingredients.length === 0;
+    for (const tag of state.ingredients) {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip removable";
+      chip.title = `Remove "${tag}"`;
+      chip.append(tag);
+      const x = document.createElement("span");
+      x.className = "chip-x";
+      x.setAttribute("aria-hidden", "true");
+      x.textContent = "×";
+      chip.appendChild(x);
+      chip.addEventListener("click", () => {
+        state.ingredients = state.ingredients.filter((t) => t !== tag);
+        syncIngredientFilter();
+        if ((location.hash || "#/") === "#/") showList();
+      });
+      box.appendChild(chip);
+    }
+  }
+
+  // Redraws the chips and clears the typing field. Call after any change to
+  // state.ingredients that did not come from the input itself.
+  function syncIngredientFilter() {
+    const input = $("#ingredient-filter");
+    if (input) input.value = "";
+    renderIngredientChips();
+  }
+
+  function addIngredientToken(raw) {
+    const tag = String(raw || "")
+      .trim()
+      .toLowerCase();
+    if (!tag || state.ingredients.includes(tag)) return false;
+    state.ingredients.push(tag);
+    return true;
+  }
+
+  function wireIngredientFilter() {
+    const input = $("#ingredient-filter");
+    const listEl = $(".ing-filter .combo-list");
+    let items = [];
+    let activeIndex = -1;
+
+    const rerender = () => {
+      renderIngredientChips();
+      if ((location.hash || "#/") === "#/") showList();
+    };
+
+    function close() {
+      listEl.hidden = true;
+      listEl.innerHTML = "";
+      activeIndex = -1;
+      input.setAttribute("aria-expanded", "false");
+    }
+
+    function render() {
+      if (!items.length) return close();
+      listEl.innerHTML = items
+        .map(
+          (c, i) =>
+            `<li role="option" class="${i === activeIndex ? "active" : ""}">${escapeHtml(c)}</li>`,
+        )
+        .join("");
+      listEl.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function open() {
+      const tok = input.value.trim().toLowerCase();
+      const chosen = new Set(state.ingredients);
+      items = allIngredientTags()
+        .filter((t) => !chosen.has(t) && t.includes(tok))
+        .slice(0, 50);
+      render();
+    }
+
+    function commit(value) {
+      if (addIngredientToken(value)) {
+        input.value = "";
+        rerender();
+      }
+      close();
+    }
+
+    input.addEventListener("focus", () => {
+      activeIndex = -1;
+      open();
+    });
+    input.addEventListener("input", () => {
+      // A comma ends the token, so pasting "chicken, garlic" works too.
+      if (input.value.includes(",")) {
+        const parts = input.value.split(",");
+        input.value = parts.pop();
+        let added = false;
+        for (const part of parts) added = addIngredientToken(part) || added;
+        if (added) rerender();
+      }
+      activeIndex = -1;
+      open();
+    });
+    input.addEventListener("blur", () => setTimeout(close, 120));
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !input.value && state.ingredients.length) {
+        state.ingredients.pop();
+        rerender();
+        open();
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        commit(activeIndex >= 0 ? items[activeIndex] : input.value);
+        return;
+      }
+      if (listEl.hidden) return;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        render();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        render();
+      } else if (e.key === "Escape") {
+        // Only close the dropdown — the global handler would reset the view.
+        e.stopPropagation();
+        close();
+      }
+    });
+    listEl.addEventListener("mousedown", (e) => {
+      const li = e.target.closest("li");
+      if (!li) return;
+      e.preventDefault();
+      const idx = Array.prototype.indexOf.call(listEl.children, li);
+      if (idx >= 0) commit(items[idx]);
+    });
+  }
+
   function slugify(title) {
     return (
       title
@@ -953,7 +1380,7 @@
 
   async function refreshData() {
     state.recipes = await loadRecipes();
-    refreshCategoryFilter();
+    refreshTypeFilter();
   }
 
   // Icon for the view toggle. The button shows the view it will switch *to*.
@@ -988,10 +1415,11 @@
       state.query = e.target.value;
       if ((location.hash || "#/") === "#/") showList();
     });
-    $("#category-filter").addEventListener("change", (e) => {
-      state.category = e.target.value;
+    $("#type-filter").addEventListener("change", (e) => {
+      state.type = e.target.value;
       if ((location.hash || "#/") === "#/") showList();
     });
+    wireIngredientFilter();
     $("#toggle-images").addEventListener("click", (e) => {
       state.showImages = !state.showImages;
       document.body.classList.toggle("show-images", state.showImages);
@@ -1064,6 +1492,7 @@
     { keys: "Esc", label: "Leave the field, then reset to the initial view" },
     { keys: "e", label: "Edit the open recipe", serverOnly: true },
     { keys: "d", label: "Delete the open recipe", serverOnly: true },
+    { keys: "g", label: "Filter by ingredient" },
     { keys: "r", label: "Open a random recipe" },
     { keys: "a", label: "Add a recipe", serverOnly: true },
     { keys: "i", label: "Show / hide images" },
@@ -1095,16 +1524,18 @@
     btn.setAttribute("aria-expanded", show ? "true" : "false");
   }
 
-  // "Like when the site was just opened": drop the query, the category filter,
-  // the image toggle, the view mode and any collapsed groups, then go home.
+  // "Like when the site was just opened": drop the query, both filters, the
+  // image toggle, the view mode and any collapsed groups, then go home.
   function resetToInitial() {
     state.query = "";
-    state.category = "";
+    state.type = "";
+    state.ingredients = [];
     state.collapsed.clear();
     state.view = "flat";
     state.showImages = false;
     $("#search").value = "";
-    $("#category-filter").value = "";
+    $("#type-filter").value = "";
+    syncIngredientFilter();
     document.body.classList.remove("show-images");
     const imgBtn = $("#toggle-images");
     imgBtn.textContent = "Show images";
@@ -1178,6 +1609,10 @@
           break;
         case "d":
           clickIfAvailable(".detail .delete");
+          break;
+        case "g":
+          e.preventDefault();
+          $("#ingredient-filter").focus();
           break;
         case "r":
           clickIfAvailable("#random");

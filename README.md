@@ -13,8 +13,10 @@ Opens [http://localhost:36637](http://localhost:36637) in your browser.
 
 ## Features
 
-- Browse, search, and filter recipes by category.
-- Pick a random recipe — globally or within the current category filter.
+- Browse, search, and filter recipes by **dish type** (Main dish, Dessert, Salad, Sauce…) from the dropdown.
+- Filter by **ingredients** — pick several at once and only recipes containing all of them are shown.
+- Ingredient tags are filled in automatically from a recipe's ingredient list when you add it, and can be edited afterwards.
+- Pick a random recipe — globally or within the current filters.
 - Add, edit, and delete recipes through a UI form.
 - Upload a picture per recipe (stored in `recipe_images/`).
 - Images are **collapsed by default** in the list — toggle "Show images" in the header to reveal all at once.
@@ -43,7 +45,8 @@ Each recipe is one Markdown file with YAML frontmatter:
 ```markdown
 ---
 title: Cassoulet
-categories: [Beef]
+types: [Main dish, Stew]
+ingredient_tags: [white beans, sausage, chicken leg]
 prep_minutes: 20
 cook_minutes: 70
 image: cassoulet.jpg

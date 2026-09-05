@@ -178,13 +178,70 @@ body {
   align-items: center;
   padding: 0.5rem 1rem;
 }
-.subbar select {
+.subbar select,
+.subbar input[type="text"] {
   font: inherit;
   padding: 0.4rem 0.7rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: #fff;
   color: var(--fg);
+}
+/* The ingredient filter grows into the free space; its chips take the row
+   below so a long selection never squeezes the controls. */
+.subbar .ing-filter {
+  flex: 1 1 12rem;
+  min-width: 8rem;
+  max-width: 22rem;
+}
+#ingredient-chips {
+  flex-basis: 100%;
+}
+
+/* Tag chips: ingredient tags on a recipe, and the active ingredient filter. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+.chips:empty {
+  display: none;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+}
+.chip:hover {
+  background: #f0eee8;
+  color: var(--fg);
+}
+.chip.removable {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.chip.removable:hover {
+  filter: brightness(0.95);
+  color: var(--accent-fg);
+}
+.chip-x {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+.detail .tag-chips {
+  margin: 0 0 0.75rem;
 }
 .icon-btn {
   display: inline-flex;
@@ -624,7 +681,7 @@ body.show-images .card .thumb[src] {
   min-height: 4rem;
 }
 
-/* Category combobox (free text + dropdown of existing categories) */
+/* Tag comboboxes (free text + dropdown of what already exists) */
 .combo {
   position: relative;
 }
@@ -655,6 +712,26 @@ body.show-images .card .thumb[src] {
 }
 .combo-list li:hover,
 .combo-list li.active {
+  background: #f0eee8;
+}
+/* Sits under the ingredient-tags field: explains where the tags came from. */
+.tags-hint {
+  margin: -0.4rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.tags-hint .extract-tags {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+  margin-left: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--fg);
+  cursor: pointer;
+}
+.tags-hint .extract-tags:hover {
   background: #f0eee8;
 }
 .form-actions {

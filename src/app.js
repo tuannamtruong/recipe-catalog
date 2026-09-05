@@ -375,9 +375,7 @@
   // ----- ingredient-name extraction -----
   //
   // Turns raw ingredient lines into bare names for the tag field:
-  // "3 cloves garlic, minced" -> "garlic". Mirrored in
-  // scripts/ingredient_tags.py, which the importer and the migration use.
-  // Keep the two in sync.
+  // "3 cloves garlic, minced" -> "garlic".
 
   const UNITS = new Set(
     ("g gr gram grams kg kilo kilos kilogram kilograms mg ml milliliter " +
@@ -521,58 +519,9 @@
 
   // A recipe carries two independent tag lists: `types` (dish types — the
   // dropdown filter and the grouped-view headings) and `ingredient_tags` (what
-  // it is made of — the multi-ingredient search). Both are 0..n.
-  //
-  // Canonical type names. These are NOT offered as suggestions — the form only
-  // suggests types already in use, so the list never advertises a type no
-  // recipe has. Free-form: anything typed in is kept. This list exists solely
-  // to classify the legacy `categories:` field.
-  // Mirrored in scripts/ingredient_tags.py.
-  const TYPE_VOCAB = [
-    "Appetizer",
-    "Bread",
-    "Breakfast",
-    "Cake",
-    "Curry",
-    "Dessert",
-    "Drink",
-    "Main dish",
-    "Rice & Noodles",
-    "Salad",
-    "Sauce",
-    "Side dish",
-    "Snack",
-    "Soup",
-    "Stew",
-    "Vegan",
-    "Vegetarian",
-  ];
-
-  // Legacy `categories:` values that name a type under a different word.
-  const TYPE_ALIASES = {
-    main: "Main dish",
-    mains: "Main dish",
-    "main course": "Main dish",
-    dinner: "Main dish",
-    side: "Side dish",
-    sides: "Side dish",
-    starter: "Appetizer",
-    noodles: "Rice & Noodles",
-    rice: "Rice & Noodles",
-    pasta: "Rice & Noodles",
-    dessert: "Dessert",
-    desserts: "Dessert",
-    sauces: "Sauce",
-    soups: "Soup",
-    salads: "Salad",
-    cakes: "Cake",
-    sweets: "Dessert",
-    baking: "Bread",
-  };
-  const LEGACY_NOISE = new Set(["uncategorized", "other", "misc"]);
-
-  const TYPE_LOOKUP = new Map(TYPE_VOCAB.map((t) => [t.toLowerCase(), t]));
-  for (const [k, v] of Object.entries(TYPE_ALIASES)) TYPE_LOOKUP.set(k, v);
+  // it is made of — the multi-ingredient search). Both are 0..n. Types are
+  // free-form: the form suggests only types already in use, so the list never
+  // advertises a type no recipe has.
 
   function strList(value) {
     if (!Array.isArray(value)) return [];
@@ -581,32 +530,12 @@
       .map((c) => c.trim());
   }
 
-  // Recipes written before the split (or hand-edited from an old file) still
-  // carry one mixed `categories:` list. Sort it out on read so nothing has to
-  // be migrated before the app works.
-  function legacySplit(rec) {
-    const types = [];
-    const tags = [];
-    for (const c of strList(rec.frontmatter?.categories)) {
-      const key = c.toLowerCase();
-      if (LEGACY_NOISE.has(key)) continue;
-      if (TYPE_LOOKUP.has(key)) types.push(TYPE_LOOKUP.get(key));
-      else tags.push(key);
-    }
-    return { types, tags };
-  }
-
   function typesOf(rec) {
-    const fm = rec.frontmatter || {};
-    if ("types" in fm || "ingredient_tags" in fm) return strList(fm.types);
-    return legacySplit(rec).types;
+    return strList(rec.frontmatter?.types);
   }
 
   function ingredientTagsOf(rec) {
-    const fm = rec.frontmatter || {};
-    if ("types" in fm || "ingredient_tags" in fm)
-      return strList(fm.ingredient_tags);
-    return legacySplit(rec).tags;
+    return strList(rec.frontmatter?.ingredient_tags);
   }
 
   function allTypes() {

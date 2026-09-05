@@ -4,8 +4,8 @@ A local, single-user webapp for browsing and managing recipes.
 
 ## Goals
 
-- Browse, search, and filter recipes by category.
-- Pick a random recipe — globally or within the current category filter.
+- Browse, search, and filter recipes by dish type and by ingredient.
+- Pick a random recipe — globally or within the current filters.
 - Add new recipes through a UI form (no hand-editing required for the common case).
 - Upload an image per recipe; store locally in `recipe_images/`.
 - Keep recipes in plain text so they remain readable/editable without the app.
@@ -13,9 +13,38 @@ A local, single-user webapp for browsing and managing recipes.
 ## UX rules
 
 - **Images are collapsed by default** on the list view. A global "Show images" toggle reveals them in every card at once.
-- The category filter is a dropdown of all categories that actually appear across the recipes.
-- The "Random" button respects the current category filter (or picks across all recipes if no filter is set).
+- Categories come in two kinds and are filtered separately (see [Categories](#categories)):
+  - **Types** — dish types (`Main dish`, `Dessert`, `Salad`, `Sauce`, …). A dropdown of the types that actually appear across the recipes. One at a time.
+  - **Ingredient tags** — what the recipe is made of. Never in the dropdown; they have their own multi-select filter, so several ingredients can be stacked.
+- The ingredient filter is a text box with suggestions; each accepted suggestion becomes a removable chip. Several chips are **ANDed** — every one of them must match, so adding chips narrows the list. A chip matches as a substring, so `tomato` finds `cherry tomatoes`.
+- Ingredient tags are also shown as chips on a recipe's detail page; clicking one goes back to the list filtered by it.
+- The "Random" button respects both filters (or picks across all recipes if neither is set).
+- The grouped view groups by type; recipes with no type land in "Uncategorized".
+- **Ingredient tags are extracted from the "## Ingredients" lines** when adding a recipe — the name only, no amount (`3 cloves garlic, minced` → `garlic`). The field refills as you type in the ingredients box and stops the moment you edit it yourself, so a manual correction is never overwritten; the "Re-extract from ingredients" button forces a refill. See [Categories](#categories).
 - **Imperial → metric is auto-applied when saving** (add or edit). `oz`/`lb`/`°F` are **replaced** with metric. `cup`/`cups` are **kept** with metric appended in parens. `tsp`/`tbs` are intentionally left alone. Examples: `3 oz cream cheese` → `85 g cream cheese`; `350°F` → `177 °C`; `1 cup of milk` → `1 cup (240 ml) of milk`; `2 cups flour` → `2 cups (240 g) flour`. Known dry ingredients convert to grams; everything else converts to a flat 240 ml (a cup is a fixed volume). The dry-ingredient gram table lives in `conversions.json` and is **editable from the reference panel** on the add/edit form (persisted via `PUT /api/conversions`). `src/app.js` holds built-in defaults used until the table loads and as a fallback.
+
+## Categories
+
+A recipe carries two independent, 0..n tag lists in its frontmatter:
+
+| Field             | Holds                     | Example                        | Filtered by                       |
+| ----------------- | ------------------------- | ------------------------------ | --------------------------------- |
+| `types`           | dish types                | `[Main dish, Salad]`           | the dropdown (one at a time)      |
+| `ingredient_tags` | ingredient names, no amount | `[chicken thigh, garlic]`    | the multi-select chips (ANDed)    |
+
+Types are free-form — anything typed into the form is kept. Both the filter
+dropdown and the form's autocomplete offer **only the types that some recipe
+actually carries**, so the list never advertises a type nothing uses; a new
+type comes into existence by being typed into the form, and disappears when the
+last recipe holding it drops it. Ingredient tags are lowercased on save; types
+keep their capitalisation.
+
+**Extraction.** `extract_ingredient_names()` turns ingredient lines into bare
+names: it drops parentheticals, cuts at the first comma / dash / `or`, strips
+leading amounts and units and trailing preparation words, splits on `and`, and
+discards anything still longer than four words (that is a sentence, not an
+ingredient). `juice of 1 lemon` becomes `lemon juice`. It lives in `src/app.js`
+and runs in the browser as you fill in the add/edit form.
 
 ## Stack decisions
 
@@ -48,7 +77,7 @@ cooking_app/
 │   ├── recipes.html          # single self-contained file (CSS + JS + recipes inlined)
 ├── build/                    # desktop-bundle output (gitignored)
 │   └── macos/                # Cooking App.app + cooking-app-macos.zip
-├── scripts/                  # build.py, import_docx.py, appicon.py, make_*_bundle.*
+├── scripts/                  # build.py, appicon.py, make_*_bundle.*
 ├── run.sh                    # launcher: starts server.py and opens browser
 ```
 
@@ -59,7 +88,8 @@ Each recipe is one Markdown file with YAML frontmatter:
 ```markdown
 ---
 title: Cassoulet
-categories: [Beef, Stew]
+types: [Main dish, Stew]
+ingredient_tags: [white beans, sausage, chicken leg]
 prep_minutes: 20
 cook_minutes: 70
 image: cassoulet.jpg # filename inside images/, or null
@@ -229,7 +259,8 @@ There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib
 ## Conventions
 
 - Slugs are kebab-case, lowercase, ASCII (Vietnamese diacritics are stripped for the filename only; the `title:` field keeps the original).
-- Categories are free-form strings; the UI builds the filter list from whatever appears across all recipes.
+- Types are free-form strings; the UI builds the dropdown from whatever appears across all recipes.
+- Ingredient tags are lowercase and hold names only — never amounts or preparation.
 - Image filenames are tied to the recipe slug. Deleting a recipe removes its images.
 - `recipes/` and `recipe_images/` are the source of truth. The UI never holds unsaved state across restarts.
 - When importing, never overwrite an existing `recipes/{slug}.md`. The import script skips collisions so manual edits survive re-runs.

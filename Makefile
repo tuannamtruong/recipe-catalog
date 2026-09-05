@@ -1,4 +1,4 @@
-.PHONY: help run build exe-win exe-win-win exe-mac import clean
+.PHONY: help run build exe-win exe-win-win exe-mac clean
 .DEFAULT_GOAL := run
 
 help:

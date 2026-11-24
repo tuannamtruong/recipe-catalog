@@ -372,134 +372,6 @@
     return parts.join("\n") + "\n";
   }
 
-  // ----- ingredient-name extraction -----
-  //
-  // Turns raw ingredient lines into bare names for the tag field:
-  // "3 cloves garlic, minced" -> "garlic".
-
-  const UNITS = new Set(
-    ("g gr gram grams kg kilo kilos kilogram kilograms mg ml milliliter " +
-      "milliliters millilitre millilitres l liter liters litre litres dl cl " +
-      "cup cups tbsp tbs tb tablespoon tablespoons tsp tsps tbsps teaspoon " +
-      "teaspoons oz ounce ounces lb lbs pound pounds pinch pinches dash " +
-      "dashes clove cloves can cans jar jars tin tins packet packets package " +
-      "packages pack packs stick sticks slice slices piece pieces bunch " +
-      "bunches sprig sprigs stalk stalks head heads handful handfuls sheet " +
-      "sheets bag bags box boxes cube cubes drop drops quart quarts pint " +
-      "pints gallon gallons").split(" "),
-  );
-
-  const COUNT_WORDS = new Set(
-    ("a an one two three four five six seven eight nine ten eleven twelve " +
-      "half quarter couple few some several").split(" "),
-  );
-
-  // Qualify the amount or the cut, never the ingredient itself.
-  const LEAD_NOISE = new Set(
-    ("of about approximately around roughly large small medium big extra " +
-      "good heaped heaping level generous whole plus the your any x").split(" "),
-  );
-
-  // Preparation, not identity — dropped from the end, repeatedly.
-  const TRAIL_NOISE = new Set(
-    ("chopped minced diced sliced grated shredded crushed melted softened " +
-      "beaten peeled cubed drained rinsed halved quartered trimmed divided " +
-      "optional cooked uncooked thawed julienned mashed cut torn seeded " +
-      "deseeded stemmed boneless skinless finely roughly coarsely thinly " +
-      "freshly lightly well warm cold hot room temperature more extra " +
-      "needed taste").split(" "),
-  );
-
-  // The same words lead just as often ("chopped tomatoes"), except the few
-  // that are part of the name when they do: "hot sauce", "cut of beef".
-  const LEAD_PREP = new Set(
-    Array.from(TRAIL_NOISE).filter(
-      (w) => !["hot", "cold", "warm", "cut", "well", "taste", "more", "needed"].includes(w),
-    ),
-  );
-
-  const NUMERIC_RE = /^[\d¼-¾⅐-⅞]+([.,/–-]?[\d¼-¾⅐-⅞]+)*$/;
-  const NUM_UNIT_RE = /^[\d.,/-]+([a-z]+)$/;
-  const TAIL_CUT_RE =
-    /\b(to taste|for garnish|garnish with|to garnish|for serving|for the\b|as needed|if needed|at room temperature|plus more|or more|divided)\b.*$/;
-  // "juice of 1 lemon" is the lemon's juice — reorder rather than lose the word.
-  const OF_PHRASE_RE = /^(juice|zest|peel|rind)\s+of\s+(.+)$/i;
-
-  function stripLead(words) {
-    while (words.length) {
-      const w = words[0].replace(/\./g, "").toLowerCase();
-      if (UNITS.has(w) || COUNT_WORDS.has(w) || LEAD_NOISE.has(w) || LEAD_PREP.has(w)) {
-        words = words.slice(1);
-        continue;
-      }
-      if (NUMERIC_RE.test(w)) {
-        words = words.slice(1);
-        continue;
-      }
-      const m = NUM_UNIT_RE.exec(w);
-      if (m && UNITS.has(m[1])) {
-        words = words.slice(1);
-        continue;
-      }
-      break;
-    }
-    return words;
-  }
-
-  function cleanPhrase(phrase) {
-    let text = phrase.trim();
-    const of = OF_PHRASE_RE.exec(text);
-    if (of) {
-      const rest = stripLead(of[2].split(/\s+/)).join(" ");
-      text = rest ? `${rest} ${of[1].toLowerCase()}` : of[1].toLowerCase();
-    }
-    let words = text.split(/\s+/).filter(Boolean);
-    words = stripLead(words);
-    while (
-      words.length &&
-      TRAIL_NOISE.has(words[words.length - 1].replace(/[.,]/g, "").toLowerCase())
-    ) {
-      words = words.slice(0, -1);
-    }
-    // A unit can survive in the middle once the count is gone ("2 x 400 g can").
-    words = stripLead(words);
-    const name = words
-      .join(" ")
-      .replace(/^[\s.,–:;-]+|[\s.,–:;-]+$/g, "")
-      .replace(/\s+/g, " ")
-      .toLowerCase();
-    if (!name || NUMERIC_RE.test(name)) return "";
-    // Anything still this long is a sentence, not an ingredient name.
-    if (name.split(" ").length > 4) return "";
-    return name;
-  }
-
-  /** Ingredient names from raw "## Ingredients" lines, order preserved. */
-  function extractIngredientNames(lines) {
-    const out = [];
-    const seen = new Set();
-    for (const raw of lines || []) {
-      let line = String(raw)
-        .replace(/^\s*[-*•·‣◦]\s*/, "")
-        .trim();
-      if (!line) continue;
-      // "Sauce:", "For the topping:" — a group heading, not an ingredient.
-      if (line.endsWith(":")) continue;
-      line = line.replace(/\([^)]*\)/g, " "); // parentheticals are notes
-      line = line.split(/\s+[-–—]\s+|,/)[0];
-      line = line.split(/\bor\b/)[0];
-      line = line.replace(TAIL_CUT_RE, "");
-      for (const part of line.split(/\s+and\s+|\s*[&+]\s*/)) {
-        const name = cleanPhrase(part);
-        if (name && !seen.has(name)) {
-          seen.add(name);
-          out.push(name);
-        }
-      }
-    }
-    return out;
-  }
-
   // ----- state + view glue -----
 
   const state = {
@@ -780,6 +652,45 @@
     return bits.join(" · ");
   }
 
+  // Ingredient tags double as a jumping-off point: clicking one goes back to
+  // the list filtered by it.
+  function tagChip(tag) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.textContent = tag;
+    chip.title = `Show recipes with ${tag}`;
+    chip.addEventListener("click", () => {
+      state.ingredients = [tag.toLowerCase()];
+      syncIngredientFilter();
+      location.hash = "#/";
+    });
+    return chip;
+  }
+
+  // Every ingredient tag in use, with how many recipes carry it.
+  function showTags() {
+    const counts = new Map();
+    for (const r of state.recipes) {
+      for (const t of ingredientTagsOf(r)) {
+        const k = t.toLowerCase();
+        counts.set(k, (counts.get(k) || 0) + 1);
+      }
+    }
+    const box = document.createElement("div");
+    box.className = "chips all-tags";
+    for (const tag of [...counts.keys()].sort((a, b) => a.localeCompare(b))) {
+      const chip = tagChip(tag);
+      const n = document.createElement("span");
+      n.className = "chip-count";
+      n.textContent = counts.get(tag);
+      chip.appendChild(n);
+      box.appendChild(chip);
+    }
+    main.innerHTML = `<h2 class="tags-title">${counts.size} ingredient tags</h2>`;
+    main.appendChild(box);
+  }
+
   function showDetail(slug) {
     const r = state.recipes.find((x) => x.slug === slug);
     if (!r) {
@@ -789,22 +700,8 @@
     const node = $("#tpl-detail").content.firstElementChild.cloneNode(true);
     $(".title", node).textContent = r.frontmatter?.title || r.slug;
     $(".meta", node).textContent = metaLine(r);
-    // Ingredient tags double as a jumping-off point: clicking one goes back to
-    // the list filtered by it.
     const tagBox = $(".tag-chips", node);
-    for (const tag of ingredientTagsOf(r)) {
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "chip";
-      chip.textContent = tag;
-      chip.title = `Show recipes with ${tag}`;
-      chip.addEventListener("click", () => {
-        state.ingredients = [tag.toLowerCase()];
-        syncIngredientFilter();
-        location.hash = "#/";
-      });
-      tagBox.appendChild(chip);
-    }
+    for (const tag of ingredientTagsOf(r)) tagBox.appendChild(tagChip(tag));
     const img = $(".hero", node);
     const imgName = r.frontmatter?.image;
     if (typeof imgName === "string" && imgName) {
@@ -847,8 +744,11 @@
       p.appendChild(a);
     }
     $(".back", node).addEventListener("click", () => history.back());
+    // Edit is a mode of the recipe, not a step of its own: it takes over the
+    // recipe's history entry (and saving / Back hand it back), so history only
+    // ever holds list -> recipe and Back always goes up a level.
     $(".edit", node).addEventListener("click", () => {
-      location.hash = `#/edit/${r.slug}`;
+      location.replace(`#/edit/${r.slug}`);
     });
     $(".delete", node).addEventListener("click", async () => {
       if (!confirm(`Delete "${r.frontmatter?.title || r.slug}"?`)) return;
@@ -887,35 +787,11 @@
     attachCombobox(typeInput, $(".combo-types .combo-list", form), allTypes);
     attachCombobox(tagInput, $(".combo-tags .combo-list", form), allIngredientTags);
 
-    // Ingredient tags are derived from the ingredient lines, then owned by the
-    // user: the moment they type in the field (or an edit brings existing tags
-    // in) auto-fill stops, so a manual correction is never overwritten.
-    const ingredientLines = () =>
-      (form.elements.ingredients.value || "")
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter(Boolean);
-    const fillTags = () => {
-      tagInput.value = extractIngredientNames(ingredientLines()).join(", ");
-    };
-    tagInput.addEventListener("input", () => {
-      tagInput.dataset.touched = "1";
-    });
-    form.elements.ingredients.addEventListener("input", () => {
-      if (tagInput.dataset.touched !== "1") fillTags();
-    });
-    $(".extract-tags", form).addEventListener("click", () => {
-      fillTags();
-      tagInput.dataset.touched = "1";
-    });
-
     if (editing) {
       const fm = r.frontmatter || {};
       form.elements.title.value = fm.title || "";
       form.elements.types.value = typesOf(r).join(", ");
-      const existingTags = ingredientTagsOf(r);
-      tagInput.value = existingTags.join(", ");
-      if (existingTags.length) tagInput.dataset.touched = "1";
+      tagInput.value = ingredientTagsOf(r).join(", ");
       form.elements.prep_minutes.value = Number.isFinite(fm.prep_minutes)
         ? fm.prep_minutes
         : "";
@@ -929,7 +805,9 @@
       form.elements.notes.value = sections.notes.join("\n");
     }
 
-    $(".back", form).addEventListener("click", () => history.back());
+    $(".back", form).addEventListener("click", () =>
+      editing ? location.replace(`#/r/${r.slug}`) : history.back(),
+    );
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const errEl = $(".form-error", form);
@@ -1004,7 +882,8 @@
       try {
         const res = await saveRecipe(payload, editing ? "update" : "create");
         await refreshData();
-        location.hash = `#/r/${res.slug || newSlug}`;
+        // Replace, so Back from the saved recipe skips the form.
+        location.replace(`#/r/${res.slug || newSlug}`);
       } catch (err) {
         errEl.textContent = err.message;
       }
@@ -1286,6 +1165,7 @@
 
   function route() {
     const hash = location.hash || "#/";
+    if (hash === "#/tags") return showTags();
     if (hash.startsWith("#/r/"))
       return showDetail(decodeURIComponent(hash.slice(4)));
     if (hash === "#/add") {
@@ -1330,6 +1210,15 @@
     btn.setAttribute("aria-label", label);
   }
 
+  // List-level actions (type filter, view toggle, collapse all) close an open
+  // recipe or the tags page and show the list. The add/edit form is left
+  // alone -- leaving it would throw away unsaved edits.
+  function backToList() {
+    const hash = location.hash || "#/";
+    if (hash === "#/") showList();
+    else if (hash.startsWith("#/r/") || hash === "#/tags") location.hash = "#/";
+  }
+
   function wireBar() {
     const home = $("#home");
     home.addEventListener("click", (e) => {
@@ -1346,14 +1235,13 @@
     });
     $("#type-filter").addEventListener("change", (e) => {
       state.type = e.target.value;
-      const hash = location.hash || "#/";
-      // Picking a type is a list-level action, so an open recipe is closed and
-      // the filtered list shown. The add/edit form is left alone -- leaving it
-      // would throw away unsaved edits.
-      if (hash === "#/") showList();
-      else if (hash.startsWith("#/r/")) location.hash = "#/";
+      backToList();
     });
     wireIngredientFilter();
+    $("#all-tags").addEventListener("click", () => {
+      // Toggles: a second click (or `t`) on the tags page goes back to the list.
+      location.hash = location.hash === "#/tags" ? "#/" : "#/tags";
+    });
     $("#toggle-images").addEventListener("click", (e) => {
       state.showImages = !state.showImages;
       document.body.classList.toggle("show-images", state.showImages);
@@ -1366,7 +1254,7 @@
       state.view = state.view === "grouped" ? "flat" : "grouped";
       renderViewToggle(viewBtn);
       updateCollapseAllBtn();
-      if ((location.hash || "#/") === "#/") showList();
+      backToList();
     });
     $("#toggle-collapse").addEventListener("click", () => {
       const names = currentGroupNames();
@@ -1374,7 +1262,7 @@
         names.length > 0 && names.every((n) => state.collapsed.has(n));
       if (allCollapsed) state.collapsed.clear();
       else names.forEach((n) => state.collapsed.add(n));
-      if ((location.hash || "#/") === "#/") showList();
+      backToList();
     });
     $("#random").addEventListener("click", () => {
       const pool = filteredRecipes();
@@ -1424,9 +1312,11 @@
     { keys: "/", label: "Focus the search box" },
     { keys: "Ctrl / ⌘ + K", label: "Focus the search box, even while typing" },
     { keys: "Esc", label: "Leave the field, then reset to the initial view" },
+    { keys: "Ctrl / ⌘ + S", label: "Save the recipe being edited", serverOnly: true },
     { keys: "e", label: "Edit the open recipe", serverOnly: true },
     { keys: "d", label: "Delete the open recipe", serverOnly: true },
     { keys: "g", label: "Filter by ingredient" },
+    { keys: "t", label: "Show all ingredient tags" },
     { keys: "r", label: "Open a random recipe" },
     { keys: "a", label: "Add a recipe", serverOnly: true },
     { keys: "i", label: "Show / hide images" },
@@ -1503,6 +1393,15 @@
     });
 
     document.addEventListener("keydown", (e) => {
+      // Ahead of the repeat check so a held key never reaches the browser's
+      // own "Save page" dialog; only the first press submits.
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        const form = $("form.form");
+        if (!form) return;
+        e.preventDefault();
+        if (!e.repeat) form.requestSubmit();
+        return;
+      }
       if (e.repeat) return;
       const typing = isTyping(e.target);
 
@@ -1547,6 +1446,9 @@
         case "g":
           e.preventDefault();
           $("#ingredient-filter").focus();
+          break;
+        case "t":
+          clickIfAvailable("#all-tags");
           break;
         case "r":
           clickIfAvailable("#random");

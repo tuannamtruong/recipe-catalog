@@ -18,9 +18,10 @@ A local, single-user webapp for browsing and managing recipes.
   - **Ingredient tags** — what the recipe is made of. Never in the dropdown; they have their own multi-select filter, so several ingredients can be stacked.
 - The ingredient filter is a text box with suggestions; each accepted suggestion becomes a removable chip. Several chips are **ANDed** — every one of them must match, so adding chips narrows the list. A chip matches as a substring, so `tomato` finds `cherry tomatoes`.
 - Ingredient tags are also shown as chips on a recipe's detail page; clicking one goes back to the list filtered by it.
+- The **Tags** button (`t`, route `#/tags`) lists every ingredient tag in use with its recipe count; clicking one filters the list the same way. Pressing Tags again, the view toggle, Collapse all or the type dropdown returns to the list (from the tags page or an open recipe; never from the add/edit form).
 - The "Random" button respects both filters (or picks across all recipes if neither is set).
 - The grouped view groups by type; recipes with no type land in "Uncategorized".
-- **Ingredient tags are extracted from the "## Ingredients" lines** when adding a recipe — the name only, no amount (`3 cloves garlic, minced` → `garlic`). The field refills as you type in the ingredients box and stops the moment you edit it yourself, so a manual correction is never overwritten; the "Re-extract from ingredients" button forces a refill. See [Categories](#categories).
+- **Ingredient tags are typed by hand** on the add/edit form — the name only, no amount (`3 cloves garlic, minced` → `garlic`). The field autocompletes against tags other recipes already carry. See [Categories](#categories).
 - **Imperial → metric is auto-applied when saving** (add or edit). `oz`/`lb`/`°F` are **replaced** with metric. `cup`/`cups` are **kept** with metric appended in parens. `tsp`/`tbs` are intentionally left alone. Examples: `3 oz cream cheese` → `85 g cream cheese`; `350°F` → `177 °C`; `1 cup of milk` → `1 cup (240 ml) of milk`; `2 cups flour` → `2 cups (240 g) flour`. Known dry ingredients convert to grams; everything else converts to a flat 240 ml (a cup is a fixed volume). The dry-ingredient gram table lives in `conversions.json` and is **editable from the reference panel** on the add/edit form (persisted via `PUT /api/conversions`). `src/app.js` holds built-in defaults used until the table loads and as a fallback.
 
 ## Categories
@@ -39,12 +40,9 @@ type comes into existence by being typed into the form, and disappears when the
 last recipe holding it drops it. Ingredient tags are lowercased on save; types
 keep their capitalisation.
 
-**Extraction.** `extract_ingredient_names()` turns ingredient lines into bare
-names: it drops parentheticals, cuts at the first comma / dash / `or`, strips
-leading amounts and units and trailing preparation words, splits on `and`, and
-discards anything still longer than four words (that is a sentence, not an
-ingredient). `juice of 1 lemon` becomes `lemon juice`. It lives in `src/app.js`
-and runs in the browser as you fill in the add/edit form.
+**Entry.** Ingredient tags are entered by hand in the add/edit form's
+comma-separated field; there is no extraction from the ingredient lines. The
+field's dropdown suggests only tags some recipe already carries.
 
 ## Stack decisions
 
@@ -260,7 +258,7 @@ There are **no npm/node and no pip dependencies — ever.** Only Python 3 stdlib
 
 - Slugs are kebab-case, lowercase, ASCII (Vietnamese diacritics are stripped for the filename only; the `title:` field keeps the original).
 - Types are free-form strings; the UI builds the dropdown from whatever appears across all recipes.
-- Ingredient tags are lowercase and hold names only — never amounts or preparation.
+- Ingredient tags are lowercase, singular, one ingredient each (no `a/b`), and hold names only — never amounts, preparation or quality words (`fresh`, `dried`, `ground`, `canned`). Staples (salt, black pepper, water) are not tagged.
 - Image filenames are tied to the recipe slug. Deleting a recipe removes its images.
 - `recipes/` and `recipe_images/` are the source of truth. The UI never holds unsaved state across restarts.
 - When importing, never overwrite an existing `recipes/{slug}.md`. The import script skips collisions so manual edits survive re-runs.

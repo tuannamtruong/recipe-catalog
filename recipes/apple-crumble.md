@@ -1,7 +1,7 @@
 ---
 title: Apple crumble
 types: []
-ingredient_tags: [vegetables]
+ingredient_tags: []
 prep_minutes: 5
 cook_minutes: null
 image: null

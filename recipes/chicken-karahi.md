@@ -1,7 +1,7 @@
 ---
 title: Chicken karahi
 types: []
-ingredient_tags: [chicken, onions, cumin seeds/jeera, kashmiri dried red chili, tomato puree, red onion, bell peppers, kashmiri red chili powder, turmeric, salt, fennel, inch cinnamon, green cardamoms, black pepper corn, dried red chili, heavy cream / yogurt, cashews, water]
+ingredient_tags: [chicken, onion, cumin, chili, tomato puree, red onion, bell pepper, chili powder, turmeric, fennel, cinnamon, cardamom, heavy cream, yogurt, cashew]
 prep_minutes: null
 cook_minutes: null
 image: null

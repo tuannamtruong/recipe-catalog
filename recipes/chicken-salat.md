@@ -1,7 +1,7 @@
 ---
 title: Chicken salat
 types: []
-ingredient_tags: [pork, crispy chicken tenders, peanuts, greek yoghurt, mayo, paprika water to thin]
+ingredient_tags: [chicken, peanut, greek yogurt, mayonnaise, paprika]
 prep_minutes: null
 cook_minutes: null
 image: null

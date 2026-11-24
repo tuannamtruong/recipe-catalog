@@ -1,7 +1,7 @@
 ---
 title: Creamy garlic parmesan
 types: []
-ingredient_tags: [chicken, chicken breast, smoked paprika powder, garlic powder, black pepper, oil, clarified butter/ghee, butter, yellow onion, fresh garlic, all purpose flour, chicken broth, heavy whipping cream, salt, red chili flakes, dried parsley, italian seasoning, parmesan cheese]
+ingredient_tags: [chicken, butter, onion, heavy cream, parsley, italian seasoning, parmesan]
 prep_minutes: null
 cook_minutes: null
 image: null

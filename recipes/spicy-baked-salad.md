@@ -1,7 +1,7 @@
 ---
 title: Spicy baked salad
 types: [Salad]
-ingredient_tags: [cherry tomatoes, chickpeas, thin garlic, fresh oregano, honey, strips of lemon peel, red chilli flakes, virgin olive oil, salt, pepper]
+ingredient_tags: [cherry tomato, chickpea, garlic, oregano, honey, lemon, chili flake, olive oil]
 prep_minutes: 25
 cook_minutes: null
 image: null

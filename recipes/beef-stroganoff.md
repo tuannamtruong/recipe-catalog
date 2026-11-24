@@ -1,7 +1,7 @@
 ---
 title: Beef Stroganoff
 types: []
-ingredient_tags: [beef, sirloin steak, salt, pepper, olive oil, butter, onion, mushrooms, garlic, brandy, beef stock, soy sauce, dijon mustard, flour, sour cream, parsley]
+ingredient_tags: [beef, sirloin steak, olive oil, butter, onion, mushroom, garlic, brandy, beef broth, soy sauce, dijon mustard, flour, sour cream, parsley]
 prep_minutes: 1
 cook_minutes: null
 image: null

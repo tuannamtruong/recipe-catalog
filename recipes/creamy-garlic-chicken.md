@@ -1,10 +1,10 @@
 ---
 title: Creamy Garlic Chicken
-types: []
-ingredient_tags: [chicken, chicken breasts, flour, olive oil, butter, garlic cloves, chicken broth, lemon juice, garlic powder, heavy/whipping cream, salt, pepper]
-prep_minutes: 3
-cook_minutes: null
-image: null
+types: [Main dish]
+ingredient_tags: [chicken, flour, olive oil, butter, garlic, chicken broth, lemon, garlic powder, heavy cream]
+prep_minutes: null
+cook_minutes: 45
+image: creamy-garlic-chicken-1789634152285.jpg
 source_url: "https://www.saltandlavender.com/creamy-garlic-chicken/"
 ---
 
@@ -14,10 +14,10 @@ source_url: "https://www.saltandlavender.com/creamy-garlic-chicken/"
 - 1 tablespoon olive oil
 - 2 tablespoons butter divided
 - 1 whole head garlic cloves peeled
-- 1/2 cup chicken broth or stock
+- 1/2 cup (120 ml) chicken broth or stock
 - 1/2 teaspoon lemon juice
 - 1/4 teaspoon garlic powder
-- 1 cup heavy/whipping cream
+- 1 cup (240 ml) heavy/whipping cream
 - Salt & pepper to taste
 
 ## Steps

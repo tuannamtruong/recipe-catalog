@@ -1,7 +1,7 @@
 ---
 title: Cassoulet
 types: [Main dish]
-ingredient_tags: [meat, white beans, fatty pork ham, sausage, chicken leg, carrots, onion ss, celeries, garlics, tomatoes paste, stock, herbs]
+ingredient_tags: [white bean, ham, sausage, chicken, carrot, onion, celery, garlic, tomato paste, broth, herb]
 prep_minutes: 120
 cook_minutes: null
 image: null

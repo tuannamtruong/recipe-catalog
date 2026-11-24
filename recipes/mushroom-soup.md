@@ -1,7 +1,7 @@
 ---
 title: Mushroom soup
 types: []
-ingredient_tags: [chicken, fresh mushrooms, dried mushroom, onion, brandy, water, garlic cloves, flour, worcestershire sauce]
+ingredient_tags: [mushroom, onion, brandy, garlic, flour, worcestershire sauce]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: Korean Coconut Chicken
 types: []
-ingredient_tags: [chicken, chicken thighs, salt, pepper, garlic, gochujang, olive oil, drizzle of honey, onions, carrot, ginger, coconut milk, brown sugar]
+ingredient_tags: [chicken, chicken thigh, garlic, gochujang, olive oil, honey, onion, carrot, ginger, coconut milk, brown sugar]
 prep_minutes: null
 cook_minutes: null
 image: null

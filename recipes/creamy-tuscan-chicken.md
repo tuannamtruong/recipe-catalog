@@ -1,8 +1,8 @@
 ---
 title: Creamy tuscan chicken
-types: []
-ingredient_tags: [chicken, chicken breast fillets, salt, smoked paprika powder, garlic powder, italian seasoning, black pepper, unsweetened heavy whipping cream, butter, shallot, garlic, red bell peppers, red chili flakes, parmesan cheese, spinach, cherry tomatoes, tomato paste, sun dried tomatoes]
-prep_minutes: 1
+types: [Main dish]
+ingredient_tags: [chicken, heavy cream, bell pepper, spinach, cherry tomato, sun-dried tomato]
+prep_minutes: null
 cook_minutes: null
 image: null
 source_url: "https://www.instagram.com/p/DLk9miqP8Sd/"
@@ -17,7 +17,7 @@ source_url: "https://www.instagram.com/p/DLk9miqP8Sd/"
 - 1 tsp Italian seasoning
 - 1 tsp black pepper
 - Sauce:
-- 2 cup unsweetened heavy whipping cream
+- 2 cup (480 ml) unsweetened heavy whipping cream
 - 1 tbsp butter
 - 1 shallot or small onion, thinly diced
 - 8 cloves garlic, finely chopped
@@ -28,8 +28,8 @@ source_url: "https://www.instagram.com/p/DLk9miqP8Sd/"
 - 1 tsp black pepper
 - 1/2 tsp Italian seasoning
 - 1 tsp red chili flakes
-- 1/2 cup freshly grated Parmesan cheese
-- 1 cup spinach
+- 1/2 cup (120 ml) freshly grated Parmesan cheese
+- 1 cup (240 ml) spinach
 - 12 cherry tomatoes, halved
 - 2 tbsp tomato paste
 - 2 tbsp sun dried tomatoes

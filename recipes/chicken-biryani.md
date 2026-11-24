@@ -1,7 +1,7 @@
 ---
 title: Chicken Biryani
 types: []
-ingredient_tags: [chicken, chicken thighs, plain yogurt, water, plain oil, garlic, ginger, ground turmeric, cinnamon, cayenne, ground cardamom, garam marsala, coriander, paprika, salt, bay leaves, star anise, green cardamon pods, rice, ghee, onions, yoghurt]
+ingredient_tags: [chicken, chicken thigh, yogurt, garlic, ginger, turmeric, cinnamon, cayenne, cardamom, garam masala, coriander, paprika, bay leaf, star anise, ghee, onion]
 prep_minutes: null
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: Chicken Marinate
 types: []
-ingredient_tags: [chicken, chicken breast, salt, pepper, garlic, lemon, paprika, olive oil]
+ingredient_tags: [chicken, garlic, lemon, paprika, olive oil]
 prep_minutes: null
 cook_minutes: null
 image: null

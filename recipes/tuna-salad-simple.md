@@ -1,7 +1,7 @@
 ---
 title: Tuna Salad – Simple
 types: []
-ingredient_tags: [seafood, tuna, sweet peas, corn, black bean, chunk of pickle, mayo, ketchup sauce]
+ingredient_tags: [seafood, tuna, pea, corn, black bean, pickle, mayonnaise, ketchup]
 prep_minutes: 5
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: Burgundy Pork Tenderloin
 types: []
-ingredient_tags: [pork, pork tenderloin, garlic powder, onion, celery/kohlrabi, red wine/red grapes juice, gravy]
+ingredient_tags: [pork, pork tenderloin, garlic powder, onion, celery, kohlrabi, red wine, grape juice, gravy]
 prep_minutes: 2
 cook_minutes: null
 image: null

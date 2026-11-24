@@ -1,7 +1,7 @@
 ---
 title: Tofu Dubu Jorim
 types: []
-ingredient_tags: [vegetables, tofu, garlic, spring onion, chili flakes, sesame oil, soy sauce, water, syrup]
+ingredient_tags: [tofu, garlic, green onion, chili flake, sesame oil, soy sauce]
 prep_minutes: 5
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: Lemon Pepper Baked Chicken
 types: []
-ingredient_tags: [chicken, chicken breast, chicken broth, butter, garlic, lemon, salt, pepper, flour, lemon zest]
+ingredient_tags: [chicken, chicken broth, butter, garlic, lemon, flour]
 prep_minutes: 3
 cook_minutes: null
 image: null

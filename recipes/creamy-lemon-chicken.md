@@ -1,7 +1,7 @@
 ---
 title: Creamy Lemon Chicken
 types: []
-ingredient_tags: [chicken, chicken thigh fillet, butter, milk, lemon juice, honey, chicken bouillon powder, msg]
+ingredient_tags: [chicken, chicken thigh, butter, milk, lemon, honey, chicken broth, msg]
 prep_minutes: null
 cook_minutes: null
 image: null

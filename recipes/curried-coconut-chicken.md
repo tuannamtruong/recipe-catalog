@@ -1,7 +1,7 @@
 ---
-title: "Curried Coconut Chicken:"
-types: []
-ingredient_tags: [chicken, thịt gà, salt, pepper, oil, curry powder, onion, garlic, coconut milk, stewed, tomatoes sauce, sugar]
+title: Curried Coconut Chicken
+types: [Main dish]
+ingredient_tags: [chicken, coconut milk]
 prep_minutes: 30
 cook_minutes: null
 image: null

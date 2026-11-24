@@ -1,7 +1,7 @@
 ---
 title: Tomato Sauce
 types: [Sauce]
-ingredient_tags: [shallot, garlic, tomato paste, tomatoe]
+ingredient_tags: [shallot, garlic, tomato paste, tomato]
 prep_minutes: null
 cook_minutes: null
 image: null

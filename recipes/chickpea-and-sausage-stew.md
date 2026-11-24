@@ -1,7 +1,7 @@
 ---
 title: Chickpea and Sausage Stew
 types: []
-ingredient_tags: [beef, sausage, onion, sweet potatoe, carrots, garlic, red pepper, dry thyme, butter, tomato paste, chicken/veg stock, chickpeas, tomatoes, dry parsley, salt, pepper]
+ingredient_tags: [sausage, onion, sweet potato, carrot, garlic, bell pepper, thyme, butter, tomato paste, chicken broth, vegetable broth, chickpea, tomato, parsley]
 prep_minutes: 1
 cook_minutes: null
 image: null

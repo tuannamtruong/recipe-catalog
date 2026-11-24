@@ -1,7 +1,7 @@
 ---
 title: Banana choco chip
 types: [Dessert]
-ingredient_tags: [bananas, butter, brown sugar, eggs, vanilla, buttermilk, greek yogurt, flour, chocolate chips]
+ingredient_tags: [banana, butter, brown sugar, egg, vanilla, buttermilk, greek yogurt, flour, chocolate chip]
 prep_minutes: 45
 cook_minutes: null
 image: null

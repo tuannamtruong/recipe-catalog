@@ -1,7 +1,7 @@
 ---
 title: Beans salad
 types: [Salad]
-ingredient_tags: [beans, kirchenerbsen, corn, bell pepper, lime/lemons, tomatoes, avocado, olive oil, basil]
+ingredient_tags: [bean, chickpea, corn, bell pepper, lime, lemon, tomato, avocado, olive oil, basil]
 prep_minutes: 15
 cook_minutes: null
 image: null

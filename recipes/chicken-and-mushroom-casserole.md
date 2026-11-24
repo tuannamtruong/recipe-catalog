@@ -1,7 +1,7 @@
 ---
 title: Chicken and Mushroom Casserole
 types: []
-ingredient_tags: [chicken, 5 large chicken breasts, salt, pepper, all-purpose flour, olive oil, fresh mushrooms, onion, garlic cloves, unsalted butter, chicken broth, lemon juice, milk, heavy cream]
+ingredient_tags: [chicken, mushroom, onion, butter, chicken broth, lemon, milk, heavy cream]
 prep_minutes: 2
 cook_minutes: null
 image: null

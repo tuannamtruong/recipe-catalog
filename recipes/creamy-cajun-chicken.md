@@ -1,7 +1,7 @@
 ---
 title: Creamy Cajun Chicken
 types: []
-ingredient_tags: [chicken, chicken thighs, cornstarch, butter, onion, garlic, chicken broth, heavy cream, parmesan cheese, lemon juice, spinach, paprika, garlic powder, salt, cayenne pepper, dried thyme, onion powerder, black pepper, chili flakes, blend of dried herbs]
+ingredient_tags: [chicken, chicken thigh, cornstarch, butter, onion, garlic, chicken broth, heavy cream, parmesan, lemon, spinach, paprika, garlic powder, cayenne, thyme, onion powder, chili flake, herb]
 prep_minutes: null
 cook_minutes: null
 image: null

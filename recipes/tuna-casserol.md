@@ -1,7 +1,7 @@
 ---
 title: Tuna Casserol
 types: []
-ingredient_tags: [seafood, egg noodles, "kondesnmilch: ratio 2/1", tuna, frozen peas, milk, dry bread crumbs, butter]
+ingredient_tags: [seafood, egg noodle, tuna, pea, milk, bread crumb, butter]
 prep_minutes: 30
 cook_minutes: null
 image: null
@@ -9,11 +9,11 @@ source_url: "https://www.allrecipes.com/recipe/151593/campbells-tuna-noodle-cass
 ---
 
 ## Ingredients
-- 4 cups medium egg noodles
+- 4 cups (960 ml) medium egg noodles
 - 300 ml Mushroom Soup: Knorr Pils Suppe + Kondesnmilch: Ratio 2/1
 - 300mg cans tuna, drained
-- 2 cups frozen peas
-- 1 cup milk
+- 2 cups (480 ml) frozen peas
+- 1 cup (240 ml) milk
 - 2 tbs dry bread crumbs
 - 1 tbs butter, melted
 

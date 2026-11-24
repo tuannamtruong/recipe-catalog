@@ -1,7 +1,7 @@
 ---
 title: Basil Garlic Chicken
 types: []
-ingredient_tags: [chicken, vegetable oil, thịt gà băm, shallots, garlic, basil leaves, chicken broth, soy sauce, white sugar, brown sugar]
+ingredient_tags: [chicken, ground chicken, shallot, garlic, basil, chicken broth, soy sauce, brown sugar]
 prep_minutes: 2
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: "Sweet, Sticky and Spicy Chicken (Bad)"
 types: []
-ingredient_tags: [chicken, chicken breast, brown sugar, honey, soy sauce, ginger, garlic, hot sauce]
+ingredient_tags: [chicken, brown sugar, honey, soy sauce, ginger, garlic, hot sauce]
 prep_minutes: 10
 cook_minutes: null
 image: null

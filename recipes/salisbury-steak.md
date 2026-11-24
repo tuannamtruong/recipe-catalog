@@ -1,7 +1,7 @@
 ---
 title: Salisbury Steak
 types: []
-ingredient_tags: [beef, "85% lean ground beef", black pepper, dry mustard, ketchup, worcestershire sauce, soy sauce, egg, cayenne pepper, plain bread crumbs, salted butter, white button mushrooms, onion, salt, all-purpose flour, high-quality]
+ingredient_tags: [beef, mustard, egg, bread crumb, butter, mushroom, onion]
 prep_minutes: 120
 cook_minutes: null
 image: null
@@ -10,7 +10,7 @@ source_url: "https://www.allrecipes.com/recipe/280901/chef-johns-salisbury-steak
 
 ## Ingredients
 - For the Steaks:
-- 1 pound 85% lean ground beef
+- 454 g 85% lean ground beef
 - ½ tsp black pepper
 - 1 tsp dry mustard
 - 2 tbs ketchup
@@ -22,12 +22,12 @@ source_url: "https://www.allrecipes.com/recipe/280901/chef-johns-salisbury-steak
 - For the Gravy:
 - 2 tbs salted butter
 - 12 large white button mushrooms, sliced
-- 1 cup diced onion
+- 1 cup (240 ml) diced onion
 - 1 pinch salt
 - 2 tbs all-purpose flour
 - 2 tbs ketchup
 - 1 tbs Worcestershire sauce
-- 3 cups high-quality, low-sodium beef broth
+- 3 cups (720 ml) high-quality, low-sodium beef broth
 - salt to taste
 - 2 tbs salted butter
 

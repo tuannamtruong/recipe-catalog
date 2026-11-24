@@ -1,7 +1,7 @@
 ---
 title: Pork Rib with BBQ Sauce
 types: []
-ingredient_tags: [pork, pork loin, salt, black pepper, bbq sauce, olive oil, onion, ground cumin, ketchup, hot chili sauce, light brown sugar, apple cider vinegar, ground pepper]
+ingredient_tags: [pork, pork loin, barbecue sauce, olive oil, onion, cumin, ketchup, hot sauce, brown sugar, apple cider vinegar]
 prep_minutes: 2
 cook_minutes: null
 image: null

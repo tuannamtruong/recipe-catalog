@@ -1,7 +1,7 @@
 ---
 title: Buffalo Chicken Wings
 types: []
-ingredient_tags: [chicken, chicken thighs, salt, unsalted butter, hot sauce, water, celery, try other thing]
+ingredient_tags: [chicken, chicken thigh, butter, hot sauce, celery]
 prep_minutes: 5
 cook_minutes: null
 image: null

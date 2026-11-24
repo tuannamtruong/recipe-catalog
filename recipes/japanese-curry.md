@@ -1,7 +1,7 @@
 ---
 title: Japanese curry
 types: []
-ingredient_tags: [vegetables, chicken breast, butter, flour, curry, garam masala, garlic, shallot, soy sauce, apple juice/vinegar, honey, carrots, potatoes]
+ingredient_tags: [chicken, butter, flour, curry powder, garam masala, garlic, shallot, soy sauce, apple juice, vinegar, honey, carrot, potato]
 prep_minutes: 45
 cook_minutes: null
 image: null

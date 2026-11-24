@@ -1,7 +1,7 @@
 ---
 title: "Beef, Bean & Lentil"
 types: []
-ingredient_tags: [beef, olive oil, garlic cloves, tomato paste, grounded beef, salt, black pepper, red chili flakes, italian seasoning, canned lentils, beef broth, water, pasta, greek yogurt/milk, parmesam]
+ingredient_tags: [beef, olive oil, garlic, tomato paste, ground beef, chili flake, italian seasoning, lentil, beef broth, pasta, greek yogurt, milk, parmesan]
 prep_minutes: 20
 cook_minutes: null
 image: null

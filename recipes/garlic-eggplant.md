@@ -1,7 +1,7 @@
 ---
 title: GARLIC EGGPLANT
 types: []
-ingredient_tags: [vegetables, mins, eggplants, oil, garlic, thumbsize piece of ginger, spring onions, soy sauce, sugar]
+ingredient_tags: [eggplant, garlic, ginger, green onion, soy sauce]
 prep_minutes: 30
 cook_minutes: null
 image: null

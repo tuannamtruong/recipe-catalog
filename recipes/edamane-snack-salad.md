@@ -1,7 +1,7 @@
 ---
 title: Edamane snack salad
 types: [Salad]
-ingredient_tags: [cucumber, shelled edamame, soy sauce, rice vinegar, cane sugar, sesame oil, chili oil, garlic clove, green onion, sesame seed]
+ingredient_tags: [cucumber, edamame, soy sauce, rice vinegar, sesame oil, chili oil, garlic, green onion, sesame seed]
 prep_minutes: 240
 cook_minutes: null
 image: null

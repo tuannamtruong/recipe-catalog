@@ -1,7 +1,7 @@
 ---
 title: Steak Diane Ragusea
 types: []
-ingredient_tags: [beef, sirloin steak, onion, mushrooms, garlic cloves, 2 tbs worcestershire sauce, mustard, tomato paste, heavy cream, rind broth, lemon juice]
+ingredient_tags: [beef, onion, mushroom, worcestershire sauce, mustard, tomato paste, heavy cream, beef broth, lemon]
 prep_minutes: null
 cook_minutes: null
 image: null
@@ -17,7 +17,7 @@ source_url: "https://www.youtube.com/watch?v=J2RbSZob6ag"
 - 1 tbs (Dijon) mustard
 - 1 tbs tomato paste
 - 125ml heavy cream
-- 1 cup rind broth
+- 1 cup (240 ml) rind broth
 - (cognac or brown liquor)
 - Lemon juice
 - (Small handful of flat-leaf parsley)

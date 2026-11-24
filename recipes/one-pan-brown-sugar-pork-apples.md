@@ -1,7 +1,7 @@
 ---
 title: "One Pan Brown Sugar Pork & Apples"
 types: []
-ingredient_tags: [pork, salt, pepper, oil, brown sugar, dijon mustard, garlic, apple juice, apples]
+ingredient_tags: [pork, brown sugar, dijon mustard, garlic, apple juice, apple]
 prep_minutes: 30
 cook_minutes: null
 image: null

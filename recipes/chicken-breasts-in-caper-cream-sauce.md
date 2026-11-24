@@ -1,7 +1,7 @@
 ---
 title: Chicken Breasts in Caper Cream Sauce
 types: []
-ingredient_tags: [chicken, seared sth, whipping cream, caper/olive?]
+ingredient_tags: [chicken, heavy cream, caper, olive]
 prep_minutes: 3
 cook_minutes: null
 image: null

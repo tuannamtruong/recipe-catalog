@@ -1,7 +1,7 @@
 ---
 title: Veggie Vegetarian Chili
 types: []
-ingredient_tags: [onion, carrots, garlic, bell peppers, chili powder, tomatoes, black beans, kidney beans, pinto beans, kernel corn, fresh mushrooms, dried oregano, dried basil, ground cumin, garlic powder]
+ingredient_tags: [onion, carrot, garlic, bell pepper, chili powder, tomato, black bean, kidney bean, pinto bean, corn, mushroom, oregano, basil, cumin, garlic powder]
 prep_minutes: 5
 cook_minutes: null
 image: null

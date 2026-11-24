@@ -1,7 +1,7 @@
 ---
 title: Oatmeal
 types: [Dessert]
-ingredient_tags: [egg, cinnamon, baking powerder, salt, over ripe bananas, almond milk, creamy_peanut butter, maple syrup, chia seed, vanilla extract]
+ingredient_tags: [egg, cinnamon, baking powder, banana, almond milk, peanut butter, maple syrup, chia seed, vanilla]
 prep_minutes: 5
 cook_minutes: null
 image: null

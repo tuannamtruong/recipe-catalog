@@ -1,7 +1,7 @@
 ---
 title: Peanut butter sauce
 types: [Sauce]
-ingredient_tags: [smooth all-natural, garlic, brown sugar, fish sauce, soy sauce, sesame oil, lime, coconut milch]
+ingredient_tags: [peanut butter, garlic, brown sugar, fish sauce, soy sauce, sesame oil, lime, coconut milk]
 prep_minutes: null
 cook_minutes: null
 image: null

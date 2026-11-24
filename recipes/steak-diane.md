@@ -1,7 +1,7 @@
 ---
 title: Steak Diane
 types: []
-ingredient_tags: [beef, sirloin steak, shallots, mushrooms, salted butter, garlic clove, 2 tbs worcestershire sauce, dijon mustard, brandy, heavy cream, flat-leaf parsley]
+ingredient_tags: [beef, sirloin steak, mushroom, butter, brandy, heavy cream, parsley]
 prep_minutes: null
 cook_minutes: null
 image: null
@@ -16,8 +16,8 @@ source_url: "https://www.youtube.com/watch?v=9rWZNHkrsNg&list=PLTzMGnJjrsSzcZUHS
 - 1 garlic clove, peeled
 - 1 -2 tbs Worcestershire sauce
 - 1 tbs Dijon mustard
-- 1/3 cup brandy or cognac
-- 1 cup heavy cream
+- 1/3 cup (80 ml) brandy or cognac
+- 1 cup (240 ml) heavy cream
 - Small handful of flat-leaf parsley
 
 ## Steps

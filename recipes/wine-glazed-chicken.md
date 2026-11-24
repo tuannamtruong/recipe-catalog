@@ -1,7 +1,7 @@
 ---
 title: Wine Glazed Chicken
 types: []
-ingredient_tags: [chicken, gà, salt, cinnamon, butter, dry white wine, fresh mushrooms, red bell pepper, scallions, chicken broth, cornstarch]
+ingredient_tags: [chicken, cinnamon, butter, white wine, mushroom, bell pepper, green onion, chicken broth, cornstarch]
 prep_minutes: 1
 cook_minutes: null
 image: null

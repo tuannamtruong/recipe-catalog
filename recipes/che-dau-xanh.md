@@ -1,7 +1,7 @@
 ---
 title: Chè đậu xanh
 types: [Soup]
-ingredient_tags: [đậu xanh bóc vỏ, sugar, coconut milk, tapioca starch]
+ingredient_tags: [mung bean, coconut milk, tapioca starch]
 prep_minutes: 120
 cook_minutes: null
 image: null

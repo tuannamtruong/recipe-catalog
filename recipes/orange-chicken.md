@@ -1,7 +1,7 @@
 ---
 title: Orange chicken
 types: []
-ingredient_tags: [chicken, crown of broccoli, cornstarch, garlic, 1-inch piece ginger, orange zest, orange juice, soy sauce, rice vinegar, granulated sugar]
+ingredient_tags: [chicken, broccoli, cornstarch, ginger, orange, rice vinegar]
 prep_minutes: null
 cook_minutes: null
 image: null
@@ -16,9 +16,9 @@ source_url: "https://www.youtube.com/watch?v=zc63e7ZKUrg"
 - 1-inch piece ginger, minced
 - Zest of 1 orange
 - Juice of 1 large orange
-- 1/4 cup soy sauce, to taste
+- 1/4 cup (60 ml) soy sauce, to taste
 - Rice vinegar, to taste (approximately 2 tbsp)
-- 1/4 cup granulated sugar
+- 1/4 cup (50 g) granulated sugar
 
 ## Steps
 1. Steam/Boil Broccoli until just fork-tender.

@@ -1,7 +1,7 @@
 ---
 title: Salmon with Lemon and Dill
 types: []
-ingredient_tags: [fish, salmon fillets, butter, lemon juice, dried dill weed, garlic powder, salt]
+ingredient_tags: [fish, salmon, butter, lemon, dill, garlic powder]
 prep_minutes: null
 cook_minutes: null
 image: null

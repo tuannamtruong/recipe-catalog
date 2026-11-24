@@ -1,7 +1,7 @@
 ---
 title: Cháo
 types: []
-ingredient_tags: [vegetables, gạo, gừng, thịt]
+ingredient_tags: [ginger, chicken]
 prep_minutes: 60
 cook_minutes: null
 image: null

@@ -1,7 +1,7 @@
 ---
 title: Boneless pork cut
 types: []
-ingredient_tags: [pork, pork loin, sốt, paprika, star anise, salt, pepper, olive oil, thyme, garlic, coriander seeds]
+ingredient_tags: [pork, pork loin, paprika, star anise, olive oil, thyme, garlic, coriander]
 prep_minutes: 8
 cook_minutes: null
 image: null

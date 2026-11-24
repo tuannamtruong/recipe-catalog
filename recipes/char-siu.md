@@ -1,7 +1,7 @@
 ---
 title: Char Siu
 types: []
-ingredient_tags: [pork, pork butt, combination of sauce, honey, brown sugar, chinese rice wine, ketchup, garlic cloves, five-spice powder, black pepper, thumb size giner]
+ingredient_tags: [pork, pork butt, oyster sauce, soy sauce, hoisin sauce, honey, brown sugar, rice wine, ketchup, garlic, five-spice powder, ginger]
 prep_minutes: 240
 cook_minutes: null
 image: null

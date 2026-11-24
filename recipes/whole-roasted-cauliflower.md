@@ -1,7 +1,7 @@
 ---
 title: WHOLE ROASTED CAULIFLOWER
 types: []
-ingredient_tags: [vegetables, blumenkohl, ca. 60ml olivenöl, eine gute prise salz, gute el tahini, el ahornsirup, tl sriracha, saft einer limette, salz nach geschmack, wasser zum verdünnen]
+ingredient_tags: [cauliflower, olive oil, tahini, maple syrup, hot sauce, lime]
 prep_minutes: 5
 cook_minutes: null
 image: null

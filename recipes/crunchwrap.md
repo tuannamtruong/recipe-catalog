@@ -1,7 +1,7 @@
 ---
 title: Crunchwrap
 types: []
-ingredient_tags: [beef, burrito, burrito-size tortillas, ground beef, beef broth, taco seasoning (, oregano, cheddar cheese, lettuce, tomatoes, sour cream, butter, creamy taco sauce, mayonnaise, milk, lime juice, taco seasoning, dried parsley, paprika, garlic powder]
+ingredient_tags: [beef, tortilla, ground beef, beef broth, taco seasoning, oregano, cheddar, lettuce, tomato, sour cream, butter, mayonnaise, milk, lime, parsley, paprika, garlic powder]
 prep_minutes: 20
 cook_minutes: null
 image: null

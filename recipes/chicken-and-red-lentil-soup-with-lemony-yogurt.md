@@ -1,7 +1,7 @@
 ---
 title: Chicken and Red Lentil Soup With Lemony Yogurt
 types: []
-ingredient_tags: [chicken, lentil, extra-virgin olive oil, onion, garlic, red lentils, ground turmeric, salt, ground black pepper, mixed parsley, plain full-fat yogurt, fresh lemon juice]
+ingredient_tags: [chicken, lentil, olive oil, onion, garlic, red lentil, turmeric, parsley, yogurt, lemon]
 prep_minutes: 20
 cook_minutes: 120
 image: null

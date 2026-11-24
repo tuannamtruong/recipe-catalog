@@ -1,7 +1,7 @@
 ---
 title: Classic Meatloaf
 types: []
-ingredient_tags: [beef, thịt băm, dried bread crumbs, yellow onion, milk, egg, ketchup, worcestershire sauce, dried parsley leaves, salt, garlic powder, ground black pepper, packed light brown sugar, red wine vinegar]
+ingredient_tags: [beef, ground meat, bread crumb, onion, milk, egg, ketchup, worcestershire sauce, parsley, garlic powder, brown sugar, red wine vinegar]
 prep_minutes: 55
 cook_minutes: null
 image: null

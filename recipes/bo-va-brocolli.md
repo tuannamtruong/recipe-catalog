@@ -1,7 +1,7 @@
 ---
 title: Bò và brocolli
 types: [Sauce]
-ingredient_tags: [thịt bò cắt lát, dầu ăn, muối, miếng tỏi, ginger, soy sauce, brown sugar, honey, beef broth, brocolli, cornstarch, water]
+ingredient_tags: [beef, garlic, ginger, soy sauce, brown sugar, honey, beef broth, broccoli, cornstarch]
 prep_minutes: null
 cook_minutes: null
 image: null

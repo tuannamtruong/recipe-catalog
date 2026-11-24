@@ -1,7 +1,7 @@
 ---
 title: Enchilada skillet
 types: []
-ingredient_tags: [ground meat, turkey, white onion, red bell pepper, taco seasoning, ground turkey, black beans, rotel, green chiles, reduced fat cream cheese, batch homemade enchilada sauce, thin corn tortillas]
+ingredient_tags: [ground meat, turkey, onion, bell pepper, taco seasoning, ground turkey, black bean, tomato, green chili, cream cheese, enchilada sauce, tortilla]
 prep_minutes: null
 cook_minutes: null
 image: null

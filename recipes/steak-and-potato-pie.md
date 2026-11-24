@@ -1,7 +1,7 @@
 ---
 title: Steak and potato pie
 types: []
-ingredient_tags: [beef, fillet steak, carrots, celery, green onions, soy sauce, pepper, honey, garlic, potatoes, egg yolk, cornstarch, vegetable oil, tomato paste, white wine, unflavored gelatin, cream]
+ingredient_tags: [beef, fillet steak, carrot, celery, green onion, soy sauce, honey, garlic, potato, egg, cornstarch, tomato paste, white wine, gelatin, heavy cream]
 prep_minutes: 2
 cook_minutes: null
 image: null

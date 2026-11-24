@@ -1,7 +1,7 @@
 ---
 title: Honey butter chicken 2
 types: []
-ingredient_tags: [chicken, tofu, chicken breast/tofu, cornstarch, garlic powder, honey, sugar, soy sauce, water, inch piece ginger, unsalted butter, sesame seed]
+ingredient_tags: [chicken, tofu, cornstarch, garlic powder, honey, soy sauce, ginger, butter, sesame seed]
 prep_minutes: null
 cook_minutes: 45
 image: null

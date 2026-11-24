@@ -1,7 +1,7 @@
 ---
 title: Chicken chasseur
 types: []
-ingredient_tags: [chicken, chicken pieces, fresh button mushrooms, shallots, carrots, tomatoes, flour, chicken stock, soy sauce, brandy/cognac, white wine, butter, fresh herbs, egg noodles]
+ingredient_tags: [chicken, mushroom, shallot, carrot, tomato, flour, chicken broth, soy sauce, brandy, white wine, butter, herb, egg noodle]
 prep_minutes: 60
 cook_minutes: 120
 image: null
